@@ -1,16 +1,7 @@
-# crosscheck
+# Crosscheck
 
-A new Flutter project.
+Some events happen everywhere, all the time. Discover upcoming events near you quickly at anytime. Crosscheck is a mobile application that helps to manage and remind you for any event you save.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The aim of this project was to determine the implementation of MVVM, TDD, and Clean Architecture in Flutter. Therefore, the main programming language it used is dart.
