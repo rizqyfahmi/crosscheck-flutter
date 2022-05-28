@@ -14,7 +14,20 @@ class RegistrationUsecase implements Usecase<AuthenticationEntity, RegistrationP
 
   @override
   Future<Either<Failure, AuthenticationEntity>>? call(RegistrationParams params) async {
-    return await repository.registration(params);
+    final result = await repository.registration(params);
+
+    return result.fold(
+      (resultError) {
+        return Left(resultError);
+      }, 
+      (resultSuccess) async {
+        final tokenResult = await repository.setToken(resultSuccess.token);
+        
+        return tokenResult.fold(
+          (tokenResultError) => Left(tokenResultError),
+          (_) => Right(resultSuccess)
+        );
+      }
+    );
   }
-  
 }
