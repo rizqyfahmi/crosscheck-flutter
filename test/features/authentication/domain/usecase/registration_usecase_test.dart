@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
@@ -19,7 +20,7 @@ void main() {
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   const AuthenticationEntity authenticationEntity = AuthenticationEntity(token: token);
 
-  setUp(() {
+  setUpAll(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     usecase = RegistrationUsecase(repository: mockAuthenticationRepository);
     registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
@@ -27,11 +28,45 @@ void main() {
 
   test("Should get authentication token after registration", () async {
     when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => const Right(authenticationEntity));
+    when(mockAuthenticationRepository.setToken(authenticationEntity.token)).thenAnswer((_) async => const Right(null));
 
     final result = await usecase(registrationParams);
     
     expect(result, const Right(AuthenticationEntity(token: token)));
+  });
+
+  test("Should set authentication token after registration", () async {
+    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => const Right(authenticationEntity));
+    when(mockAuthenticationRepository.setToken(authenticationEntity.token)).thenAnswer((_) async => const Right(null));
+
+    final result = await usecase(registrationParams);
+
+    expect(result, const Right(AuthenticationEntity(token: token)));
     verify(mockAuthenticationRepository.registration(registrationParams));
+    verify(mockAuthenticationRepository.setToken(authenticationEntity.token));
+    verifyNoMoreInteractions(mockAuthenticationRepository);
+  });
+
+  test("Should not set authentication token when registration is failed", () async {
+    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => Left(ServerFailure(message: "Server not found")));
+    
+    final result = await usecase(registrationParams);
+
+    expect(result, Left(ServerFailure(message: "Server not found")));
+    verify(mockAuthenticationRepository.registration(registrationParams));
+    verifyNever(mockAuthenticationRepository.setToken(authenticationEntity.token));
+    verifyNoMoreInteractions(mockAuthenticationRepository);
+  });
+
+  test("Should get failure when set authentication token is failed", () async {
+    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => const Right(authenticationEntity));
+    when(mockAuthenticationRepository.setToken(authenticationEntity.token)).thenAnswer((_) async => Left(CachedFailure(message: "Set token is failed")));
+    
+    final result = await usecase(registrationParams);
+
+    expect(result, Left(CachedFailure(message: "Set token is failed")));
+    verify(mockAuthenticationRepository.registration(registrationParams));
+    verify(mockAuthenticationRepository.setToken(authenticationEntity.token));
     verifyNoMoreInteractions(mockAuthenticationRepository);
   });
 }

@@ -43,4 +43,10 @@ class MockAuthenticationRepository extends _i1.Mock
                       _i2.Either<_i5.Failure, _i6.AuthenticationEntity>>.value(
                   _FakeEither_0<_i5.Failure, _i6.AuthenticationEntity>()))
           as _i4.Future<_i2.Either<_i5.Failure, _i6.AuthenticationEntity>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> setToken(String? token) =>
+      (super.noSuchMethod(Invocation.method(#setToken, [token]),
+              returnValue: Future<_i2.Either<_i5.Failure, void>>.value(
+                  _FakeEither_0<_i5.Failure, void>()))
+          as _i4.Future<_i2.Either<_i5.Failure, void>>);
 }
