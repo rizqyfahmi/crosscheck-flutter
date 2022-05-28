@@ -17,17 +17,17 @@ class RegistrationUsecase implements Usecase<AuthenticationEntity, RegistrationP
     final result = await repository.registration(params);
 
     return result.fold(
-      (resultError) {
-        return Left(resultError);
-      }, 
-      (resultSuccess) async {
-        final tokenResult = await repository.setToken(resultSuccess.token);
+      (error) => Left(error), 
+      (success) async => _setToken(success)
+    );
+  }
+
+  Future<Either<Failure, AuthenticationEntity>> _setToken(AuthenticationEntity entity) async {
+    final result = await repository.setToken(entity.token);
         
-        return tokenResult.fold(
-          (tokenResultError) => Left(tokenResultError),
-          (_) => Right(resultSuccess)
-        );
-      }
+    return result.fold(
+      (error) => Left(error),
+      (_) => Right(entity)
     );
   }
 }
