@@ -20,7 +20,7 @@ void main() {
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   const AuthenticationEntity authenticationEntity = AuthenticationEntity(token: token);
 
-  setUpAll(() {
+  setUp(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     usecase = RegistrationUsecase(repository: mockAuthenticationRepository);
     registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
@@ -33,6 +33,22 @@ void main() {
     final result = await usecase(registrationParams);
     
     expect(result, const Right(AuthenticationEntity(token: token)));
+  });
+  
+  setUp(() {
+    mockAuthenticationRepository = MockAuthenticationRepository();
+    usecase = RegistrationUsecase(repository: mockAuthenticationRepository);
+    registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
+  });
+
+  test("Should not get authentication token when registration is failed", () async {
+    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => Left(ServerFailure(message: "Something went wrong")));
+    
+    final result = await usecase(registrationParams);
+
+    expect(result, Left(ServerFailure(message: "Something went wrong")));
+    verify(mockAuthenticationRepository.registration(registrationParams));
+    verifyNoMoreInteractions(mockAuthenticationRepository);
   });
 
   test("Should set authentication token after registration", () async {
@@ -53,9 +69,7 @@ void main() {
     final result = await usecase(registrationParams);
 
     expect(result, Left(ServerFailure(message: "Server not found")));
-    verify(mockAuthenticationRepository.registration(registrationParams));
     verifyNever(mockAuthenticationRepository.setToken(authenticationEntity.token));
-    verifyNoMoreInteractions(mockAuthenticationRepository);
   });
 
   test("Should get failure when set authentication token is failed", () async {
