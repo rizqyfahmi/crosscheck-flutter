@@ -77,11 +77,8 @@ void main() {
   });
 
   test("Should setToken is called when token would be cached", () async {
-    when(mockLocalDataSource.setToken(token)).thenAnswer((_) async {}); // return void
-    
-    final result = await repository.setToken(token);
+    await repository.setToken(token);
 
-    expect(result, Right(setToken()));
     verify(mockLocalDataSource.setToken(token));
     verifyNoMoreInteractions(mockLocalDataSource);
   });
