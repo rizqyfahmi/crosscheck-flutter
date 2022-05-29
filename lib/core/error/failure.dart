@@ -34,3 +34,4 @@ class CachedFailure extends Failure {
 }
 
 class NullFailure extends Failure {}
+class NetworkFailure extends Failure {}
