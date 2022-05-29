@@ -15,9 +15,8 @@ class AuthenticationLocalDataSourceImpl implements AuthenticationLocalDataSource
   });
   
   @override
-  Future<void> setToken(String token) {
-    // TODO: implement setToken
-    throw UnimplementedError();
+  Future<void> setToken(String token) async {
+    await sharedPreferences.setString("token", token);
   }
 
 }
