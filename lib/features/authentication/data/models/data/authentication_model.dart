@@ -5,10 +5,14 @@ class AuthenticationModel extends AuthenticationEntity {
   const AuthenticationModel({required super.token});
   
   factory AuthenticationModel.fromJSON(Map<String, dynamic> response) {
-    throw UnimplementedError();
+    return AuthenticationModel(
+      token: response["token"]
+    );
   }
 
   Map<String, dynamic> toJSON() {
-    throw UnimplementedError();
+    return {
+      "token": token
+    };
   }
 }
