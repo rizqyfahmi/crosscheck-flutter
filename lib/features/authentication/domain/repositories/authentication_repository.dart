@@ -6,5 +6,5 @@ import 'package:dartz/dartz.dart';
 abstract class AuthenticationRepository {
   Future<Either<Failure, AuthenticationEntity>>? registration(RegistrationParams params);
 
-  Future<Either<Failure, void>>? setToken(String token);
+  Future<void>? setToken(String token);
 }

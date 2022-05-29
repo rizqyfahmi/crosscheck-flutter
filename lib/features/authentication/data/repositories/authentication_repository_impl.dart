@@ -8,7 +8,7 @@ import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class AuthenticationRepositoryImpl implements AuthenticationRepository{
+class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   final AuthenticationRemoteDataSource remote;
   final AuthenticationLocalDataSource local;
@@ -36,9 +36,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository{
   }
 
   @override
-  Future<Either<Failure, void>> setToken(String token) async {
-    final result = await local.setToken(token);
-    return Right(result);
+  Future<void> setToken(String token) async {
+    await local.setToken(token);
   }
   
 }
