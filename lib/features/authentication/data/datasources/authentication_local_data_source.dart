@@ -1,7 +1,23 @@
-import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthenticationLocalDataSource {
   
   Future<void> setToken(String token);
   
+}
+
+class AuthenticationLocalDataSourceImpl implements AuthenticationLocalDataSource {
+
+  final SharedPreferences sharedPreferences;
+
+  AuthenticationLocalDataSourceImpl({
+    required this.sharedPreferences
+  });
+  
+  @override
+  Future<void> setToken(String token) {
+    // TODO: implement setToken
+    throw UnimplementedError();
+  }
+
 }
