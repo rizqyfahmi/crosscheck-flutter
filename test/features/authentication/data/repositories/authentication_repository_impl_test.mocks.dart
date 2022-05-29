@@ -56,10 +56,9 @@ class MockAuthenticationLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> setToken(String? token) =>
+  _i4.Future<bool> setToken(String? token) =>
       (super.noSuchMethod(Invocation.method(#setToken, [token]),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
+          returnValue: Future<bool>.value(false)) as _i4.Future<bool>);
 }
 
 /// A class which mocks [NetworkInfo].
