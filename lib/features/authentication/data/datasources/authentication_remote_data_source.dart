@@ -7,3 +7,13 @@ abstract class AuthenticationRemoteDataSource {
   Future<AuthenticationResponseModel> registration(RegistrationParams params);
   
 }
+
+class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
+  
+  @override
+  Future<AuthenticationResponseModel> registration(RegistrationParams params) {
+    // TODO: implement registration
+    throw UnimplementedError();
+  }
+  
+}
