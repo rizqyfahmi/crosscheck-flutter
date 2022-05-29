@@ -39,7 +39,7 @@ class MockAuthenticationRepository extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#registration, [params]))
           as _i3.Future<_i4.Either<_i5.Failure, _i6.AuthenticationEntity>>?);
   @override
-  _i3.Future<_i4.Either<_i5.Failure, void>>? setToken(String? token) =>
-      (super.noSuchMethod(Invocation.method(#setToken, [token]))
-          as _i3.Future<_i4.Either<_i5.Failure, void>>?);
+  _i3.Future<void>? setToken(String? token) => (super.noSuchMethod(
+      Invocation.method(#setToken, [token]),
+      returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>?);
 }
