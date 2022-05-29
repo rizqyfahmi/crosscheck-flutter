@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
@@ -20,15 +21,24 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository{
   });
 
   @override
-  Future<Either<Failure, AuthenticationEntity>> registration(RegistrationParams params) {
-    // TODO: implement registration
-    throw UnimplementedError();
+  Future<Either<Failure, AuthenticationEntity>> registration(RegistrationParams params) async {
+    bool isConnected = await networkInfo.isConnected;
+    if (!isConnected) {
+      return Left(NetworkFailure());
+    }
+    
+    try {
+      final result = await remote.registration(params);
+      return Right(result);
+    } on ServerException catch(e) {
+      return Left(ServerFailure(message: e.message, errors: e.errors));
+    }
   }
 
   @override
-  Future<Either<Failure, void>> setToken(String token) {
-    // TODO: implement setToken
-    throw UnimplementedError();
+  Future<Either<Failure, void>> setToken(String token) async {
+    final result = await local.setToken(token);
+    return Right(result);
   }
   
 }
