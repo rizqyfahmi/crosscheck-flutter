@@ -1,6 +1,6 @@
 abstract class Response {
   final String message;
-  final Map<String, dynamic> data;
+  final dynamic data;
 
   Response({
     required this.message,
