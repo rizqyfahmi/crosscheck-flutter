@@ -10,8 +10,10 @@ class NetworkInfoImpl implements NetworkInfo {
   NetworkInfoImpl({
     required this.connectionChecker
   });
-
-  @override
-  Future<bool> get isConnected => throw UnimplementedError();
+  
+  @override // We don't use async await because we only want to forward "hasConnection" result, not else.
+  Future<bool> get isConnected {
+    return connectionChecker.hasConnection;
+  }
   
 }
