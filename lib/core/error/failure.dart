@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 /* 
@@ -31,3 +32,5 @@ class CachedFailure extends Failure {
   @override
   List<Object?> get props => [message];
 }
+
+class NullFailure extends Failure {}
