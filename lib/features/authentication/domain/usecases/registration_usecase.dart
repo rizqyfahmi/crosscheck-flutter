@@ -20,18 +20,10 @@ class RegistrationUsecase implements Usecase<AuthenticationEntity, RegistrationP
 
     return result.fold(
       (error) => Left(error), 
-      (success) async => await _setToken(success)
-    );
-  }
-
-  Future<Either<Failure, AuthenticationEntity>> _setToken(AuthenticationEntity entity) async {
-    final result = await repository.setToken(entity.token);
-    
-    if (result == null) return Left(NullFailure());
-
-    return result.fold(
-      (error) => Left(error),
-      (_) => Right(entity)
+      (data) async {
+        await repository.setToken(data.token);
+        return Right(data);
+      }
     );
   }
 }
