@@ -72,18 +72,6 @@ void main() {
     verifyNever(mockAuthenticationRepository.setToken(authenticationEntity.token));
   });
 
-  test("Should get failure when set authentication token is failed", () async {
-    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => const Right(authenticationEntity));
-    when(mockAuthenticationRepository.setToken(authenticationEntity.token)).thenAnswer((_) async => Left(CachedFailure(message: "Set token is failed")));
-    
-    final result = await usecase(registrationParams);
-
-    expect(result, Left(CachedFailure(message: "Set token is failed")));
-    verify(mockAuthenticationRepository.registration(registrationParams));
-    verify(mockAuthenticationRepository.setToken(authenticationEntity.token));
-    verifyNoMoreInteractions(mockAuthenticationRepository);
-  });
-
   test("Should get NullFailure when registration returns null", () async {
     when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) => null);
 
@@ -92,18 +80,6 @@ void main() {
     expect(result, Left(NullFailure()));
     verify(mockAuthenticationRepository.registration(registrationParams));
     verifyNever(mockAuthenticationRepository.setToken(authenticationEntity.token));
-    verifyNoMoreInteractions(mockAuthenticationRepository);
-  });
-
-  test("Should get NullFailure when setToken returns null", () async {
-    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => const Right(authenticationEntity));
-    when(mockAuthenticationRepository.setToken(authenticationEntity.token)).thenAnswer((_) => null);
-
-    final result = await usecase(registrationParams);
-
-    expect(result, Left(NullFailure()));
-    verify(mockAuthenticationRepository.registration(registrationParams));
-    verify(mockAuthenticationRepository.setToken(authenticationEntity.token));
     verifyNoMoreInteractions(mockAuthenticationRepository);
   });
 }
