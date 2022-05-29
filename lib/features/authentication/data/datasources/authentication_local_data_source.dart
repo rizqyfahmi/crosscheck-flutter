@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthenticationLocalDataSource {
   
-  Future<void> setToken(String token);
+  Future<bool> setToken(String token);
   
 }
 
@@ -15,8 +15,8 @@ class AuthenticationLocalDataSourceImpl implements AuthenticationLocalDataSource
   });
   
   @override
-  Future<void> setToken(String token) async {
-    await sharedPreferences.setString("token", token);
+  Future<bool> setToken(String token) async {
+    return await sharedPreferences.setString("token", token);
   }
 
 }
