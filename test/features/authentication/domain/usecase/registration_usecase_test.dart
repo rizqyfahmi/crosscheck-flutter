@@ -83,4 +83,27 @@ void main() {
     verify(mockAuthenticationRepository.setToken(authenticationEntity.token));
     verifyNoMoreInteractions(mockAuthenticationRepository);
   });
+
+  test("Should get NullFailure when registration returns null", () async {
+    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) => null);
+
+    final result = await usecase(registrationParams);
+
+    expect(result, Left(NullFailure()));
+    verify(mockAuthenticationRepository.registration(registrationParams));
+    verifyNever(mockAuthenticationRepository.setToken(authenticationEntity.token));
+    verifyNoMoreInteractions(mockAuthenticationRepository);
+  });
+
+  test("Should get NullFailure when setToken returns null", () async {
+    when(mockAuthenticationRepository.registration(registrationParams)).thenAnswer((_) async => const Right(authenticationEntity));
+    when(mockAuthenticationRepository.setToken(authenticationEntity.token)).thenAnswer((_) => null);
+
+    final result = await usecase(registrationParams);
+
+    expect(result, Left(NullFailure()));
+    verify(mockAuthenticationRepository.registration(registrationParams));
+    verify(mockAuthenticationRepository.setToken(authenticationEntity.token));
+    verifyNoMoreInteractions(mockAuthenticationRepository);
+  });
 }
