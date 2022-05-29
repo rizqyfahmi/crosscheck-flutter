@@ -2,6 +2,6 @@ import 'package:crosscheck/features/authentication/data/models/data/authenticati
 
 abstract class AuthenticationLocalDataSource {
   
-  Future<void> setToken(AuthenticationModel model);
+  Future<void> setToken(String token);
   
 }
