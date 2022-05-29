@@ -16,7 +16,7 @@ class RegistrationUsecase implements Usecase<AuthenticationEntity, RegistrationP
   Future<Either<Failure, AuthenticationEntity>>? call(RegistrationParams params) async {
     final result = await repository.registration(params);
 
-    return result.fold(
+    return result!.fold(
       (error) => Left(error), 
       (success) async => await _setToken(success)
     );
@@ -25,7 +25,7 @@ class RegistrationUsecase implements Usecase<AuthenticationEntity, RegistrationP
   Future<Either<Failure, AuthenticationEntity>> _setToken(AuthenticationEntity entity) async {
     final result = await repository.setToken(entity.token);
     
-    return result.fold(
+    return result!.fold(
       (error) => Left(error),
       (_) => Right(entity)
     );
