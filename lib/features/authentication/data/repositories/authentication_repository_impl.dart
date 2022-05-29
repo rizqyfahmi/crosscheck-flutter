@@ -29,7 +29,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     
     try {
       final result = await remote.registration(params);
-      return Right(result);
+      return Right(result.data);
     } on ServerException catch(e) {
       return Left(ServerFailure(message: e.message, errors: e.errors));
     }
