@@ -1,0 +1,34 @@
+import 'package:crosscheck/core/network/network_info.dart';
+import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
+import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
+import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
+import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
+import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:dartz/dartz.dart';
+
+class AuthenticationRepositoryImpl implements AuthenticationRepository{
+
+  final AuthenticationRemoteDataSource remote;
+  final AuthenticationLocalDataSource local;
+  final NetworkInfo networkInfo;
+
+  AuthenticationRepositoryImpl({
+    required this.remote,
+    required this.local,
+    required this.networkInfo
+  });
+
+  @override
+  Future<Either<Failure, AuthenticationEntity>> registration(RegistrationParams params) {
+    // TODO: implement registration
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> setToken(String token) {
+    // TODO: implement setToken
+    throw UnimplementedError();
+  }
+  
+}
