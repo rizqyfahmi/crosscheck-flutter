@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
 import 'package:http/http.dart' as http;
@@ -17,9 +19,20 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
   });
   
   @override
-  Future<AuthenticationResponseModel> registration(RegistrationParams params) {
-    // TODO: implement registration
-    throw UnimplementedError();
+  Future<AuthenticationResponseModel> registration(RegistrationParams params) async {
+    final response = await client.get(
+      Uri.parse("http://localhost:8080"),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    );
+
+    if (response.statusCode != 200) {
+      throw ServerException(message: "Something went wrong");
+    }
+
+    final Map<String, dynamic> json = jsonDecode(response.body);
+    return AuthenticationResponseModel.fromJSON(json);
   }
   
 }
