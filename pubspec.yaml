@@ -32,6 +32,7 @@ dependencies:
   build_runner: ^2.1.11
   dartz: ^0.10.1
   equatable: ^2.0.3
+  flutter_bloc: ^8.0.1
   http: ^0.13.4
   internet_connection_checker: ^0.0.1+4
   mockito: ^5.2.0
