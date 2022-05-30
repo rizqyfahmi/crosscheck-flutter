@@ -1,6 +1,6 @@
-import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
+import 'package:http/http.dart' as http;
 
 abstract class AuthenticationRemoteDataSource {
   
@@ -9,6 +9,12 @@ abstract class AuthenticationRemoteDataSource {
 }
 
 class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSource {
+
+  final http.Client client;
+
+  AuthenticationRemoteDataSourceImpl({
+    required this.client
+  });
   
   @override
   Future<AuthenticationResponseModel> registration(RegistrationParams params) {
