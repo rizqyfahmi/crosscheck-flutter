@@ -9,10 +9,10 @@ import 'package:crosscheck/features/authentication/data/datasources/authenticati
     as _i6;
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart'
     as _i3;
-import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart'
-    as _i2;
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
     as _i5;
+import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart'
+    as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -25,8 +25,8 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeAuthenticationModel_0 extends _i1.Fake
-    implements _i2.AuthenticationModel {}
+class _FakeAuthenticationResponseModel_0 extends _i1.Fake
+    implements _i2.AuthenticationResponseModel {}
 
 /// A class which mocks [AuthenticationRemoteDataSource].
 ///
@@ -38,12 +38,12 @@ class MockAuthenticationRemoteDataSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.AuthenticationModel> registration(
+  _i4.Future<_i2.AuthenticationResponseModel> registration(
           _i5.RegistrationParams? params) =>
       (super.noSuchMethod(Invocation.method(#registration, [params]),
-              returnValue: Future<_i2.AuthenticationModel>.value(
-                  _FakeAuthenticationModel_0()))
-          as _i4.Future<_i2.AuthenticationModel>);
+              returnValue: Future<_i2.AuthenticationResponseModel>.value(
+                  _FakeAuthenticationResponseModel_0()))
+          as _i4.Future<_i2.AuthenticationResponseModel>);
 }
 
 /// A class which mocks [AuthenticationLocalDataSource].

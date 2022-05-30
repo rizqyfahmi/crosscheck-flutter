@@ -7,6 +7,7 @@ import 'package:crosscheck/features/authentication/data/datasources/authenticati
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
+import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
 import 'package:crosscheck/features/authentication/data/repositories/authentication_repository_impl.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
@@ -31,7 +32,8 @@ void main() {
   
   // Mock Result
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  const AuthenticationEntity authenticationEntity = AuthenticationModel(token: token);
+  AuthenticationResponseModel responseModel = AuthenticationResponseModel(message: "The request has succeeded", data: const AuthenticationModel(token: token));
+  AuthenticationEntity authenticationEntity = responseModel.data;
 
   void setToken() {}
 
@@ -54,11 +56,11 @@ void main() {
 
   test("Should get AunthenticationModel on registration when device is online", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockRemoteDataSource.registration(params)).thenAnswer((_) async => const AuthenticationModel(token: token));
+    when(mockRemoteDataSource.registration(params)).thenAnswer((_) async => responseModel);
 
     final result = await repository.registration(params);
 
-    expect(result, const Right(authenticationEntity));
+    expect(result, Right(authenticationEntity));
     verify(mockNetworkInfo.isConnected);
     verifyNoMoreInteractions(mockNetworkInfo);
     verify(mockRemoteDataSource.registration(params));
@@ -77,6 +79,8 @@ void main() {
   });
 
   test("Should setToken is called when token would be cached", () async {
+    when(mockLocalDataSource.setToken(token)).thenAnswer((_) async => true);
+
     await repository.setToken(token);
 
     verify(mockLocalDataSource.setToken(token));
