@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
+import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AuthenticationRemoteDataSource {
@@ -28,11 +29,11 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
     );
 
     if (response.statusCode != 200) {
-      throw ServerException(message: "Something went wrong");
+      throw ServerException(message: response.body);
     }
 
-    final Map<String, dynamic> json = jsonDecode(response.body);
-    return AuthenticationResponseModel.fromJSON(json);
+    final body = jsonDecode(response.body);
+    return AuthenticationResponseModel.fromJSON(body);
   }
   
 }
