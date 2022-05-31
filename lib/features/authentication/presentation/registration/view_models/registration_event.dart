@@ -44,20 +44,14 @@ class RegistrationSetConfirmPassword extends RegistrationEvent {
 }
 
 class RegistrationSetErrorFields extends RegistrationEvent {
-  final String errorName;
-  final String errorEmail;
-  final String errorPassword;
-  final String errorConfirmPassword;
+  final List<Map<String, dynamic>> errors;
 
   const RegistrationSetErrorFields({
-    required this.errorName,
-    required this.errorEmail,
-    required this.errorPassword,
-    required this.errorConfirmPassword
+    required this.errors,
   });
 
   @override
-  List<Object?> get props => [errorName, errorEmail, errorPassword, errorConfirmPassword];
+  List<Object?> get props => [errors];
 }
 
 class RegistrationResetErrorFields extends RegistrationEvent {}

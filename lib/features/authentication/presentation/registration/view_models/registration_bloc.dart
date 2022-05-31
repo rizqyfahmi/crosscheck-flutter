@@ -19,11 +19,35 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       emit(state.copyWith(confirmPassword: event.confirmPassword));
     });
     on<RegistrationSetErrorFields>((event, emit) {
+      String errorName = "";
+      String errorEmail = "";
+      String errorPassword = "";
+      String errorConfirmPassword = "";
+
+      for (var error in event.errors) {
+        switch (error["field"]) {
+          case "name":
+            errorName = error["error"];
+            break;
+          case "email":
+            errorEmail = error["error"];
+            break;
+          case "password":
+            errorPassword = error["error"];
+            break;
+          case "confirmPassword":
+            errorConfirmPassword = error["error"];
+            break;
+        }
+      }
+
+      // print("Hello World: $errorName, $errorEmail, $errorPassword, $errorConfirmPassword");
+
       final result = state.copyWith(
-        errorName: event.errorName,
-        errorEmail: event.errorEmail,
-        errorPassword: event.errorPassword,
-        errorConfirmPassword: event.errorConfirmPassword
+        errorName: errorName,
+        errorEmail: errorEmail,
+        errorPassword: errorPassword,
+        errorConfirmPassword: errorConfirmPassword
       );
       emit(result);
     });
