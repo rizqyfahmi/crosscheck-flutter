@@ -10,13 +10,43 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc({
     required this.registrationUsecase
   }) : super(const RegistrationState()) {
-    on<RegistrationSetName>((event, emit) {});
-    on<RegistrationSetEmail>((event, emit) {});
-    on<RegistrationSetPassword>((event, emit) {});
-    on<RegistrationSetConfirmPassword>((event, emit) {});
-    on<RegistrationSetErrorFields>((event, emit) {});
-    on<RegistrationResetErrorFields>((event, emit) {});
-    on<RegistrationResetFields>((event, emit) {});
+    on<RegistrationSetName>((event, emit) {
+      final result = state.copyWith(name: event.name);
+      emit(result);
+    });
+    on<RegistrationSetEmail>((event, emit) {
+      final result = state.copyWith(email: event.email);
+      emit(result);
+    });
+    on<RegistrationSetPassword>((event, emit) {
+      final result = state.copyWith(password: event.password);
+      emit(result);
+    });
+    on<RegistrationSetConfirmPassword>((event, emit) {
+      final result = state.copyWith(confirmPassword: event.confirmPassword);
+      emit(result);
+    });
+    on<RegistrationSetErrorFields>((event, emit) {
+      final result = state.copyWith(
+        errorName: event.errorName,
+        errorEmail: event.errorEmail,
+        errorPassword: event.errorPassword,
+        errorConfirmPassword: event.errorConfirmPassword
+      );
+      emit(result);
+    });
+    on<RegistrationResetErrorFields>((event, emit) {
+      final result = state.copyWith(
+        errorName: "",
+        errorEmail: "",
+        errorPassword: "",
+        errorConfirmPassword: "",
+      );
+      emit(result);
+    });
+    on<RegistrationResetFields>((event, emit) {
+      emit(const RegistrationState());
+    });
   }
 
 }
