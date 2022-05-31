@@ -67,10 +67,9 @@ void main() {
     verifyNoMoreInteractions(mockRemoteDataSource);
   });
 
-  test("Should get NetworkException on registration when device is offline", () async {
+  test("Should get NetworkFailure on registration when device is offline", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-    when(mockRemoteDataSource.registration(params)).thenThrow(NetworkException());
-
+    
     final result = await repository.registration(params);
 
     expect(result, Left(NetworkFailure()));
