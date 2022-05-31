@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 /* 
@@ -33,5 +32,10 @@ class CachedFailure extends Failure {
   List<Object?> get props => [message];
 }
 
-class NullFailure extends Failure {}
-class NetworkFailure extends Failure {}
+class NullFailure extends Failure {
+  static const message = "Null reference error";
+}
+
+class NetworkFailure extends Failure {
+  static const message = "Network error";
+}
