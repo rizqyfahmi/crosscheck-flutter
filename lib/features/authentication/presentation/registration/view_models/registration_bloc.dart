@@ -5,26 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
-  final RegistrationUsecase registrationUsecase;
-
-  RegistrationBloc({
-    required this.registrationUsecase
-  }) : super(const RegistrationState()) {
+  RegistrationBloc() : super(const RegistrationState()) {
     on<RegistrationSetName>((event, emit) {
-      final result = state.copyWith(name: event.name);
-      emit(result);
+      emit(state.copyWith(name: event.name));
     });
     on<RegistrationSetEmail>((event, emit) {
-      final result = state.copyWith(email: event.email);
-      emit(result);
+      emit(state.copyWith(email: event.email));
     });
     on<RegistrationSetPassword>((event, emit) {
-      final result = state.copyWith(password: event.password);
-      emit(result);
+      emit(state.copyWith(password: event.password));
     });
     on<RegistrationSetConfirmPassword>((event, emit) {
-      final result = state.copyWith(confirmPassword: event.confirmPassword);
-      emit(result);
+      emit(state.copyWith(confirmPassword: event.confirmPassword));
     });
     on<RegistrationSetErrorFields>((event, emit) {
       final result = state.copyWith(
