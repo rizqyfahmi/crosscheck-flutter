@@ -17,19 +17,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       final response = await registrationUsecase(event.params);
 
       response.fold((error) {
-        if (error is NullFailure) {
-          return emit(AuthenticationGeneralError(message: NullFailure.message));
-        }
-
-        if (error is NetworkFailure) {
-          return emit(AuthenticationGeneralError(message: NetworkFailure.message));
-        }
-
-        if (error is! ServerFailure) return;
-
-        if (error.errors != null) {
-          return emit(AuthenticationErrorFields(errors: error.errors!));
-        }
+        if (error is NullFailure) return emit(AuthenticationGeneralError(message: NullFailure.message));
+        if (error is NetworkFailure) return emit(AuthenticationGeneralError(message: NetworkFailure.message));
+        if (error is! ServerFailure) return; // prevent other failures, except ServerFailure
+        if (error.errors != null) return emit(AuthenticationErrorFields(errors: error.errors!));
 
         emit(AuthenticationGeneralError(message: error.message));
 
