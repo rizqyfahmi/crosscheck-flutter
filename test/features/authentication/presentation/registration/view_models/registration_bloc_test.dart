@@ -1,22 +1,13 @@
-import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 
-import 'registration_bloc_test.mocks.dart';
-
-@GenerateMocks([
-  RegistrationUsecase
-])
 void main() {
-  late MockRegistrationUsecase mockUsecase;
   late RegistrationBloc bloc;
 
   setUp(() {
-    mockUsecase = MockRegistrationUsecase();
-    bloc = RegistrationBloc(registrationUsecase: mockUsecase);
+    bloc = RegistrationBloc();
   });
 
   test("Should return Initial() at first time", () {
@@ -25,8 +16,7 @@ void main() {
 
   group("Field Testing", () {
     setUp(() {
-      mockUsecase = MockRegistrationUsecase();
-      bloc = RegistrationBloc(registrationUsecase: mockUsecase);
+      bloc = RegistrationBloc();
     });
     test("Should keep value when each field is entered in separately", () {
       final expected = [
