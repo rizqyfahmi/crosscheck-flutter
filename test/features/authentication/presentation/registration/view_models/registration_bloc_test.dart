@@ -118,12 +118,25 @@ void main() {
       bloc.add(const RegistrationSetEmail("fulan@email"));
       bloc.add(const RegistrationSetPassword("Password"));
       bloc.add(const RegistrationSetConfirmPassword("Password123"));
-      bloc.add(const RegistrationSetErrorFields(
-          errorName: "Your name should contain at least 8 characters",
-          errorEmail: "Please enter a valid email address", 
-          errorPassword: "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required.",
-          errorConfirmPassword: "Your password and confirmation password do not match"
-        )
+      bloc.add(
+        const RegistrationSetErrorFields(errors: [
+          {
+            "field": "name",
+            "error": "Your name should contain at least 8 characters"
+          },
+          {
+            "field": "email",
+            "error": "Please enter a valid email address"
+          },
+          {
+            "field": "password",
+            "error": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+          },
+          {
+            "field": "confirmPassword",
+            "error": "Your password and confirmation password do not match"
+          }
+        ])
       );
     });
 
@@ -148,12 +161,25 @@ void main() {
       bloc.add(const RegistrationSetEmail("fulan@email"));
       bloc.add(const RegistrationSetPassword("Password"));
       bloc.add(const RegistrationSetConfirmPassword("Password123"));
-      bloc.add(const RegistrationSetErrorFields(
-          errorName: "Your name should contain at least 8 characters",
-          errorEmail: "Please enter a valid email address", 
-          errorPassword: "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required.",
-          errorConfirmPassword: "Your password and confirmation password do not match"
-        )
+      bloc.add(
+        const RegistrationSetErrorFields(errors: [
+          {
+            "field": "name",
+            "error": "Your name should contain at least 8 characters"
+          },
+          {
+            "field": "email",
+            "error": "Please enter a valid email address"
+          },
+          {
+            "field": "password",
+            "error": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+          },
+          {
+            "field": "confirmPassword",
+            "error": "Your password and confirmation password do not match"
+          }
+        ])
       );
       bloc.add(RegistrationResetErrorFields());
     });
@@ -179,12 +205,25 @@ void main() {
       bloc.add(const RegistrationSetEmail("fulan@email"));
       bloc.add(const RegistrationSetPassword("Password"));
       bloc.add(const RegistrationSetConfirmPassword("Password123"));
-      bloc.add(const RegistrationSetErrorFields(
-          errorName: "Your name should contain at least 8 characters",
-          errorEmail: "Please enter a valid email address", 
-          errorPassword: "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required.",
-          errorConfirmPassword: "Your password and confirmation password do not match"
-        )
+      bloc.add(
+        const RegistrationSetErrorFields(errors: [
+          {
+            "field": "name",
+            "error": "Your name should contain at least 8 characters"
+          },
+          {
+            "field": "email", 
+            "error": "Please enter a valid email address"
+          },
+          {
+            "field": "password",
+            "error": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+          },
+          {
+            "field": "confirmPassword",
+            "error": "Your password and confirmation password do not match"
+          }
+        ])
       );
       bloc.add(RegistrationResetFields());
     });
