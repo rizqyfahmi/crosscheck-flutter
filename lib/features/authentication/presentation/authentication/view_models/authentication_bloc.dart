@@ -11,7 +11,35 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   AuthenticationBloc({
     required this.registrationUsecase
   }) : super(Unauthenticated()) {
-    on<AuthenticationSubmitRegistration>((event, emit) {});
+    on<AuthenticationSubmitRegistration>((event, emit) async {
+      
+      emit(AuthenticationLoading());
+      final response = await registrationUsecase(event.params);
+
+      response.fold((error) {
+        if (error is NullFailure) {
+          return emit(AuthenticationGeneralError(message: NullFailure.message));
+        }
+
+        if (error is NetworkFailure) {
+          return emit(AuthenticationGeneralError(message: NetworkFailure.message));
+        }
+
+        if (error is! ServerFailure) return;
+
+        if (error.errors != null) {
+          return emit(AuthenticationErrorFields(errors: error.errors!));
+        }
+
+        emit(AuthenticationGeneralError(message: error.message));
+
+      }, (result) {
+
+        emit(AuthenticationSuccess(token: result.token));
+        
+      });
+
+    });
   }
 
 }
