@@ -1,34 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
+  final String token;
+
+  const AuthenticationState({required this.token});
 
   @override
   List<Object?> get props => [];
 }
 
-class Unauthenticated extends AuthenticationState {}
-class AuthenticationLoading extends AuthenticationState {}
-class AuthenticationSuccess extends AuthenticationState {
-  final String token;
-
-  const AuthenticationSuccess({
-    required this.token
-  });
+class Unauthenticated extends AuthenticationState {
+  const Unauthenticated() : super(token: "");
 }
-
-class AuthenticationGeneralError extends Unauthenticated {
-  final String message;
-  
-  AuthenticationGeneralError({
-    required this.message
-  });
-}
-
-class AuthenticationErrorFields extends Unauthenticated {
-  final List<Map<String, dynamic>> errors;
-  
-  AuthenticationErrorFields({
-    required this.errors
-  });
+class Authenticated extends AuthenticationState {
+  const Authenticated({required super.token});
 }

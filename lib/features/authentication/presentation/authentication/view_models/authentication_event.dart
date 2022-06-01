@@ -1,4 +1,3 @@
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationEvent extends Equatable {
@@ -8,10 +7,15 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class AuthenticationSubmitRegistration extends AuthenticationEvent {
-  final RegistrationParams params;
+class AuthenticationSetToken extends AuthenticationEvent {
+  final String token;
 
-  const AuthenticationSubmitRegistration({
-    required this.params
+  const AuthenticationSetToken({
+    required this.token
   });
+
+  @override
+  List<Object?> get props => [token];
 }
+
+class AuthenticationResetToken extends AuthenticationEvent {}

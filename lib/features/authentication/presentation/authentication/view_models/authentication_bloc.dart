@@ -6,30 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   
-  final RegistrationUsecase registrationUsecase;
-
-  AuthenticationBloc({
-    required this.registrationUsecase
-  }) : super(Unauthenticated()) {
-    on<AuthenticationSubmitRegistration>((event, emit) async {
-      
-      emit(AuthenticationLoading());
-      final response = await registrationUsecase(event.params);
-
-      response.fold((error) {
-        if (error is NullFailure) return emit(AuthenticationGeneralError(message: NullFailure.message));
-        if (error is NetworkFailure) return emit(AuthenticationGeneralError(message: NetworkFailure.message));
-        if (error is! ServerFailure) return; // prevent other failures, except ServerFailure
-        if (error.errors != null) return emit(AuthenticationErrorFields(errors: error.errors!));
-
-        emit(AuthenticationGeneralError(message: error.message));
-
-      }, (result) {
-
-        emit(AuthenticationSuccess(token: result.token));
-        
-      });
-
+  AuthenticationBloc() : super(const Unauthenticated()) {
+    on<AuthenticationSetToken>((event, emit) {
+      emit(Authenticated(token: event.token));
+    });
+    on<AuthenticationResetToken>((event, emit) {
+      emit(const Unauthenticated());
     });
   }
 
