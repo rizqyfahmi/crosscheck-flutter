@@ -1,51 +1,44 @@
+import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_model.dart';
 import 'package:equatable/equatable.dart';
 
-class RegistrationState extends Equatable {
+abstract class RegistrationState extends Equatable {
 
-  final String name;
-  final String errorName;
-  final String email;
-  final String errorEmail;
-  final String password;
-  final String errorPassword;
-  final String confirmPassword;
-  final String errorConfirmPassword;
+  final RegistrationModel model;
 
   const RegistrationState({
-    this.name = "",
-    this.errorName = "",
-    this.email = "",
-    this.errorEmail = "",
-    this.password = "",
-    this.errorPassword = "",
-    this.confirmPassword = "",
-    this.errorConfirmPassword = ""
+    required this.model
   });
-
-  RegistrationState copyWith({
-    String? name,
-    String? errorName,
-    String? email,
-    String? errorEmail,
-    String? password,
-    String? errorPassword,
-    String? confirmPassword,
-    String? errorConfirmPassword
-  }) {
-    return RegistrationState(
-      name: name ?? this.name, 
-      errorName: errorName ?? this.errorName, 
-      email: email ?? this.email, 
-      errorEmail: errorEmail ?? this.errorEmail, 
-      password: password ?? this.password, 
-      errorPassword: errorPassword ?? this.errorPassword, 
-      confirmPassword: confirmPassword ?? this.confirmPassword, 
-      errorConfirmPassword: errorConfirmPassword ?? this.errorConfirmPassword
-    );
-  }
 
   @override
   List<Object?> get props => [
-    name, errorName, email, errorEmail, password, errorPassword, confirmPassword, errorConfirmPassword
+    model
   ];
+}
+
+class RegistrationInitial extends RegistrationState {
+  const RegistrationInitial() : super(model: const RegistrationModel());
+}
+
+class RegistrationEnterField extends RegistrationState{
+  const RegistrationEnterField({required super.model});
+}
+
+class RegistrationLoading extends RegistrationState {
+  const RegistrationLoading({required super.model});
+}
+
+class RegistrationSuccess extends RegistrationState {
+  final String token;
+
+  const RegistrationSuccess({required this.token}) : super(model: const RegistrationModel());
+}
+
+class RegistrationGeneralError extends RegistrationState {
+  final String message;
+
+  const RegistrationGeneralError({required this.message, required super.model});
+}
+
+class RegistrationValidationError extends RegistrationState {
+  const RegistrationValidationError({required super.model});
 }

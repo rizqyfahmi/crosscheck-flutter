@@ -1,24 +1,35 @@
+import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_model.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
-  RegistrationBloc() : super(const RegistrationState()) {
+  final RegistrationUsecase registrationUsecase;
+
+  RegistrationBloc({
+    required this.registrationUsecase
+  }) : super(const RegistrationInitial()) {
     on<RegistrationSetName>((event, emit) {
-      emit(state.copyWith(name: event.name));
+      final RegistrationModel model = state.model.copyWith(name: event.name);
+      emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetEmail>((event, emit) {
-      emit(state.copyWith(email: event.email));
+      final RegistrationModel model = state.model.copyWith(email: event.email);
+      emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetPassword>((event, emit) {
-      emit(state.copyWith(password: event.password));
+      final RegistrationModel model = state.model.copyWith(password: event.password);
+      emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetConfirmPassword>((event, emit) {
-      emit(state.copyWith(confirmPassword: event.confirmPassword));
+      final RegistrationModel model = state.model.copyWith(confirmPassword: event.confirmPassword);
+      emit(RegistrationEnterField(model: model));
     });
-    on<RegistrationSetErrorFields>((event, emit) {
+    on<RegistrationSetValidationError>((event, emit) {
       String errorName = "";
       String errorEmail = "";
       String errorPassword = "";
@@ -41,27 +52,43 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         }
       }
 
-      // print("Hello World: $errorName, $errorEmail, $errorPassword, $errorConfirmPassword");
-
-      final result = state.copyWith(
+      final RegistrationModel model = state.model.copyWith(
         errorName: errorName,
         errorEmail: errorEmail,
         errorPassword: errorPassword,
         errorConfirmPassword: errorConfirmPassword
       );
-      emit(result);
+      
+      emit(RegistrationValidationError(model: model));
     });
-    on<RegistrationResetErrorFields>((event, emit) {
-      final result = state.copyWith(
+    on<RegistrationSubmit>((event, emit) async {
+      // Reset validation error before registrartion submit
+      final RegistrationModel model = state.model.copyWith(
         errorName: "",
         errorEmail: "",
         errorPassword: "",
-        errorConfirmPassword: "",
+        errorConfirmPassword: ""
       );
-      emit(result);
-    });
-    on<RegistrationResetFields>((event, emit) {
-      emit(const RegistrationState());
+      emit(RegistrationLoading(model: model));
+
+      final RegistrationParams params = RegistrationParams(
+        name: model.name, 
+        email: model.email, 
+        password: model.password, 
+        confirmPassword: model.confirmPassword
+      );
+      final response =  await registrationUsecase(params);
+
+      response.fold((error) {
+        if (error is NullFailure) return emit(RegistrationGeneralError(message: NullFailure.message, model: model));
+        if (error is NetworkFailure) return emit(RegistrationGeneralError(message: NetworkFailure.message, model: model));
+        if (error is! ServerFailure) return; // prevent other failures, except ServerFailure
+        if (error.errors != null) return add(RegistrationSetValidationError(errors: error.errors!));
+
+        emit(RegistrationGeneralError(message: error.message, model: model));
+      }, (result) {
+        emit(RegistrationSuccess(token: result.token));
+      });
     });
   }
 
