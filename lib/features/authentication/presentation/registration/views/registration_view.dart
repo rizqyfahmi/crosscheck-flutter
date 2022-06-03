@@ -1,8 +1,13 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
+import 'package:crosscheck/core/widgets/text_error/text_error.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({Key? key}) : super(key: key);
@@ -34,10 +39,6 @@ class _RegistrationViewState extends State<RegistrationView> {
 
       setState(() {
         height = contentHeight > screenHeight ? contentHeight : screenHeight;
-      });
-
-      await Future.delayed(const Duration(seconds: 1));
-      setState(() {
         opacity = 1;
       });
     });
@@ -66,27 +67,47 @@ class _RegistrationViewState extends State<RegistrationView> {
         BorderedTextField(
           key: const Key("nameField"),
           hintText: "Full Name", 
-          onChanged: (value) {}
+          onChanged: (value) {
+            context.read<RegistrationBloc>().add(RegistrationSetName(value));
+          }
+        ),
+        BlocBuilder<RegistrationBloc, RegistrationState>(
+          builder: (context, state) => TextError(state.model.errorName)
         ),
         const SizedBox(height: 16),
         BorderedTextField(
           key: const Key("emailField"),
           hintText: "Email Address", 
-          onChanged: (value) {}
+          onChanged: (value) {
+            context.read<RegistrationBloc>().add(RegistrationSetEmail(value));
+          }
+        ),
+        BlocBuilder<RegistrationBloc, RegistrationState>(
+          builder: (context, state) => TextError(state.model.errorEmail)
         ),
         const SizedBox(height: 16),
         BorderedTextField(
           key: const Key("passwordField"),
           hintText: "Password",
           obscureText: true,
-          onChanged: (value) {}
+          onChanged: (value) {
+            context.read<RegistrationBloc>().add(RegistrationSetPassword(value));
+          }
+        ),
+        BlocBuilder<RegistrationBloc, RegistrationState>(
+          builder: (context, state) => TextError(state.model.errorPassword)
         ),
         const SizedBox(height: 16),
         BorderedTextField(
           key: const Key("confirmPasswordField"),
           hintText: "Confirm Password",
           obscureText: true,
-          onChanged: (value) {}
+          onChanged: (value) {
+            context.read<RegistrationBloc>().add(RegistrationSetConfirmPassword(value));
+          }
+        ),
+        BlocBuilder<RegistrationBloc, RegistrationState>(
+          builder: (context, state) => TextError(state.model.errorConfirmPassword)
         ),
         const SizedBox(height: 32),
         Row(
