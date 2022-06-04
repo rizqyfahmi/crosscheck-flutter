@@ -1,5 +1,6 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
+import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/core/widgets/text_error/text_error.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
@@ -125,7 +126,9 @@ class _RegistrationViewState extends State<RegistrationView> {
                   ),
                   primary: CustomColors.primary
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.read<RegistrationBloc>().add(RegistrationSubmit());
+                },
                 child: const Text(
                   "Create an account",
                   style: TextStyles.poppinsMedium18,
@@ -230,23 +233,28 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Opacity(
-          opacity: opacity,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              if (height > 0) {
-                return SingleChildScrollView(
-                  child: SizedBox(
-                    height: height,
-                    child: buildForm(context),
-                  ),
-                );
-              }
+        child: BlocBuilder<RegistrationBloc, RegistrationState>(
+          builder: (context, state) {
+            return LoadingModal(
+              isLoading: state is RegistrationLoading,
+              child: Opacity(
+                opacity: opacity,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  if (height > 0) {
+                    return SingleChildScrollView(
+                      child: SizedBox(
+                        height: height,
+                        child: buildForm(context),
+                      ),
+                    );
+                  }
 
-              return buildForm(context);
-            }
-          ),
-        ),
+                  return buildForm(context);
+                }),
+              )
+            );
+          }
+        )
       ),
     );
   }
