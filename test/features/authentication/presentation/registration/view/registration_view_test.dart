@@ -13,36 +13,27 @@ import 'registration_view_test.mocks.dart';
 
 @GenerateMocks([
   AuthenticationBloc,
-  RegistrationBloc
+  RegistrationBloc,
 ])
 void main() async {
-  late MockAuthenticationBloc authenticationBloc;
-  late MockRegistrationBloc registrationBloc;
+  late MockAuthenticationBloc mockAuthenticationBloc;
+  late MockRegistrationBloc mockRegistrationBloc;
   late Widget testWidget;
   
-  setUp(() {
-    authenticationBloc = MockAuthenticationBloc();
-    registrationBloc = MockRegistrationBloc();
-
-    testWidget = MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthenticationBloc>(
-          create: (_) => authenticationBloc
-        ),
-        BlocProvider<RegistrationBloc>(
-          create: (_) => registrationBloc
-        )
-      ], 
-      child: const MaterialApp(
-        home: RegistrationView(),
-      )
-    );
-  });
-  
   group("Looking for some of important widgets", () {
+    setUp(() {
+      mockAuthenticationBloc = MockAuthenticationBloc();
+      mockRegistrationBloc = MockRegistrationBloc();
+
+      testWidget = buildWidget(
+        authenticationBloc: mockAuthenticationBloc,
+        registrationBloc: mockRegistrationBloc
+      );
+    });
+
     testWidgets("Should be running well", (WidgetTester tester) async {
-      when(registrationBloc.state).thenReturn(const RegistrationInitial());
-      when(registrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
+      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
+      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
 
       await tester.pumpWidget(testWidget);
       await tester.pumpAndSettle();
@@ -51,8 +42,8 @@ void main() async {
     });
 
     testWidgets("Should display all fields", (WidgetTester tester) async {
-      when(registrationBloc.state).thenReturn(const RegistrationInitial());
-      when(registrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
+      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
+      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
 
       await tester.pumpWidget(testWidget);
       await tester.pumpAndSettle();
@@ -64,8 +55,8 @@ void main() async {
     });
 
     testWidgets("Should display submit button", (WidgetTester tester) async {
-      when(registrationBloc.state).thenReturn(const RegistrationInitial());
-      when(registrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
+      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
+      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
 
       await tester.pumpWidget(testWidget);
       await tester.pumpAndSettle();
@@ -74,8 +65,8 @@ void main() async {
     });
 
     testWidgets("Should display sign in and t&c text button", (WidgetTester tester) async {
-      when(registrationBloc.state).thenReturn(const RegistrationInitial());
-      when(registrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
+      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
+      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
 
       await tester.pumpWidget(testWidget);
       await tester.pumpAndSettle();
@@ -89,8 +80,8 @@ void main() async {
       // change screen size
       // tester.binding.window.physicalSizeTestValue = const Size(720, 1634);
 
-      when(registrationBloc.state).thenReturn(const RegistrationInitial());
-      when(registrationBloc.stream).thenAnswer((_) => Stream.fromIterable([
+      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
+      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([
         const RegistrationValidationError(model: RegistrationModel(
           errorName: "Field full name is required",
           errorEmail: "Field email address is required",
@@ -114,8 +105,8 @@ void main() async {
       // change screen size
       // tester.binding.window.physicalSizeTestValue = const Size(720, 1634);
 
-      when(registrationBloc.state).thenReturn(const RegistrationInitial());
-      when(registrationBloc.stream).thenAnswer((_) => Stream.fromIterable([
+      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
+      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([
         const RegistrationValidationError(model: RegistrationModel(
           errorName: "Field full name is required",
           errorEmail: "Field email address is required",
@@ -141,4 +132,23 @@ void main() async {
     });
   });
 
+}
+
+Widget buildWidget({
+  required AuthenticationBloc authenticationBloc,
+  required RegistrationBloc registrationBloc
+}) {
+  return MultiBlocProvider(
+        providers: [
+      BlocProvider<AuthenticationBloc>(
+        create: (_) => authenticationBloc
+      ),
+      BlocProvider<RegistrationBloc>(
+        create: (_) => registrationBloc
+      )
+    ], 
+    child: const MaterialApp(
+      home: RegistrationView(),
+    )
+  );
 }
