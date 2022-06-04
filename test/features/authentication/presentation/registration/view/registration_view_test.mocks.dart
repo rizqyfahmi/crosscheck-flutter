@@ -2,23 +2,31 @@
 // in crosscheck/test/features/authentication/presentation/registration/view/registration_view_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
+import 'dart:async' as _i8;
 
+import 'package:crosscheck/core/error/failure.dart' as _i13;
+import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
+    as _i15;
+import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
+    as _i14;
+import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
+    as _i5;
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart'
     as _i3;
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart'
-    as _i5;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart'
     as _i7;
+import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart'
+    as _i9;
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_state.dart'
     as _i2;
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart'
-    as _i9;
+    as _i11;
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart'
-    as _i10;
+    as _i12;
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart'
     as _i4;
-import 'package:flutter_bloc/flutter_bloc.dart' as _i8;
+import 'package:dartz/dartz.dart' as _i6;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -40,11 +48,16 @@ class _FakeRegistrationUsecase_1 extends _i1.Fake
 class _FakeRegistrationState_2 extends _i1.Fake
     implements _i4.RegistrationState {}
 
+class _FakeAuthenticationRepository_3 extends _i1.Fake
+    implements _i5.AuthenticationRepository {}
+
+class _FakeEither_4<L, R> extends _i1.Fake implements _i6.Either<L, R> {}
+
 /// A class which mocks [AuthenticationBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationBloc extends _i1.Mock
-    implements _i5.AuthenticationBloc {
+    implements _i7.AuthenticationBloc {
   MockAuthenticationBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -54,20 +67,20 @@ class MockAuthenticationBloc extends _i1.Mock
       Invocation.getter(#state),
       returnValue: _FakeAuthenticationState_0()) as _i2.AuthenticationState);
   @override
-  _i6.Stream<_i2.AuthenticationState> get stream =>
+  _i8.Stream<_i2.AuthenticationState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i2.AuthenticationState>.empty())
-          as _i6.Stream<_i2.AuthenticationState>);
+          as _i8.Stream<_i2.AuthenticationState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i7.AuthenticationEvent? event) =>
+  void add(_i9.AuthenticationEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i7.AuthenticationEvent? event) =>
+  void onEvent(_i9.AuthenticationEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -75,24 +88,24 @@ class MockAuthenticationBloc extends _i1.Mock
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i7.AuthenticationEvent>(
-          _i8.EventHandler<E, _i2.AuthenticationState>? handler,
-          {_i8.EventTransformer<E>? transformer}) =>
+  void on<E extends _i9.AuthenticationEvent>(
+          _i10.EventHandler<E, _i2.AuthenticationState>? handler,
+          {_i10.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i8.Transition<_i7.AuthenticationEvent, _i2.AuthenticationState>?
+          _i10.Transition<_i9.AuthenticationEvent, _i2.AuthenticationState>?
               transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i6.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  void onChange(_i8.Change<_i2.AuthenticationState>? change) =>
+  void onChange(_i10.Change<_i2.AuthenticationState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -108,7 +121,7 @@ class MockAuthenticationBloc extends _i1.Mock
 /// A class which mocks [RegistrationBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRegistrationBloc extends _i1.Mock implements _i9.RegistrationBloc {
+class MockRegistrationBloc extends _i1.Mock implements _i11.RegistrationBloc {
   MockRegistrationBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -122,20 +135,20 @@ class MockRegistrationBloc extends _i1.Mock implements _i9.RegistrationBloc {
       (super.noSuchMethod(Invocation.getter(#state),
           returnValue: _FakeRegistrationState_2()) as _i4.RegistrationState);
   @override
-  _i6.Stream<_i4.RegistrationState> get stream =>
+  _i8.Stream<_i4.RegistrationState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i4.RegistrationState>.empty())
-          as _i6.Stream<_i4.RegistrationState>);
+          as _i8.Stream<_i4.RegistrationState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i10.RegistrationEvent? event) =>
+  void add(_i12.RegistrationEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i10.RegistrationEvent? event) =>
+  void onEvent(_i12.RegistrationEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -143,24 +156,24 @@ class MockRegistrationBloc extends _i1.Mock implements _i9.RegistrationBloc {
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i10.RegistrationEvent>(
-          _i8.EventHandler<E, _i4.RegistrationState>? handler,
-          {_i8.EventTransformer<E>? transformer}) =>
+  void on<E extends _i12.RegistrationEvent>(
+          _i10.EventHandler<E, _i4.RegistrationState>? handler,
+          {_i10.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i8.Transition<_i10.RegistrationEvent, _i4.RegistrationState>?
+          _i10.Transition<_i12.RegistrationEvent, _i4.RegistrationState>?
               transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i6.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  void onChange(_i8.Change<_i4.RegistrationState>? change) =>
+  void onChange(_i10.Change<_i4.RegistrationState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -171,4 +184,28 @@ class MockRegistrationBloc extends _i1.Mock implements _i9.RegistrationBloc {
   void onError(Object? error, StackTrace? stackTrace) =>
       super.noSuchMethod(Invocation.method(#onError, [error, stackTrace]),
           returnValueForMissingStub: null);
+}
+
+/// A class which mocks [RegistrationUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockRegistrationUsecase extends _i1.Mock
+    implements _i3.RegistrationUsecase {
+  MockRegistrationUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.AuthenticationRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+              returnValue: _FakeAuthenticationRepository_3())
+          as _i5.AuthenticationRepository);
+  @override
+  _i8.Future<_i6.Either<_i13.Failure, _i14.AuthenticationEntity>> call(
+          _i15.RegistrationParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
+          returnValue: Future<
+                  _i6.Either<_i13.Failure, _i14.AuthenticationEntity>>.value(
+              _FakeEither_4<_i13.Failure, _i14.AuthenticationEntity>())) as _i8
+          .Future<_i6.Either<_i13.Failure, _i14.AuthenticationEntity>>);
 }
