@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
@@ -26,9 +27,26 @@ void main() async {
   late MockRegistrationUsecase mockRegistrationUsecase;
   late AuthenticationBloc authenticationBloc;
   late RegistrationBloc registrationBloc;
+  late RegistrationModel model;
   late Widget testWidget;
   
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+  const String token = "eyJhbGci OiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+  const errorMessage = "Something went wrong";
+  const List<Map<String, dynamic>> errors = [
+    {
+      "field": "name",
+      "error": "Your name should contain at least 8 characters"
+    },
+    {"field": "email", "error": "Please enter a valid email address"},
+    {
+      "field": "password",
+      "error":"A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+    },
+    {
+      "field": "confirmPassword",
+      "error": "Your password and confirmation password do not match"
+    }
+  ];
 
   group("Looking for some of important widgets", () {
     setUp(() {
@@ -140,6 +158,7 @@ void main() async {
       mockRegistrationUsecase = MockRegistrationUsecase();
       authenticationBloc = AuthenticationBloc();
       registrationBloc = RegistrationBloc(registrationUsecase: mockRegistrationUsecase);
+      model = const RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email.com", errorEmail: "", password: "Password123", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "");
       
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc,
@@ -212,6 +231,142 @@ void main() async {
         expect(registrationBloc.state, expected);
       });
     });
+
+    testWidgets("Should display RegistrationGeneralError when registration returns NullFailure", (WidgetTester tester) async {
+      when(mockRegistrationUsecase(any)).thenAnswer((_) async {
+        await Future.delayed(const Duration(seconds: 2));
+        return Left(NullFailure());
+      });
+
+      await tester.pumpWidget(testWidget);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
+      await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password123");
+      await tester.pump();
+
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key("submitButton")));
+        await tester.pump();
+
+        RegistrationState expected = RegistrationLoading(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsOneWidget);
+        
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pump();
+        expected = RegistrationGeneralError(message: NullFailure.message, model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text(NullFailure.message), findsOneWidget);
+      });
+    });
+
+    testWidgets("Should display RegistrationGeneralError when registration returns NetworkFailure", (WidgetTester tester) async {
+      when(mockRegistrationUsecase(any)).thenAnswer((_) async {
+        await Future.delayed(const Duration(seconds: 2));
+        return Left(NetworkFailure());
+      });
+
+      await tester.pumpWidget(testWidget);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
+      await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password123");
+      await tester.pump();
+
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key("submitButton")));
+        await tester.pump();
+
+        RegistrationState expected = RegistrationLoading(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsOneWidget);
+        
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pump();
+        expected = RegistrationGeneralError(message: NetworkFailure.message, model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text(NetworkFailure.message), findsOneWidget);
+      });
+    });
+
+    testWidgets("Should display RegistrationGeneralError when registration returns ServerFailure", (WidgetTester tester) async {
+      when(mockRegistrationUsecase(any)).thenAnswer((_) async {
+        await Future.delayed(const Duration(seconds: 2));
+        return Left(ServerFailure(message: errorMessage));
+      });
+
+      await tester.pumpWidget(testWidget);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
+      await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password123");
+      await tester.pump();
+
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key("submitButton")));
+        await tester.pump();
+
+        RegistrationState expected = RegistrationLoading(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsOneWidget);
+        
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pump();
+        expected = RegistrationGeneralError(message: errorMessage, model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text(errorMessage), findsOneWidget);
+      });
+    });
+
+    testWidgets("Should display RegistrationGeneralError when registration returns validation error", (WidgetTester tester) async {
+      when(mockRegistrationUsecase(any)).thenAnswer((_) async {
+        await Future.delayed(const Duration(seconds: 2));
+        return Left(ServerFailure(message: errorMessage, errors: errors));
+      });
+
+      await tester.pumpWidget(testWidget);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
+      await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password123");
+      await tester.pump();
+
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key("submitButton")));
+        await tester.pump();
+
+        RegistrationState expected = RegistrationLoading(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsOneWidget);
+
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pump();
+
+        final modifiedModel = model.copyWith(
+          errorName: "Your name should contain at least 8 characters",
+          errorEmail: "Please enter a valid email address",
+          errorPassword: "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required.",
+          errorConfirmPassword: "Your password and confirmation password do not match"
+        );
+
+        expected = RegistrationValidationError(model: modifiedModel);
+        expect(registrationBloc.state, expected);
+        expect(find.text(modifiedModel.errorName), findsOneWidget);
+        expect(find.text(modifiedModel.errorEmail), findsOneWidget);
+        expect(find.text(modifiedModel.errorPassword), findsOneWidget);
+        expect(find.text(modifiedModel.errorConfirmPassword), findsOneWidget);
+      });
+    });
+
   });
 
 }
