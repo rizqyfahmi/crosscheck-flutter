@@ -14,19 +14,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     required this.registrationUsecase
   }) : super(const RegistrationInitial()) {
     on<RegistrationSetName>((event, emit) {
-      final RegistrationModel model = state.model.copyWith(name: event.name);
+      final RegistrationModel model = state.model.copyWith(name: event.name, errorName: "");
       emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetEmail>((event, emit) {
-      final RegistrationModel model = state.model.copyWith(email: event.email);
+      final RegistrationModel model = state.model.copyWith(email: event.email, errorEmail: "");
       emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetPassword>((event, emit) {
-      final RegistrationModel model = state.model.copyWith(password: event.password);
+      final RegistrationModel model = state.model.copyWith(password: event.password, errorPassword: "");
       emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetConfirmPassword>((event, emit) {
-      final RegistrationModel model = state.model.copyWith(confirmPassword: event.confirmPassword);
+      final RegistrationModel model = state.model.copyWith(confirmPassword: event.confirmPassword, errorConfirmPassword: "");
       emit(RegistrationEnterField(model: model));
     });
     on<RegistrationSetValidationError>((event, emit) {
@@ -58,8 +58,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         errorPassword: errorPassword,
         errorConfirmPassword: errorConfirmPassword
       );
-      
+
       emit(RegistrationValidationError(model: model));
+    });
+    on<RegistrationResetGeneralError>((event, emit) {
+      emit(RegistrationNoGeneralError(model: state.model));
     });
     on<RegistrationSubmit>((event, emit) async {
       // Reset validation error before registrartion submit

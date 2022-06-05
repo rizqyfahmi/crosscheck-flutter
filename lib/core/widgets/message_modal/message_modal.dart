@@ -170,14 +170,14 @@ class _MessageModalState extends State<MessageModal> {
                                                         children: [
                                                           Expanded(
                                                             child: ElevatedButton(
+                                                              key: const Key("dismissButton"),
                                                               onPressed: () {
                                                                 setState(() {
                                                                   isShown = false;
+                                                                  if (widget.onDismissed != null) {
+                                                                    widget.onDismissed!();
+                                                                  }
                                                                 });
-
-                                                                if (widget.onDismissed != null) {
-                                                                  widget.onDismissed!();
-                                                                }
                                                               },
                                                               style: ElevatedButton.styleFrom(
                                                                 elevation: 0,

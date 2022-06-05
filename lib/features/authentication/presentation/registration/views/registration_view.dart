@@ -241,6 +241,9 @@ class _RegistrationViewState extends State<RegistrationView> {
               child: MessageModal(
                 status: MessageModalStatus.error,
                 message: state is RegistrationGeneralError ? state.message : null,
+                onDismissed: () {
+                  context.read<RegistrationBloc>().add(RegistrationResetGeneralError());
+                },
                 child: Opacity(
                   opacity: opacity,
                   child: LayoutBuilder(builder: (context, constraints) {

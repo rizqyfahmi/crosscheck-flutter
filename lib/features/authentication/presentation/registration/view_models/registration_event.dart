@@ -55,3 +55,4 @@ class RegistrationSetValidationError extends RegistrationEvent {
 }
 
 class RegistrationSubmit extends RegistrationEvent {}
+class RegistrationResetGeneralError extends RegistrationEvent {}

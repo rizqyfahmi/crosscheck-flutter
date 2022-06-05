@@ -39,6 +39,10 @@ class RegistrationGeneralError extends RegistrationState {
   const RegistrationGeneralError({required this.message, required super.model});
 }
 
+class RegistrationNoGeneralError extends RegistrationState {
+  const RegistrationNoGeneralError({required super.model});
+}
+
 class RegistrationValidationError extends RegistrationState {
   const RegistrationValidationError({required super.model});
 }
