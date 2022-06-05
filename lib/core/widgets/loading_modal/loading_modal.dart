@@ -27,7 +27,7 @@ class LoadingModal extends StatelessWidget {
         child,
         Positioned(
           child: Container(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withOpacity(0.5),
           )
         ),
         Center(
