@@ -90,6 +90,9 @@ flutter:
           weight: 500
         - asset: lib/assets/fonts/poppins/Poppins-Bold.ttf
           weight: 700
+    - family: Crosscheck
+      fonts:
+        - asset: lib/assets/icons/crosscheck/fonts/Crosscheck.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
