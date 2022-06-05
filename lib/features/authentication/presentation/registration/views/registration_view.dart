@@ -1,6 +1,7 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
 import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
+import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/core/widgets/text_error/text_error.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
@@ -237,20 +238,24 @@ class _RegistrationViewState extends State<RegistrationView> {
           builder: (context, state) {
             return LoadingModal(
               isLoading: state is RegistrationLoading,
-              child: Opacity(
-                opacity: opacity,
-                child: LayoutBuilder(builder: (context, constraints) {
-                  if (height > 0) {
-                    return SingleChildScrollView(
-                      child: SizedBox(
-                        height: height,
-                        child: buildForm(context),
-                      ),
-                    );
-                  }
-
-                  return buildForm(context);
-                }),
+              child: MessageModal(
+                status: MessageModalStatus.error,
+                message: state is RegistrationGeneralError ? state.message : null,
+                child: Opacity(
+                  opacity: opacity,
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    if (height > 0) {
+                      return SingleChildScrollView(
+                        child: SizedBox(
+                          height: height,
+                          child: buildForm(context),
+                        ),
+                      );
+                    }
+              
+                    return buildForm(context);
+                  }),
+                ),
               )
             );
           }
