@@ -232,7 +232,7 @@ void main() async {
       });
     });
 
-    testWidgets("Should display RegistrationGeneralError when registration returns NullFailure", (WidgetTester tester) async {
+    testWidgets("Should show and hide RegistrationGeneralError when registration returns NullFailure", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
         return Left(NullFailure());
@@ -260,10 +260,21 @@ void main() async {
         expected = RegistrationGeneralError(message: NullFailure.message, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(NullFailure.message), findsOneWidget);
+        expect(find.byKey(const Key("dismissButton")), findsOneWidget);
+        
+        await tester.ensureVisible(find.byKey(const Key("dismissButton")));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("dismissButton")));
+        await tester.pump();
+
+        expected = RegistrationNoGeneralError(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text(NullFailure.message), findsNothing);
+
       });
     });
 
-    testWidgets("Should display RegistrationGeneralError when registration returns NetworkFailure", (WidgetTester tester) async {
+    testWidgets("Should show and hide RegistrationGeneralError when registration returns NetworkFailure", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
         return Left(NetworkFailure());
@@ -291,10 +302,20 @@ void main() async {
         expected = RegistrationGeneralError(message: NetworkFailure.message, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(NetworkFailure.message), findsOneWidget);
+        expect(find.byKey(const Key("dismissButton")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("dismissButton")));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("dismissButton")));
+        await tester.pump();
+
+        expected = RegistrationNoGeneralError(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text(NetworkFailure.message), findsNothing);
       });
     });
 
-    testWidgets("Should display RegistrationGeneralError when registration returns ServerFailure", (WidgetTester tester) async {
+    testWidgets("Should show and hide RegistrationGeneralError when registration returns ServerFailure", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
         return Left(ServerFailure(message: errorMessage));
@@ -322,10 +343,20 @@ void main() async {
         expected = RegistrationGeneralError(message: errorMessage, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(errorMessage), findsOneWidget);
+        expect(find.byKey(const Key("dismissButton")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("dismissButton")));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key("dismissButton")));
+        await tester.pump();
+
+        expected = RegistrationNoGeneralError(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text(errorMessage), findsNothing);
       });
     });
 
-    testWidgets("Should display RegistrationGeneralError when registration returns validation error", (WidgetTester tester) async {
+    testWidgets("Should display and reset error fields when user retype value after registration returns validation error", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
         return Left(ServerFailure(message: errorMessage, errors: errors));
@@ -364,6 +395,20 @@ void main() async {
         expect(find.text(modifiedModel.errorEmail), findsOneWidget);
         expect(find.text(modifiedModel.errorPassword), findsOneWidget);
         expect(find.text(modifiedModel.errorConfirmPassword), findsOneWidget);
+
+        
+        await tester.enterText(find.byKey(const Key("nameField")), "Fulano");
+        await tester.pump();
+        expect(find.text(modifiedModel.errorName), findsNothing);
+        await tester.enterText(find.byKey(const Key("emailField")), "fulano@email.com");
+        await tester.pump();
+        expect(find.text(modifiedModel.errorEmail), findsNothing);
+        await tester.enterText(find.byKey(const Key("passwordField")), "Password456");
+        await tester.pump();
+        expect(find.text(modifiedModel.errorPassword), findsNothing);
+        await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password456");
+        await tester.pump();
+        expect(find.text(modifiedModel.errorConfirmPassword), findsNothing);
       });
     });
 
