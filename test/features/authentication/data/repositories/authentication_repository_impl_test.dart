@@ -1,10 +1,10 @@
-
-
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart';
+import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
 import 'package:crosscheck/features/authentication/data/repositories/authentication_repository_impl.dart';
@@ -28,6 +28,7 @@ void main() {
   late MockNetworkInfo mockNetworkInfo;
   late AuthenticationRepository repository;
   late RegistrationParams params;
+  late LoginParams loginParams;
   
   // Mock Result
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -49,6 +50,7 @@ void main() {
       password: "fulan123",
       confirmPassword: "fulan123"
     );
+    loginParams = const LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
   test("Should get AunthenticationModel on registration when device is online", () async {
@@ -81,6 +83,39 @@ void main() {
 
     verify(mockLocalDataSource.setToken(token));
     verifyNoMoreInteractions(mockLocalDataSource);
+  });
+
+  test("Should get AuthenticationModel on login when device is online", () async {
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockRemoteDataSource.login(loginParams)).thenAnswer((_) async => responseModel);
+
+    final result = await repository.login(loginParams);
+    
+    expect(result, Right(authenticationEntity));
+    verify(mockNetworkInfo.isConnected);
+    verify(mockRemoteDataSource.login(loginParams));
+  });
+
+  test("Should get NetworkFailure when login is failed because of device is offline", () async {
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+    when(mockRemoteDataSource.login(loginParams)).thenAnswer((_) async => responseModel);
+
+    final result = await repository.login(loginParams);
+
+    expect(result, Left(NetworkFailure()));
+    verify(mockNetworkInfo.isConnected);
+    verifyNever(mockRemoteDataSource.login(loginParams));
+  });
+
+  test("Should get ServerFailure when login is failed because of ServerException", () async {
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockRemoteDataSource.login(loginParams)).thenThrow(ServerException(message: "Something went wrong"));
+
+    final result = await repository.login(loginParams);
+    
+    expect(result, Left(ServerFailure(message: "Something went wrong")));
+    verify(mockNetworkInfo.isConnected);
+    verify(mockRemoteDataSource.login(loginParams));
   });
 
 }

@@ -4,11 +4,13 @@
 
 import 'dart:async' as _i4;
 
-import 'package:crosscheck/core/network/network_info.dart' as _i7;
+import 'package:crosscheck/core/network/network_info.dart' as _i8;
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart'
-    as _i6;
+    as _i7;
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart'
     as _i3;
+import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
+    as _i6;
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
     as _i5;
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart'
@@ -44,13 +46,19 @@ class MockAuthenticationRemoteDataSource extends _i1.Mock
               returnValue: Future<_i2.AuthenticationResponseModel>.value(
                   _FakeAuthenticationResponseModel_0()))
           as _i4.Future<_i2.AuthenticationResponseModel>);
+  @override
+  _i4.Future<_i2.AuthenticationResponseModel> login(_i6.LoginParams? params) =>
+      (super.noSuchMethod(Invocation.method(#login, [params]),
+              returnValue: Future<_i2.AuthenticationResponseModel>.value(
+                  _FakeAuthenticationResponseModel_0()))
+          as _i4.Future<_i2.AuthenticationResponseModel>);
 }
 
 /// A class which mocks [AuthenticationLocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationLocalDataSource extends _i1.Mock
-    implements _i6.AuthenticationLocalDataSource {
+    implements _i7.AuthenticationLocalDataSource {
   MockAuthenticationLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -64,7 +72,7 @@ class MockAuthenticationLocalDataSource extends _i1.Mock
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i8.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
