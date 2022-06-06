@@ -20,6 +20,7 @@ void main() {
   late LoginParams loginParams;
 
   // Mock Result
+  const String generalError = "{\"message\": \"Something went wrong\"}";
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   AuthenticationResponseModel responseModel = const AuthenticationResponseModel(message: "The request has succeeded", data: AuthenticationModel(token: token));
 
@@ -40,7 +41,7 @@ void main() {
   });
 
   test("Should throw a ServerException when the response is 500", () async {
-    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response("Something went wrong", 500));
+    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response(generalError, 500));
     
     final call = remoteDataSource.registration(registrationParams);
 
@@ -86,7 +87,7 @@ void main() {
   });
 
   test("Should throw a ServerException when login is failed because of 500", () async {
-    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response("Something went wrong", 500));
+    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response(generalError, 500));
     
     final call = remoteDataSource.login(loginParams);
 
