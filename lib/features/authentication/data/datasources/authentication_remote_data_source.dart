@@ -30,12 +30,23 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
       }
     );
 
-    if (response.statusCode != 200) {
-      throw ServerException(message: response.body);
+    final body = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return AuthenticationResponseModel.fromJSON(body);
     }
 
-    final body = jsonDecode(response.body);
-    return AuthenticationResponseModel.fromJSON(body);
+    if (body["data"]["errors"] != null) {
+      final errors = (body["data"]["errors"] as List).map((error) {
+        return {
+          "field": error["field"],
+          "error": error["error"]
+        };
+      }).toList();
+      throw ServerException(message: body["message"], errors: errors);  
+    }
+
+    throw ServerException(message: body["message"]);
   }
   
   @override
