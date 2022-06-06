@@ -41,6 +41,10 @@ class _RegistrationViewState extends State<RegistrationView> {
 
       setState(() {
         height = contentHeight > screenHeight ? contentHeight : screenHeight;
+      });
+
+      Future.delayed(const Duration(seconds: 1));
+      setState(() {
         opacity = 1;
       });
     });
@@ -53,6 +57,7 @@ class _RegistrationViewState extends State<RegistrationView> {
       children : [
         const Center(
           child: Image(
+            key: Key("logo"),
             fit: BoxFit.contain,
             repeat: ImageRepeat.noRepeat,
             image: AssetImage(Images.logo),
