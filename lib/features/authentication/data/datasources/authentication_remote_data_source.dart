@@ -39,9 +39,20 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
   }
   
   @override
-  Future<AuthenticationResponseModel> login(LoginParams params) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<AuthenticationResponseModel> login(LoginParams params) async {
+    final response = await client.get(
+      Uri.parse("http://localhost:8080/auth/login"),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      return AuthenticationResponseModel.fromJSON(body);
+    }
+
+    throw ServerException(message: response.body);
   }
   
 }
