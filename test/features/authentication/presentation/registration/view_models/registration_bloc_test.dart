@@ -279,7 +279,7 @@ void main() {
     });
 
     test("Should return error fields when registration is failed because of validation error", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => Left(ServerFailure(message: "Something went wrong")));
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => Left(ServerFailure(message: "Something went wrong", errors: errors)));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
