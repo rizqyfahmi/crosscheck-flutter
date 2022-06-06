@@ -15,7 +15,13 @@ class LoginUsecase implements Usecase {
     
     final response = await repository.login(params);
 
-    return response.fold((error) => Left(error), (result) => Right(result));
+    return response.fold(
+      (error) => Left(error), 
+      (result) async {
+        await repository.setToken(result.token);
+        return Right(result);
+      } 
+    );
   }
   
 }
