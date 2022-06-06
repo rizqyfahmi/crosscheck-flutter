@@ -11,9 +11,11 @@ class LoginUsecase implements Usecase {
   });
 
   @override
-  Future<Either<Failure, dynamic>> call(param) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, dynamic>> call(params) async {
+    
+    final response = await repository.login(params);
+
+    return response.fold((error) => Left(error), (result) => Right(result));
   }
   
 }
