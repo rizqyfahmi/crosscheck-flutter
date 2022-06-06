@@ -23,8 +23,6 @@ import 'registration_view_test.mocks.dart';
   RegistrationUsecase
 ])
 void main() {
-  late MockAuthenticationBloc mockAuthenticationBloc;
-  late MockRegistrationBloc mockRegistrationBloc;
   late MockRegistrationUsecase mockRegistrationUsecase;
   late AuthenticationBloc authenticationBloc;
   late RegistrationBloc registrationBloc;

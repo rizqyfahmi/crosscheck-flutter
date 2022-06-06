@@ -1,6 +1,5 @@
 
 
-import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
@@ -32,10 +31,8 @@ void main() {
   
   // Mock Result
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  AuthenticationResponseModel responseModel = AuthenticationResponseModel(message: "The request has succeeded", data: const AuthenticationModel(token: token));
+  AuthenticationResponseModel responseModel = const AuthenticationResponseModel(message: "The request has succeeded", data: AuthenticationModel(token: token));
   AuthenticationEntity authenticationEntity = responseModel.data;
-
-  void setToken() {}
 
   setUp(() {
     mockRemoteDataSource = MockAuthenticationRemoteDataSource();

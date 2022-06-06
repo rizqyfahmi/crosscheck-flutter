@@ -1,9 +1,6 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 class LoadingModal extends StatelessWidget {

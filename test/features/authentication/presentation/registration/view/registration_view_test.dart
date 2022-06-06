@@ -1,5 +1,4 @@
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
