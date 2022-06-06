@@ -5,6 +5,8 @@ import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/core/widgets/text_error/text_error.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
@@ -42,8 +44,8 @@ class _RegistrationViewState extends State<RegistrationView> {
       setState(() {
         height = contentHeight > screenHeight ? contentHeight : screenHeight;
       });
-
-      Future.delayed(const Duration(seconds: 1));
+      
+      // Change state of opacity separately from height to avoid glitch when load the registration form
       setState(() {
         opacity = 1;
       });
@@ -239,7 +241,12 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<RegistrationBloc, RegistrationState>(
+        child: BlocConsumer<RegistrationBloc, RegistrationState>(
+          listener: (context, state) {
+            if (state is! RegistrationSuccess) return;
+
+            context.read<AuthenticationBloc>().add(AuthenticationSetToken(token: state.token));
+          },
           builder: (context, state) {
             return LoadingModal(
               isLoading: state is RegistrationLoading,
