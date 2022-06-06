@@ -39,12 +39,41 @@ void main() {
     expect(result, equals(responseModel));
   });
 
-  test("Should throw a ServerException when the response is 404", () async {
-    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response("Something went wrong", 400));
+  test("Should throw a ServerException when the response is 500", () async {
+    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response("Something went wrong", 500));
     
     final call = remoteDataSource.registration(registrationParams);
 
     expect(() => call, throwsA(const TypeMatcher<ServerException>()));
+  });
+
+  test("Should throw a ServerException with error fields when registration is faild because of validation error", () async {
+    final String filepath = stringify("test/features/authentication/data/models/response/authentication_validation_error.json");
+    final ServerException expected = ServerException(message: "Bad request", errors: const [
+        {
+          "field": "name",
+          "error": "Your name should contain at least 8 characters"
+        },
+        {"field": "email", "error": "Please enter a valid email address"},
+        {
+          "field": "password",
+          "error":"A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+        },
+        {
+          "field": "confirmPassword",
+          "error": "Your password and confirmation password do not match"
+        }
+      ]
+    );
+
+    when(mockClient.get(any, headers: {"Content-Type": "application/json"})).thenAnswer((_) async => http.Response(filepath, 400));
+    
+    final call = remoteDataSource.registration(registrationParams);
+
+    expect(
+      () => call, 
+      throwsA(predicate((e) => e is ServerException && e == expected))
+    );
   });
 
   test("Should return AuthenticationResponseModel when login is success", () async {
