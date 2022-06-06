@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
+import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,8 @@ import 'package:http/http.dart' as http;
 abstract class AuthenticationRemoteDataSource {
   
   Future<AuthenticationResponseModel> registration(RegistrationParams params);
+
+  Future<AuthenticationResponseModel> login(LoginParams params);
   
 }
 
@@ -33,6 +36,12 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
 
     final body = jsonDecode(response.body);
     return AuthenticationResponseModel.fromJSON(body);
+  }
+  
+  @override
+  Future<AuthenticationResponseModel> login(LoginParams params) {
+    // TODO: implement login
+    throw UnimplementedError();
   }
   
 }

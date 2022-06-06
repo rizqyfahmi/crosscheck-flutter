@@ -42,9 +42,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, AuthenticationEntity>> login(LoginParams params) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<Either<Failure, AuthenticationEntity>> login(LoginParams params) async {
+    
+    bool isConnected = await networkInfo.isConnected;
+    if (!isConnected) {
+      return Left(NetworkFailure());
+    }
+    
+    try {
+      final result = await remote.login(params);
+      return Right(result.data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, errors: e.errors));
+    }
+    
   }
   
 }
