@@ -18,7 +18,7 @@ class ServerFailure extends Failure {
   });
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, errors];
 }
 
 class CachedFailure extends Failure {

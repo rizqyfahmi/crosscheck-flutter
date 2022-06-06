@@ -2,6 +2,7 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
+import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/core/error/failure.dart';
@@ -38,6 +39,23 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<void> setToken(String token) async {
     await local.setToken(token);
+  }
+
+  @override
+  Future<Either<Failure, AuthenticationEntity>> login(LoginParams params) async {
+    
+    bool isConnected = await networkInfo.isConnected;
+    if (!isConnected) {
+      return Left(NetworkFailure());
+    }
+    
+    try {
+      final result = await remote.login(params);
+      return Right(result.data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, errors: e.errors));
+    }
+    
   }
   
 }
