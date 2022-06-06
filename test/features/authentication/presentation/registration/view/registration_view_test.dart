@@ -3,6 +3,7 @@ import 'package:crosscheck/features/authentication/data/models/request/registrat
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_state.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_model.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
@@ -409,6 +410,70 @@ void main() async {
         await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password456");
         await tester.pump();
         expect(find.text(modifiedModel.errorConfirmPassword), findsNothing);
+      });
+    });
+
+    testWidgets("Should return RegistrationSuccess when registration is success", (WidgetTester tester) async {
+      when(mockRegistrationUsecase(any)).thenAnswer((_) async {
+        await Future.delayed(const Duration(seconds: 2));
+        return const Right(AuthenticationEntity(token: token));
+      });
+
+      await tester.pumpWidget(testWidget);
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
+      await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password123");
+      await tester.pump();
+
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key("submitButton")));
+        await tester.pump();
+
+        RegistrationState expected = RegistrationLoading(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsOneWidget);
+
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pump();
+
+        expected = const RegistrationSuccess(token: token);
+        expect(registrationBloc.state, expected);
+      });
+    });
+
+    testWidgets("Should return Authenticated after registration is success", (WidgetTester tester) async {
+      when(mockRegistrationUsecase(any)).thenAnswer((_) async {
+        await Future.delayed(const Duration(seconds: 2));
+        return const Right(AuthenticationEntity(token: token));
+      });
+
+      await tester.pumpWidget(testWidget);
+      await tester.pumpAndSettle();
+      expect(authenticationBloc.state, const Unauthenticated());
+
+      await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
+      await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.enterText(find.byKey(const Key("confirmPasswordField")), "Password123");
+      await tester.pump();
+
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const Key("submitButton")));
+        await tester.pump();
+
+        RegistrationState expected = RegistrationLoading(model: model);
+        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsOneWidget);
+
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pump();
+
+        expected = const RegistrationSuccess(token: token);
+        expect(registrationBloc.state, expected);
+        expect(authenticationBloc.state, const Authenticated(token: token));
       });
     });
 
