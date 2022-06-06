@@ -31,12 +31,12 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
     );
 
     final body = jsonDecode(response.body);
-
+    
     if (response.statusCode == 200) {
       return AuthenticationResponseModel.fromJSON(body);
     }
 
-    if (body["data"]["errors"] != null) {
+    if (body["data"] != null) {
       final errors = (body["data"]["errors"] as List).map((error) {
         return {
           "field": error["field"],
@@ -58,12 +58,13 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
       }
     );
 
+    final body = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
       return AuthenticationResponseModel.fromJSON(body);
     }
 
-    throw ServerException(message: response.body);
+    throw ServerException(message: body["message"]);
   }
   
 }
