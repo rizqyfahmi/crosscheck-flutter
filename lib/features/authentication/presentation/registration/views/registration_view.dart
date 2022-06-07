@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationView extends StatefulWidget {
+  static String routeName = "registration";
+
   const RegistrationView({Key? key}) : super(key: key);
 
   @override
