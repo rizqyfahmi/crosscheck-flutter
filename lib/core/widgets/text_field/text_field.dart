@@ -20,7 +20,7 @@ class BorderedTextField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: const EdgeInsets.all(16),
+        contentPadding: const EdgeInsets.all(18),
         hintText: hintText,
         hintStyle: TextStyles.poppinsRegular14.copyWith(
           color: CustomColors.placeholderText
