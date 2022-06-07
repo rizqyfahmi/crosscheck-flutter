@@ -5,6 +5,8 @@
 import 'dart:async' as _i5;
 
 import 'package:crosscheck/core/error/failure.dart' as _i6;
+import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
+    as _i8;
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
     as _i7;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
@@ -44,7 +46,7 @@ class MockLoginUsecase extends _i1.Mock implements _i4.LoginUsecase {
           as _i2.AuthenticationRepository);
   @override
   _i5.Future<_i3.Either<_i6.Failure, _i7.AuthenticationEntity>> call(
-          dynamic params) =>
+          _i8.LoginParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
               returnValue: Future<
                       _i3.Either<_i6.Failure, _i7.AuthenticationEntity>>.value(
