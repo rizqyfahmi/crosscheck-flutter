@@ -4,6 +4,9 @@ import 'package:equatable/equatable.dart';
   Failure classes are only focus on error that is resulted by "Either"
 */
 abstract class Failure extends Equatable {
+  static const generalError = "Something went wrong";
+  static const loginRequiredFieldError = "Username and password are required";
+
   @override
   List<Object?> get props => [];
 }
