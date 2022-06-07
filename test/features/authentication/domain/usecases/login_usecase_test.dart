@@ -62,6 +62,16 @@ void main() {
     verifyNever(mockAuthenticationRepository.setToken(token));
   });
 
+  test("Should get a failure when login is failed because of username or password is still empty", () async {
+    when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
+
+    final result = await usecase(const LoginParams(username: "", password: ""));
+    
+    expect(result, Left(ServerFailure(message: Failure.loginRequiredFieldError)));
+    verifyNever(mockAuthenticationRepository.login(loginParams));
+    verifyNever(mockAuthenticationRepository.setToken(token));
+  });
+
   test("Should get a failure as the same as the failure that is returned when login is failed", () async {
     when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => Left(ServerFailure(message: "Something went wrong")));
 
