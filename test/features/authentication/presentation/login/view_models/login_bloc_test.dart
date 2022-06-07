@@ -33,60 +33,36 @@ void main() {
     expect(bloc.state, const LoginInitial());
   });
 
-  test("Should set content height of login page", () {
-    final expacted = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-    ];
-
-    bloc.add(const LoginSetContentHeight(height: 100));
-    
-    expectLater(bloc.stream, emitsInOrder(expacted));
-  });
-
-  test("Should set content opacity of login page", () {
-    final expacted = [
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 0, contentOpacity: 1, username: "", password: "")),
-    ];
-
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
-    
-    expectLater(bloc.stream, emitsInOrder(expacted));
-  });
-
   test("Should keep value when each field on login form is entered in separately", () {
     final expacted = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "f", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fu", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "ful", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fula", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@e", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@em", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@ema", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@emai", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.c", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.co", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "P")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Pa")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Pas")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Pass")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Passw")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Passwo")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Passwor")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password1")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password12")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
+      const LoginEnterField(model: LoginModel(username: "f", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fu", password: "")),
+      const LoginEnterField(model: LoginModel(username: "ful", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fula", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@e", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@em", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@ema", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@emai", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.c", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.co", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "P")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Pa")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Pas")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Pass")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Passw")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Passwo")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Passwor")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password1")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password12")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(const LoginSetUsername(username: "f"));
     bloc.add(const LoginSetUsername(username: "fu"));
     bloc.add(const LoginSetUsername(username: "ful"));
@@ -121,15 +97,11 @@ void main() {
     when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
 
     final expected = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginLoading(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123"))
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123"))
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
     bloc.add(const LoginSetPassword(password: "Password123"));
     bloc.add(LoginSubmit());
@@ -141,16 +113,12 @@ void main() {
     when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
 
     final expected = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginLoading(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")),
       const LoginSuccess(token: token)
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
     bloc.add(const LoginSetPassword(password: "Password123"));
     bloc.add(LoginSubmit());
@@ -166,16 +134,12 @@ void main() {
     when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
     final expected = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginLoading(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginGeneralError(message: Failure.generalError, model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123"))
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginGeneralError(message: Failure.generalError, model: LoginModel(username: "fulan@email.com", password: "Password123"))
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
     bloc.add(const LoginSetPassword(password: "Password123"));
     bloc.add(LoginSubmit());
@@ -191,16 +155,12 @@ void main() {
     when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: NetworkFailure.message)));
 
     final expected = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginLoading(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123"))
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(username: "fulan@email.com", password: "Password123"))
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
     bloc.add(const LoginSetPassword(password: "Password123"));
     bloc.add(LoginSubmit());
@@ -216,14 +176,10 @@ void main() {
     when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
 
     final expected = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginLoading(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginGeneralError(message: Failure.loginRequiredFieldError, model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: ""))
+      const LoginLoading(model: LoginModel( username: "", password: "")),
+      const LoginGeneralError(message: Failure.loginRequiredFieldError, model: LoginModel( username: "", password: ""))
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(LoginSubmit());
 
     expectLater(bloc.stream, emitsInOrder(expected));
@@ -237,17 +193,13 @@ void main() {
     when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
     final expected = [
-      const LoginAlterContentHeight(model: LoginModel(contentHeight: 100, contentOpacity: 0, username: "", password: "")),
-      const LoginAlterContentOpacity(model: LoginModel(contentHeight: 100, contentOpacity: 1, username: "", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "")),
-      const LoginEnterField(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginLoading(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginGeneralError(message: Failure.generalError, model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123")),
-      const LoginNoGeneralError(model: LoginModel(contentHeight: 100, contentOpacity: 1,username: "fulan@email.com", password: "Password123"))
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
+      const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginGeneralError(message: Failure.generalError, model: LoginModel(username: "fulan@email.com", password: "Password123")),
+      const LoginNoGeneralError(model: LoginModel(username: "fulan@email.com", password: "Password123"))
     ];
 
-    bloc.add(const LoginSetContentHeight(height: 100));
-    bloc.add(const LoginSetContentOpacity(opacity: 1));
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
     bloc.add(const LoginSetPassword(password: "Password123"));
     bloc.add(LoginSubmit());

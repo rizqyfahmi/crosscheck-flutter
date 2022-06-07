@@ -43,11 +43,11 @@ void main() {
 
     await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
     await tester.pump();
-    expect(loginBloc.state, const LoginEnterField(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "")));
+    expect(loginBloc.state, const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")));
 
     await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
     await tester.pump();
-    expect(loginBloc.state, const LoginEnterField(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+    expect(loginBloc.state, const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")));
   });
 
   testWidgets("Should display loading dialog on submit login form", (WidgetTester tester) async {
@@ -61,15 +61,18 @@ void main() {
 
     await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
     await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
-    
+    await tester.pump();
     await tester.runAsync(() async {
+      await tester.ensureVisible(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key("submitButton")));
       await tester.pump();
-
-      expect(loginBloc.state, const LoginLoading(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+    
+      expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text("Loading..."), findsOneWidget);
-
+      
       await Future.delayed(const Duration(seconds: 2));
+      await tester.pump();
 
     });
   });
@@ -93,7 +96,7 @@ void main() {
       await tester.tap(find.byKey(const Key("submitButton")));
       await tester.pump();
     
-      expect(loginBloc.state, const LoginLoading(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text("Loading..."), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 2));
@@ -127,14 +130,14 @@ void main() {
       await tester.tap(find.byKey(const Key("submitButton")));
       await tester.pump();
       
-      expect(loginBloc.state, const LoginLoading(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text("Loading..."), findsOneWidget);
 
       await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       
       expect(find.text("Loading..."), findsNothing);
-      expect(loginBloc.state, const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text(NetworkFailure.message), findsOneWidget);
 
       await tester.ensureVisible(find.byKey(const Key("dismissButton")));
@@ -142,7 +145,7 @@ void main() {
       await tester.tap(find.byKey(const Key("dismissButton")));
       await tester.pump();
 
-      expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text(NetworkFailure.message), findsNothing);
     });
 
@@ -165,14 +168,14 @@ void main() {
       await tester.tap(find.byKey(const Key("submitButton")));
       await tester.pump();
       
-      expect(loginBloc.state, const LoginLoading(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "", password: "")));
+      expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "", password: "")));
       expect(find.text("Loading..."), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       
       expect(find.text("Loading..."), findsNothing);
-      expect(loginBloc.state, const LoginGeneralError(message: Failure.loginRequiredFieldError, model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "", password: "")));
+      expect(loginBloc.state, const LoginGeneralError(message: Failure.loginRequiredFieldError, model: LoginModel(username: "", password: "")));
       expect(find.text(Failure.loginRequiredFieldError), findsOneWidget);
 
       await tester.ensureVisible(find.byKey(const Key("dismissButton")));
@@ -180,7 +183,7 @@ void main() {
       await tester.tap(find.byKey(const Key("dismissButton")));
       await tester.pump();
 
-      expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "", password: "")));
+      expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(username: "", password: "")));
       expect(find.text(Failure.loginRequiredFieldError), findsNothing);
     });
 
@@ -205,14 +208,14 @@ void main() {
       await tester.tap(find.byKey(const Key("submitButton")));
       await tester.pump();
     
-      expect(loginBloc.state, const LoginLoading(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text("Loading..."), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       
       expect(find.text("Loading..."), findsNothing);
-      expect(loginBloc.state, const LoginGeneralError(message: Failure.generalError, model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginGeneralError(message: Failure.generalError, model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text(Failure.generalError), findsOneWidget);
 
       await tester.ensureVisible(find.byKey(const Key("dismissButton")));
@@ -220,7 +223,7 @@ void main() {
       await tester.tap(find.byKey(const Key("dismissButton")));
       await tester.pump();
 
-      expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(contentHeight: 0, contentOpacity: 0, username: "fulan@email.com", password: "Password123")));
+      expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(username: "fulan@email.com", password: "Password123")));
       expect(find.text(Failure.loginRequiredFieldError), findsNothing);
     });
 
