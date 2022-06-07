@@ -2,6 +2,7 @@ import 'package:crosscheck/assets/fonts/fonts.dart';
 import 'package:flutter/material.dart';
 
 class TextStyles {
+  TextStyles._();
   /// TextStyle(
   ///   fontFamily: FontFamily.poppins,
   ///   fontSize: 22,
