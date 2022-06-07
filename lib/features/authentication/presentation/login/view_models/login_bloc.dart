@@ -11,12 +11,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
     required this.loginUsecase
   }) : super(const LoginInitial()) {
-    on<LoginSetContentHeight>((event, emit) {
-      emit(LoginAlterContentHeight(model: state.model.copyWith(contentHeight: event.height)));
-    });
-    on<LoginSetContentOpacity>((event, emit) {
-      emit(LoginAlterContentOpacity(model: state.model.copyWith(contentOpacity: 1)));
-    });
     on<LoginSetUsername>((event, emit) {
       emit(LoginEnterField(model: state.model.copyWith(username: event.username)));
     });

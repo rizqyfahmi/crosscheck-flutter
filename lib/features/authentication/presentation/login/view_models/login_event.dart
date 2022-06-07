@@ -29,27 +29,5 @@ class LoginSetPassword extends LoginEvent {
   List<Object?> get props => [password];
 }
 
-class LoginSetContentHeight extends LoginEvent {
-  final double height;
-
-  const LoginSetContentHeight({
-    required this.height
-  });
-
-  @override
-  List<Object?> get props => [height];
-}
-
-class LoginSetContentOpacity extends LoginEvent {
-  final double opacity;
-
-  const LoginSetContentOpacity({
-    required this.opacity
-  });
-
-  @override
-  List<Object?> get props => [opacity];
-}
-
 class LoginSubmit extends LoginEvent {}
 class LoginResetGeneralError extends LoginEvent {}

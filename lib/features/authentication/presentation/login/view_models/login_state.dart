@@ -16,14 +16,6 @@ class LoginInitial extends LoginState {
   const LoginInitial() : super(model: const LoginModel());
 }
 
-class LoginAlterContentHeight extends LoginState {
-  const LoginAlterContentHeight({required super.model});
-}
-
-class LoginAlterContentOpacity extends LoginState {
-  const LoginAlterContentOpacity({required super.model});
-}
-
 class LoginEnterField extends LoginState {
   const LoginEnterField({required super.model});
 }
