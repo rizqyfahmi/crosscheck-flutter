@@ -1,5 +1,7 @@
 import 'package:crosscheck/core/locator/locator.dart' as di;
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
+import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/views/registration_view.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<RegistrationBloc>(
           create: (_) => di.locator<RegistrationBloc>()
+        ),
+        BlocProvider<LoginBloc>(
+          create: (_) => di.locator<LoginBloc>()
         )
       ],
       child: MaterialApp(
@@ -40,7 +45,11 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: const RegistrationView(),
+        home: const LoginView(),
+        routes: {
+          RegistrationView.routeName: (context) =>  const RegistrationView(),
+          LoginView.routeName:(context) => const LoginView()
+        },
       ),
     );
   }

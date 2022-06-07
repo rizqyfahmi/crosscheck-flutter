@@ -3,8 +3,10 @@ import 'package:crosscheck/features/authentication/data/datasources/authenticati
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:crosscheck/features/authentication/data/repositories/authentication_repository_impl.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -15,9 +17,10 @@ import 'package:http/http.dart' as http;
 final locator = GetIt.instance;
 Future<void> init() async  {
   locator.registerFactory(() => AuthenticationBloc());
-  
   locator.registerFactory(() => RegistrationBloc(registrationUsecase: locator()));
+  locator.registerFactory(() => LoginBloc(loginUsecase: locator()));
   locator.registerLazySingleton(() => RegistrationUsecase(repository: locator()));
+  locator.registerLazySingleton(() => LoginUsecase(repository: locator()));
   locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(
     remote: locator(), local: locator(), networkInfo: locator()
   ));

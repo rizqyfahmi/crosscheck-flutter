@@ -42,6 +42,9 @@ class LoginGeneralError extends LoginState {
   final String message;
 
   const LoginGeneralError({required this.message, required super.model});
+
+  @override
+  List<Object?> get props => [...super.props, message];
 }
 
 class LoginNoGeneralError extends LoginState {
