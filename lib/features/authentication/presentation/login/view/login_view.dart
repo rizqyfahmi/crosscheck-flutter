@@ -3,40 +3,39 @@ import 'package:crosscheck/assets/images/images.dart';
 import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
 import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
-import 'package:crosscheck/core/widgets/text_error/text_error.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
+import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/view_models/login_event.dart';
+import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegistrationView extends StatefulWidget {
-  static String routeName = "registration";
+class LoginView extends StatefulWidget {
+  static String routeName = "login";
 
-  const RegistrationView({Key? key}) : super(key: key);
+  const LoginView({Key? key}) : super(key: key);
 
   @override
-  State<RegistrationView> createState() => _RegistrationViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _RegistrationViewState extends State<RegistrationView> {
+class _LoginViewState extends State<LoginView> {
 
   GlobalKey formKey = GlobalKey();
   double height = 0;
   double opacity = 0;
 
   @override
-  void initState() {    
+  void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       MediaQueryData mediaQuery = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
       final double statusBar = mediaQuery.padding.top;
       final double screenHeight = mediaQuery.size.height - statusBar;
-      const double bufferHeight = 200; // it's used for error validation massage
+      const double bufferHeight = 100; // it's used for error validation massage
 
       final RenderBox box = formKey.currentContext?.findRenderObject() as RenderBox;
       final double contentHeight = box.size.height + bufferHeight;
@@ -70,31 +69,17 @@ class _RegistrationViewState extends State<RegistrationView> {
         const SizedBox(height: 32),
         const Center(
           child: Text(
-            "Create your account",
+            "Welcome back!",
             style: TextStyles.poppinsBold22,
           ),
         ),
         const SizedBox(height: 48),
         BorderedTextField(
-          key: const Key("nameField"),
+          key: const Key("usernameField"),
           hintText: "Full Name", 
           onChanged: (value) {
-            context.read<RegistrationBloc>().add(RegistrationSetName(value));
+            context.read<LoginBloc>().add(LoginSetUsername(username: value));
           }
-        ),
-        BlocBuilder<RegistrationBloc, RegistrationState>(
-          builder: (context, state) => TextError(state.model.errorName)
-        ),
-        const SizedBox(height: 16),
-        BorderedTextField(
-          key: const Key("emailField"),
-          hintText: "Email Address", 
-          onChanged: (value) {
-            context.read<RegistrationBloc>().add(RegistrationSetEmail(value));
-          }
-        ),
-        BlocBuilder<RegistrationBloc, RegistrationState>(
-          builder: (context, state) => TextError(state.model.errorEmail)
         ),
         const SizedBox(height: 16),
         BorderedTextField(
@@ -102,23 +87,8 @@ class _RegistrationViewState extends State<RegistrationView> {
           hintText: "Password",
           obscureText: true,
           onChanged: (value) {
-            context.read<RegistrationBloc>().add(RegistrationSetPassword(value));
+            context.read<LoginBloc>().add(LoginSetPassword(password: value));
           }
-        ),
-        BlocBuilder<RegistrationBloc, RegistrationState>(
-          builder: (context, state) => TextError(state.model.errorPassword)
-        ),
-        const SizedBox(height: 16),
-        BorderedTextField(
-          key: const Key("confirmPasswordField"),
-          hintText: "Confirm Password",
-          obscureText: true,
-          onChanged: (value) {
-            context.read<RegistrationBloc>().add(RegistrationSetConfirmPassword(value));
-          }
-        ),
-        BlocBuilder<RegistrationBloc, RegistrationState>(
-          builder: (context, state) => TextError(state.model.errorConfirmPassword)
         ),
         const SizedBox(height: 32),
         Row(
@@ -137,10 +107,10 @@ class _RegistrationViewState extends State<RegistrationView> {
                   primary: CustomColors.primary
                 ),
                 onPressed: () {
-                  context.read<RegistrationBloc>().add(RegistrationSubmit());
+                  context.read<LoginBloc>().add(LoginSubmit());
                 },
                 child: const Text(
-                  "Create an account",
+                  "Sign in",
                   style: TextStyles.poppinsMedium18,
                 )
               ),
@@ -151,14 +121,8 @@ class _RegistrationViewState extends State<RegistrationView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Already have an account? ",
-              style: TextStyles.poppinsMedium14.copyWith(
-                color: CustomColors.secondary
-              ),
-            ),
             TextButton(
-              key: const Key("signInTextButton"),
+              key: const Key("forgotPasswordTextButton"),
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
                 minimumSize: Size.zero,
@@ -167,7 +131,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               ),
               onPressed: () {},
               child: Text(
-                "Sign In",
+                "Forgot Password?",
                 style: TextStyles.poppinsMedium14.copyWith(
                   color: CustomColors.primary
                 ),
@@ -195,45 +159,35 @@ class _RegistrationViewState extends State<RegistrationView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           fields,
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "By creating and/or using an account, you agree",
+                "Don't have an account? ",
                 style: TextStyles.poppinsMedium12.copyWith(
                   color: CustomColors.secondary
                 )
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "to our ",
-                    style: TextStyles.poppinsMedium12.copyWith(
-                      color: CustomColors.secondary
-                    ),
+              TextButton(
+                key: const Key("signUpTextButton"),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  elevation: 0,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                ),
+                onPressed: () {},
+                child: Text(
+                  "Sign up",
+                  style: TextStyles.poppinsMedium12.copyWith(
+                    color: CustomColors.primary
                   ),
-                  TextButton(
-                    key: const Key("tncTextButton"),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      elevation: 0,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Term & Conditions.",
-                      style: TextStyles.poppinsMedium12.copyWith(
-                        color: CustomColors.primary
-                      ),
-                    )
-                  )
-                ],
-              ),
-              const SizedBox(height: 16)
+                )
+              )
             ],
-          )
+          ),
+          const SizedBox(height: 16)
         ],
       ),
     );
@@ -243,41 +197,43 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocConsumer<RegistrationBloc, RegistrationState>(
+        child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
-            if (state is! RegistrationSuccess) return;
+            if (state is! LoginSuccess) return;
 
             context.read<AuthenticationBloc>().add(AuthenticationSetToken(token: state.token));
           },
           builder: (context, state) {
             return LoadingModal(
-              isLoading: state is RegistrationLoading,
+              isLoading: state is LoginLoading,
               child: MessageModal(
                 status: MessageModalStatus.error,
-                message: state is RegistrationGeneralError ? state.message : null,
+                message: state is LoginGeneralError ? state.message : null,
                 onDismissed: () {
-                  context.read<RegistrationBloc>().add(RegistrationResetGeneralError());
+                  context.read<LoginBloc>().add(LoginResetGeneralError());
                 },
                 child: Opacity(
                   opacity: opacity,
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    if (height > 0) {
-                      return SingleChildScrollView(
-                        child: SizedBox(
-                          height: height,
-                          child: buildForm(context),
-                        ),
-                      );
-                    }
-              
-                    return buildForm(context);
-                  }),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (height > 0) {
+                        return SingleChildScrollView(
+                          child: SizedBox(
+                            height: height,
+                            child: buildForm(context),
+                          ),
+                        );
+                      }
+                        
+                      return buildForm(context);
+                    },
+                  ),
                 ),
-              )
+              ),
             );
-          }
+          },
         )
-      ),
+      )
     );
   }
 }
