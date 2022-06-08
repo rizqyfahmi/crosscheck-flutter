@@ -23,36 +23,6 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
 
-  GlobalKey formKey = GlobalKey();
-  double height = 0;
-  double opacity = 0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      MediaQueryData mediaQuery = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-      final double statusBar = mediaQuery.padding.top;
-      final double screenHeight = mediaQuery.size.height - statusBar;
-      const double bufferHeight = 100; // it's used for error validation massage
-
-      final RenderBox box = formKey.currentContext?.findRenderObject() as RenderBox;
-      final double contentHeight = box.size.height + bufferHeight;
-
-      if (height > 0) return;
-
-      setState(() {
-        height = contentHeight > screenHeight ? contentHeight : screenHeight;
-      });
-      
-      // Change state of opacity separately from height to avoid glitch when load the registration form
-      setState(() {
-        opacity = 1;
-      });
-    });
-  }
-
   Widget buildFields(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -143,58 +113,11 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget buildForm(BuildContext context) {
-    Widget fields = buildFields(context);
-
-    if (height > 0) {
-      fields = Expanded(
-        child: buildFields(context),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        key: formKey,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          fields,
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Don't have an account? ",
-                style: TextStyles.poppinsMedium12.copyWith(
-                  color: CustomColors.secondary
-                )
-              ),
-              TextButton(
-                key: const Key("signUpTextButton"),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  elevation: 0,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap
-                ),
-                onPressed: () {},
-                child: Text(
-                  "Sign up",
-                  style: TextStyles.poppinsMedium12.copyWith(
-                    color: CustomColors.primary
-                  ),
-                )
-              )
-            ],
-          ),
-          const SizedBox(height: 16)
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    EdgeInsets padding = MediaQuery.of(context).padding;
+
     return Scaffold(
       body: SafeArea(
         child: BlocConsumer<LoginBloc, LoginState>(
@@ -212,21 +135,56 @@ class _LoginViewState extends State<LoginView> {
                 onDismissed: () {
                   context.read<LoginBloc>().add(LoginResetGeneralError());
                 },
-                child: Opacity(
-                  opacity: opacity,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (height > 0) {
-                        return SingleChildScrollView(
-                          child: SizedBox(
-                            height: height,
-                            child: buildForm(context),
-                          ),
-                        );
-                      }
-                        
-                      return buildForm(context);
-                    },
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    constraints: BoxConstraints(
+                      minHeight: (size.height - padding.top),
+                      minWidth:  size.width,
+                      maxWidth:  size.width
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const SizedBox(height: 32),
+                        buildFields(context),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account? ",
+                                  style: TextStyles.poppinsMedium12.copyWith(
+                                    color: CustomColors.secondary
+                                  )
+                                ),
+                                TextButton(
+                                  key: const Key("signUpTextButton"),
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    elevation: 0,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Sign up",
+                                    style: TextStyles.poppinsMedium12.copyWith(
+                                      color: CustomColors.primary
+                                    ),
+                                  )
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16)
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

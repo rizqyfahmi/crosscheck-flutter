@@ -153,7 +153,9 @@ void main() {
       expect(find.text("Loading..."), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text("Loading..."), findsNothing);
+      
       expected = const RegistrationSuccess(token: token);
       expect(registrationBloc.state, expected);
     });
@@ -185,7 +187,9 @@ void main() {
       expect(find.text("Loading..."), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text("Loading..."), findsNothing);
+
       expected = RegistrationGeneralError(message: NetworkFailure.message, model: model);
       expect(registrationBloc.state, expected);
       expect(find.text(NetworkFailure.message), findsOneWidget);
@@ -228,7 +232,9 @@ void main() {
         expect(find.text("Loading..."), findsOneWidget);
         
         await Future.delayed(const Duration(seconds: 2));
-        await tester.pump();
+        await tester.pumpAndSettle();
+        expect(find.text("Loading..."), findsNothing);
+
         expected = RegistrationGeneralError(message: errorMessage, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(errorMessage), findsOneWidget);
@@ -271,7 +277,8 @@ void main() {
       expect(find.text("Loading..."), findsOneWidget);
 
       await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text("Loading..."), findsNothing);
 
       final modifiedModel = model.copyWith(
         errorName: "Your name should contain at least 8 characters",
@@ -329,7 +336,8 @@ void main() {
       expect(find.text("Loading..."), findsOneWidget);
 
       await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text("Loading..."), findsNothing);
 
       expected = const RegistrationSuccess(token: token);
       expect(registrationBloc.state, expected);
@@ -363,7 +371,8 @@ void main() {
       expect(find.text("Loading..."), findsOneWidget);
 
       await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
+      expect(find.text("Loading..."), findsNothing);
 
       expected = const RegistrationSuccess(token: token);
       expect(registrationBloc.state, expected);

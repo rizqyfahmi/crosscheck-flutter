@@ -59,7 +59,8 @@ void main() async {
       );
     });
 
-    testWidgets("Should be running well", (WidgetTester tester) async {
+     testWidgets("Should display all fields properly", (WidgetTester tester) async {
+
       when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
       when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
 
@@ -67,38 +68,11 @@ void main() async {
       await tester.pumpAndSettle();
 
       expect(find.text("Create your account"), findsOneWidget);
-    });
-
-    testWidgets("Should display all fields", (WidgetTester tester) async {
-      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
-      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
-
-      await tester.pumpWidget(testWidget);
-      await tester.pumpAndSettle();
-
       expect(find.byKey(const Key("nameField")), findsOneWidget);
       expect(find.byKey(const Key("emailField")), findsOneWidget);
       expect(find.byKey(const Key("passwordField")), findsOneWidget);
       expect(find.byKey(const Key("confirmPasswordField")), findsOneWidget);
-    });
-
-    testWidgets("Should display submit button", (WidgetTester tester) async {
-      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
-      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
-
-      await tester.pumpWidget(testWidget);
-      await tester.pumpAndSettle();
-
       expect(find.byKey(const Key("submitButton")), findsOneWidget);
-    });
-
-    testWidgets("Should display sign in and t&c text button", (WidgetTester tester) async {
-      when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
-      when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([const RegistrationInitial()]));
-
-      await tester.pumpWidget(testWidget);
-      await tester.pumpAndSettle();
-
       expect(find.byKey(const Key("signInTextButton")), findsOneWidget);
       expect(find.byKey(const Key("tncTextButton")), findsOneWidget);
     });
@@ -107,7 +81,6 @@ void main() async {
 
       // change screen size
       // tester.binding.window.physicalSizeTestValue = const Size(720, 1634);
-
       when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
       when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([
         const RegistrationValidationError(model: RegistrationModel(
@@ -132,12 +105,6 @@ void main() async {
 
       when(mockRegistrationBloc.state).thenReturn(const RegistrationInitial());
       when(mockRegistrationBloc.stream).thenAnswer((_) => Stream.fromIterable([
-        const RegistrationValidationError(model: RegistrationModel(
-          errorName: "Field full name is required",
-          errorEmail: "Field email address is required",
-          errorPassword: "Field password is required",
-          errorConfirmPassword: "Field confirm confirm is required"
-        )),
         const RegistrationLoading(model: RegistrationModel(
           name: "Fulan",
           email: "fulan@email.com",
@@ -220,15 +187,14 @@ void main() async {
       await tester.runAsync(() async {
         await tester.tap(find.byKey(const Key("submitButton")));
         await tester.pump();
-
+        
         expected = const RegistrationLoading(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email.com", errorEmail: "", password: "Password123", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: ""));
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
         
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
-        expected = const RegistrationSuccess(token: token);
-        expect(registrationBloc.state, expected);
+        expect(find.text("Loading..."), findsNothing);
       });
     });
 
@@ -257,6 +223,8 @@ void main() async {
         
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
+        expect(find.text("Loading..."), findsNothing);
+
         expected = RegistrationGeneralError(message: NullFailure.message, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(NullFailure.message), findsOneWidget);
@@ -299,6 +267,8 @@ void main() async {
         
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
+        expect(find.text("Loading..."), findsNothing);
+
         expected = RegistrationGeneralError(message: NetworkFailure.message, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(NetworkFailure.message), findsOneWidget);
@@ -340,6 +310,8 @@ void main() async {
         
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
+        expect(find.text("Loading..."), findsNothing);
+
         expected = RegistrationGeneralError(message: errorMessage, model: model);
         expect(registrationBloc.state, expected);
         expect(find.text(errorMessage), findsOneWidget);
@@ -381,6 +353,7 @@ void main() async {
 
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
+        expect(find.text("Loading..."), findsNothing);
 
         final modifiedModel = model.copyWith(
           errorName: "Your name should contain at least 8 characters",
@@ -437,6 +410,7 @@ void main() async {
 
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
+        expect(find.text("Loading..."), findsNothing);
 
         expected = const RegistrationSuccess(token: token);
         expect(registrationBloc.state, expected);
@@ -469,6 +443,7 @@ void main() async {
 
         await Future.delayed(const Duration(seconds: 2));
         await tester.pump();
+        expect(find.text("Loading..."), findsNothing);
 
         expected = const RegistrationSuccess(token: token);
         expect(registrationBloc.state, expected);
