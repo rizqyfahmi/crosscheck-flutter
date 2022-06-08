@@ -13,46 +13,10 @@ import 'package:crosscheck/features/authentication/presentation/registration/vie
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegistrationView extends StatefulWidget {
+class RegistrationView extends StatelessWidget {
   static String routeName = "registration";
 
   const RegistrationView({Key? key}) : super(key: key);
-
-  @override
-  State<RegistrationView> createState() => _RegistrationViewState();
-}
-
-class _RegistrationViewState extends State<RegistrationView> {
-
-  GlobalKey formKey = GlobalKey();
-  double height = 0;
-  double opacity = 0;
-
-  @override
-  void initState() {    
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      MediaQueryData mediaQuery = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-      final double statusBar = mediaQuery.padding.top;
-      final double screenHeight = mediaQuery.size.height - statusBar;
-      const double bufferHeight = 200; // it's used for error validation massage
-
-      final RenderBox box = formKey.currentContext?.findRenderObject() as RenderBox;
-      final double contentHeight = box.size.height + bufferHeight;
-
-      if (height > 0) return;
-
-      setState(() {
-        height = contentHeight > screenHeight ? contentHeight : screenHeight;
-      });
-      
-      // Change state of opacity separately from height to avoid glitch when load the registration form
-      setState(() {
-        opacity = 1;
-      });
-    });
-  }
 
   Widget buildFields(BuildContext context) {
     return Column(
@@ -174,73 +138,17 @@ class _RegistrationViewState extends State<RegistrationView> {
               )
             )
           ],
-        )
+        ),
+        const SizedBox(height: 32),
       ],
-    );
-  }
-
-  Widget buildForm(BuildContext context) {
-    Widget fields = buildFields(context);
-
-    if (height > 0) {
-      fields = Expanded(
-        child: buildFields(context),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        key: formKey,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          fields,
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "By creating and/or using an account, you agree",
-                style: TextStyles.poppinsMedium12.copyWith(
-                  color: CustomColors.secondary
-                )
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "to our ",
-                    style: TextStyles.poppinsMedium12.copyWith(
-                      color: CustomColors.secondary
-                    ),
-                  ),
-                  TextButton(
-                    key: const Key("tncTextButton"),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      elevation: 0,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Term & Conditions.",
-                      style: TextStyles.poppinsMedium12.copyWith(
-                        color: CustomColors.primary
-                      ),
-                    )
-                  )
-                ],
-              ),
-              const SizedBox(height: 16)
-            ],
-          )
-        ],
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    EdgeInsets padding = MediaQuery.of(context).padding;
+
     return Scaffold(
       body: SafeArea(
         child: BlocConsumer<RegistrationBloc, RegistrationState>(
@@ -258,20 +166,63 @@ class _RegistrationViewState extends State<RegistrationView> {
                 onDismissed: () {
                   context.read<RegistrationBloc>().add(RegistrationResetGeneralError());
                 },
-                child: Opacity(
-                  opacity: opacity,
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    if (height > 0) {
-                      return SingleChildScrollView(
-                        child: SizedBox(
-                          height: height,
-                          child: buildForm(context),
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    constraints: BoxConstraints(
+                      minHeight: (size.height - padding.top),
+                      minWidth:  size.width,
+                      maxWidth:  size.width
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const SizedBox(height: 32),
+                        buildFields(context),
+                        Column(              
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const SizedBox(height: 16),
+                            Text(
+                              "By creating and/or using an account, you agree",
+                              style: TextStyles.poppinsMedium12.copyWith(
+                                color: CustomColors.secondary
+                              )
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "to our ",
+                                  style: TextStyles.poppinsMedium12.copyWith(
+                                    color: CustomColors.secondary
+                                  ),
+                                ),
+                                TextButton(
+                                  key: const Key("tncTextButton"),
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    elevation: 0,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Term & Conditions.",
+                                    style: TextStyles.poppinsMedium12.copyWith(
+                                      color: CustomColors.primary
+                                    ),
+                                  )
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16)
+                          ],
                         ),
-                      );
-                    }
-              
-                    return buildForm(context);
-                  }),
+                      ],
+                    )
+                  ),
                 ),
               )
             );
