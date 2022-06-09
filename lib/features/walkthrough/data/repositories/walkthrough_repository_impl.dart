@@ -21,8 +21,14 @@ class WalkthroughRepositoryImpl implements WalkthroughRepository {
 
   @override
   Future<Either<Failure, dynamic>> setIsSkip(WalkthroughParams params) async {
-    // TODO: implement getIsSkip
-    throw UnimplementedError();
+    
+    try {
+      await walkthroughLocalDataSource.setIsSkip(params.isSkip);
+      return const Right(null);
+    } on CachedFailure catch (e) {
+      return Left(CachedFailure(message: e.message));
+    }
+
   }
   
 }
