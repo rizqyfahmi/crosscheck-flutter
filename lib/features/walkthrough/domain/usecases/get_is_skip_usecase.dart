@@ -15,8 +15,7 @@ class GetIsSkipUsecase implements Usecase<WalkthroughEntity, NoParam> {
 
   @override
   Future<Either<Failure, WalkthroughEntity>> call(NoParam param) async {
-    // TODO: implement call
-    throw UnimplementedError();
+    return await repository.getIsSkip();
   }
   
 }
