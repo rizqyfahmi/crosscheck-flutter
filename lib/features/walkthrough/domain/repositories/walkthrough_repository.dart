@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class WalkthroughRepository {
   
-  Future<Either<Failure, void>> setIsSkip(WalkthroughParams params);
+  Future<Either<Failure, dynamic>> setIsSkip(WalkthroughParams params);
   
   Future<Either<Failure, WalkthroughEntity>> getIsSkip();
 
