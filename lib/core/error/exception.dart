@@ -4,4 +4,6 @@ class ServerException extends ServerFailure implements Exception {
   ServerException({required super.message, super.errors});
 }
 
-class CacheException implements Exception {}
+class CacheException extends CachedFailure implements Exception {
+  CacheException({required super.message});
+}
