@@ -27,8 +27,8 @@ void main() {
   setUp(() {
     mockClient = MockClient();
     remoteDataSource = AuthenticationRemoteDataSourceImpl(client: mockClient);
-    registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
-    loginParams = const LoginParams(username: "fulan@email.com", password: "Password123");
+    registrationParams = RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
+    loginParams = LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
   test("Should return AuthenticationResponseModel", () async {

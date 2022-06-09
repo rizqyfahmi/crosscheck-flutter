@@ -26,7 +26,7 @@ void main() {
   setUp(() {
     mockLoginUsecase = MockLoginUsecase();
     bloc = LoginBloc(loginUsecase: mockLoginUsecase);
-    loginParams = const LoginParams(username: "fulan@email.com", password: "Password123");
+    loginParams = LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
   test("Should return LoginInitial at first time", () {
@@ -185,7 +185,7 @@ void main() {
     expectLater(bloc.stream, emitsInOrder(expected));
     await untilCalled(mockLoginUsecase(any));
     
-    verify(mockLoginUsecase(const LoginParams(username: "", password: "")));
+    verify(mockLoginUsecase(LoginParams(username: "", password: "")));
 
   });
 

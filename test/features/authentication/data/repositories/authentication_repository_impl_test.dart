@@ -31,8 +31,8 @@ void main() {
   late LoginParams loginParams;
   
   // Mock Result
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  AuthenticationResponseModel responseModel = const AuthenticationResponseModel(message: "The request has succeeded", data: AuthenticationModel(token: token));
+ String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+  AuthenticationResponseModel responseModel = AuthenticationResponseModel(message: "The request has succeeded", data: AuthenticationModel(token: token));
   AuthenticationEntity authenticationEntity = responseModel.data;
 
   setUp(() {
@@ -44,13 +44,13 @@ void main() {
       local: mockLocalDataSource,
       networkInfo: mockNetworkInfo
     );
-    params = const RegistrationParams(
+    params = RegistrationParams(
       name: "Fulan",
       email: "fulan@email.com",
       password: "fulan123",
       confirmPassword: "fulan123"
     );
-    loginParams = const LoginParams(username: "fulan@email.com", password: "Password123");
+    loginParams = LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
   test("Should get AunthenticationModel on registration when device is online", () async {

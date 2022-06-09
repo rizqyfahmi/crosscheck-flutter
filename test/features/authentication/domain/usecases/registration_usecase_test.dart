@@ -23,7 +23,7 @@ void main() {
   setUp(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     usecase = RegistrationUsecase(repository: mockAuthenticationRepository);
-    registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
+    registrationParams = RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
   });
 
   test("Should get authentication token after registration", () async {
@@ -38,7 +38,7 @@ void main() {
   setUp(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     usecase = RegistrationUsecase(repository: mockAuthenticationRepository);
-    registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
+    registrationParams = RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
   });
 
   test("Should not get authentication token when registration is failed", () async {

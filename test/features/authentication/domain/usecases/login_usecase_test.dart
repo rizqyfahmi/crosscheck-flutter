@@ -23,7 +23,7 @@ void main() {
   setUp(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     usecase = LoginUsecase(repository: mockAuthenticationRepository);
-    loginParams = const LoginParams(username: "fulan@email.com", password: "Password123");
+    loginParams = LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
   test("Should get the authentication token when login is success", () async {
@@ -65,7 +65,7 @@ void main() {
   test("Should get a failure when login is failed because of username or password is still empty", () async {
     when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
 
-    final result = await usecase(const LoginParams(username: "", password: ""));
+    final result = await usecase(LoginParams(username: "", password: ""));
     
     expect(result, Left(ServerFailure(message: Failure.loginRequiredFieldError)));
     verifyNever(mockAuthenticationRepository.login(loginParams));
