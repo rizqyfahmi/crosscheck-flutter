@@ -12,16 +12,10 @@ import 'package:crosscheck/features/authentication/presentation/login/view_model
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends StatelessWidget {
   static String routeName = "login";
 
   const LoginView({Key? key}) : super(key: key);
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
 
   Widget buildFields(BuildContext context) {
     return Column(
