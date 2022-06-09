@@ -14,9 +14,13 @@ class WalkthroughRepositoryImpl implements WalkthroughRepository {
   });
 
   @override
-  Future<Either<Failure, WalkthroughEntity>> getIsSkip() {
-    // TODO: implement getIsSkip
-    throw UnimplementedError();
+  Future<Either<Failure, WalkthroughEntity>> getIsSkip() async {
+    try {
+      final response = await walkthroughLocalDataSource.getIsSkip();
+      return Right(response);
+    } on CachedFailure catch (e) {
+      return Left(CachedFailure(message: e.message));
+    }
   }
 
   @override
