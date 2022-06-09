@@ -36,12 +36,12 @@ class MockWalkthroughRepository extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> setIsSkip(
+  _i4.Future<_i2.Either<_i5.Failure, dynamic>> setIsSkip(
           _i6.WalkthroughParams? params) =>
       (super.noSuchMethod(Invocation.method(#setIsSkip, [params]),
-              returnValue: Future<_i2.Either<_i5.Failure, void>>.value(
-                  _FakeEither_0<_i5.Failure, void>()))
-          as _i4.Future<_i2.Either<_i5.Failure, void>>);
+              returnValue: Future<_i2.Either<_i5.Failure, dynamic>>.value(
+                  _FakeEither_0<_i5.Failure, dynamic>()))
+          as _i4.Future<_i2.Either<_i5.Failure, dynamic>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i7.WalkthroughEntity>> getIsSkip() =>
       (super.noSuchMethod(Invocation.method(#getIsSkip, []),

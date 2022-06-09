@@ -32,11 +32,11 @@ void main() {
   });
 
   test("Should not set \"is skip\" status and return CachedFailure when error is happened", () async {
-    when(mockWalkthroughRepository.setIsSkip(const WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
+    when(mockWalkthroughRepository.setIsSkip(const WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
 
     final result = await setIsSkipUsecase(const WalkthroughParams(isSkip: true));
 
-    expect(result, Left(CachedFailure(message: Failure.generalError)));
+    expect(result, Left(CachedFailure(message: Failure.cacheError)));
     verify(setIsSkipUsecase(const WalkthroughParams(isSkip: true)));
   });
 }
