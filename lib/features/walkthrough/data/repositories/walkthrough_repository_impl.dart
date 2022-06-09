@@ -1,4 +1,4 @@
-import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_storage.dart';
+import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
 import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart';
 import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:crosscheck/core/error/failure.dart';
@@ -23,7 +23,7 @@ class WalkthroughRepositoryImpl implements WalkthroughRepository {
   Future<Either<Failure, dynamic>> setIsSkip(WalkthroughParams params) async {
     
     try {
-      await walkthroughLocalDataSource.setIsSkip(params.isSkip);
+      await walkthroughLocalDataSource.setIsSkip(params);
       return const Right(null);
     } on CachedFailure catch (e) {
       return Left(CachedFailure(message: e.message));

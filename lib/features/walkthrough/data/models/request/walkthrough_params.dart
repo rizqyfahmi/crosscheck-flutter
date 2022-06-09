@@ -6,4 +6,8 @@ class WalkthroughParams extends Param {
 
   WalkthroughParams({required this.isSkip});
 
+  factory WalkthroughParams.fromJSON(Map<String, dynamic> response) => WalkthroughParams(isSkip: response["isSkip"]);
+  
+  Map<String, dynamic> toJSON() => {"isSkip": isSkip};
+
 }

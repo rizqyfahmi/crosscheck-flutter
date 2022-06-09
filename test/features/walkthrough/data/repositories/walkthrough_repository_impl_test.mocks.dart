@@ -4,8 +4,10 @@
 
 import 'dart:async' as _i3;
 
-import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_storage.dart'
+import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart'
     as _i2;
+import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart'
+    as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -28,8 +30,8 @@ class MockWalkthroughLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i3.Future<void> setIsSkip(bool? isSkip) =>
-      (super.noSuchMethod(Invocation.method(#setIsSkip, [isSkip]),
+  _i3.Future<void> setIsSkip(_i4.WalkthroughParams? params) =>
+      (super.noSuchMethod(Invocation.method(#setIsSkip, [params]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
 }
