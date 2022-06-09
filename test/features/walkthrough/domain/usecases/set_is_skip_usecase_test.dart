@@ -23,20 +23,20 @@ void main() {
   });
 
   test("Should set \"is skip\" status", () async {
-    when(mockWalkthroughRepository.setIsSkip(const WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
+    when(mockWalkthroughRepository.setIsSkip(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
 
-    final result = await setIsSkipUsecase(const WalkthroughParams(isSkip: true));
+    final result = await setIsSkipUsecase(WalkthroughParams(isSkip: true));
 
     expect(result, const Right(null));
-    verify(setIsSkipUsecase(const WalkthroughParams(isSkip: true)));
+    verify(setIsSkipUsecase(WalkthroughParams(isSkip: true)));
   });
 
   test("Should not set \"is skip\" status and return CachedFailure when error is happened", () async {
-    when(mockWalkthroughRepository.setIsSkip(const WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockWalkthroughRepository.setIsSkip(WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
 
-    final result = await setIsSkipUsecase(const WalkthroughParams(isSkip: true));
+    final result = await setIsSkipUsecase(WalkthroughParams(isSkip: true));
 
     expect(result, Left(CachedFailure(message: Failure.cacheError)));
-    verify(setIsSkipUsecase(const WalkthroughParams(isSkip: true)));
+    verify(setIsSkipUsecase(WalkthroughParams(isSkip: true)));
   });
 }

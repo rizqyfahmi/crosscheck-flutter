@@ -53,7 +53,7 @@ void main() {
     setUp(() {
       mockRegistrationUseCase = MockRegistrationUsecase();
       bloc = RegistrationBloc(registrationUsecase: mockRegistrationUseCase);
-      registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
+      registrationParams = RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
     });
 
     test("Should keep value when each field is entered in separately", () {
@@ -173,7 +173,7 @@ void main() {
     setUp(() {
       mockRegistrationUseCase = MockRegistrationUsecase();
       bloc = RegistrationBloc(registrationUsecase: mockRegistrationUseCase);
-      registrationParams = const RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
+      registrationParams = RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
     });
 
     test("Should return RegistrationGeneralError(message: NullFailure.message) when registration is failed because of NullFailure()", () async {

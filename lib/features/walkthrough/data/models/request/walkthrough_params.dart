@@ -1,7 +1,9 @@
-import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart';
+import 'package:crosscheck/core/param/param.dart';
 
-class WalkthroughParams extends WalkthroughEntity {
+class WalkthroughParams extends Param {
 
-  const WalkthroughParams({required super.isSkip});
+  final bool isSkip;
+
+  WalkthroughParams({required this.isSkip});
 
 }

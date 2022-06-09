@@ -26,7 +26,7 @@ void main() {
   test("Should set \"isSkip\" status properly ", () async {
     when(mockWalkthroughLocalDataSource.setIsSkip(true)).thenAnswer((_) async {});
 
-    final result = await walkthroughRepository.setIsSkip(const WalkthroughParams(isSkip: true));
+    final result = await walkthroughRepository.setIsSkip(WalkthroughParams(isSkip: true));
 
     expect(result, const Right(null));
     verify(mockWalkthroughLocalDataSource.setIsSkip(true));
@@ -35,7 +35,7 @@ void main() {
   test("Should not set \"is skip\" status and return CachedFailure when error is happened", () async {
     when(mockWalkthroughLocalDataSource.setIsSkip(true)).thenThrow(CacheException(message: Failure.generalError));
 
-    final result = await walkthroughRepository.setIsSkip(const WalkthroughParams(isSkip: true));
+    final result = await walkthroughRepository.setIsSkip(WalkthroughParams(isSkip: true));
 
     expect(result, Left(CachedFailure(message: Failure.generalError)));
     verify(mockWalkthroughLocalDataSource.setIsSkip(true));

@@ -1,10 +1,10 @@
-import 'package:equatable/equatable.dart';
+import 'package:crosscheck/core/param/param.dart';
 
-class LoginParams extends Equatable {
+class LoginParams extends Param {
   final String username;
   final String password;
 
-  const LoginParams({
+  LoginParams({
     required this.username,
     required this.password
   });
