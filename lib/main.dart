@@ -73,13 +73,10 @@ class MainPage extends StatelessWidget {
             return navigate(context, const WalkthroughView());
           }
 
-          if (
-              (state is WalkthroughLoadSkipSuccess) || 
-              (state is WalkthroughSkipSuccess) ||
-              (state is WalkthroughSkipFailed)
-          ) {
+          if (state is WalkthroughLoadSkipSuccess) {
             return navigate(context, const LoginView());
           }
+
         },
         child: const Scaffold(),
       ),
