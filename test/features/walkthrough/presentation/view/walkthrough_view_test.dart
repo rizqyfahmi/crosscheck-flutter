@@ -82,7 +82,7 @@ void main() {
       testWidget = buildWidget(
         loginBloc: mockLoginBloc,
         walkthroughBloc: mockWalkthroughBloc,
-        child: const MainPage()
+        child: const WalkthroughView()
       );
 
       when(mockLoginBloc.state).thenReturn(const LoginInitial());
