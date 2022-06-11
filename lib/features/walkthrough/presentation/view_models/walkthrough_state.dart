@@ -36,6 +36,9 @@ class WalkthroughSkipFailed extends WalkthroughState {
     required this.message
   });
 
+  @override
+  List<Object?> get props => [...super.props, message];
+
 }
 
 class WalkthroughLoadSkipSuccess extends WalkthroughState {
@@ -52,5 +55,8 @@ class WalkthroughLoadSkipFailed extends WalkthroughState {
     required super.model,
     required this.message
   });
+
+  @override
+  List<Object?> get props => [...super.props, message];
 
 }

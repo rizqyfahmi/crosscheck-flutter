@@ -4,6 +4,10 @@ import 'package:crosscheck/features/authentication/presentation/login/view/login
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/views/registration_view.dart';
+import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
+import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_event.dart';
+import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,27 +33,52 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<LoginBloc>(
           create: (_) => di.locator<LoginBloc>()
+        ),
+        BlocProvider<WalkthroughBloc>(
+          create: (_) => di.locator<WalkthroughBloc>()..add(WalkthroughGetSkip())
         )
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-        ),
-        home: const LoginView(),
+        home: const MainPage(),
         routes: {
-          RegistrationView.routeName: (context) =>  const RegistrationView(),
-          LoginView.routeName:(context) => const LoginView()
+          WalkthroughView.routeName: (context) => const WalkthroughView(),
+          RegistrationView.routeName: (context) => const RegistrationView(),
+          LoginView.routeName: (context) => const LoginView()
         },
+      ),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  void navigate(BuildContext context, Widget destination) {
+    Navigator.pushReplacement(
+      context, 
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation)  => destination,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero
+      )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocListener<WalkthroughBloc, WalkthroughState>(
+        listener: (context, state) {
+          if (state is WalkthroughLoadSkipFailed) {
+            return navigate(context, const WalkthroughView());
+          }
+
+          if (state is WalkthroughLoadSkipSuccess) {
+            return navigate(context, const LoginView());
+          }
+
+        },
+        child: const Scaffold(),
       ),
     );
   }
