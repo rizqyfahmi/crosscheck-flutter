@@ -2,30 +2,27 @@
 // in crosscheck/test/features/walkthrough/presentation/view/walkthrough_view_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i7;
+import 'dart:async' as _i8;
 
-import 'package:crosscheck/core/error/failure.dart' as _i11;
-import 'package:crosscheck/core/param/param.dart' as _i15;
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart'
     as _i2;
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart'
-    as _i6;
+    as _i7;
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_event.dart'
-    as _i8;
+    as _i9;
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart'
     as _i3;
-import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart'
-    as _i12;
-import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart'
-    as _i14;
-import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart'
-    as _i4;
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart'
-    as _i13;
+    as _i5;
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart'
-    as _i10;
-import 'package:dartz/dartz.dart' as _i5;
-import 'package:flutter_bloc/flutter_bloc.dart' as _i9;
+    as _i4;
+import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart'
+    as _i11;
+import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_event.dart'
+    as _i12;
+import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_state.dart'
+    as _i6;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -42,15 +39,19 @@ class _FakeLoginUsecase_0 extends _i1.Fake implements _i2.LoginUsecase {}
 
 class _FakeLoginState_1 extends _i1.Fake implements _i3.LoginState {}
 
-class _FakeWalkthroughRepository_2 extends _i1.Fake
-    implements _i4.WalkthroughRepository {}
+class _FakeSetIsSkipUsecase_2 extends _i1.Fake implements _i4.SetIsSkipUsecase {
+}
 
-class _FakeEither_3<L, R> extends _i1.Fake implements _i5.Either<L, R> {}
+class _FakeGetIsSkipUsecase_3 extends _i1.Fake implements _i5.GetIsSkipUsecase {
+}
+
+class _FakeWalkthroughState_4 extends _i1.Fake implements _i6.WalkthroughState {
+}
 
 /// A class which mocks [LoginBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLoginBloc extends _i1.Mock implements _i6.LoginBloc {
+class MockLoginBloc extends _i1.Mock implements _i7.LoginBloc {
   MockLoginBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -63,20 +64,20 @@ class MockLoginBloc extends _i1.Mock implements _i6.LoginBloc {
   _i3.LoginState get state => (super.noSuchMethod(Invocation.getter(#state),
       returnValue: _FakeLoginState_1()) as _i3.LoginState);
   @override
-  _i7.Stream<_i3.LoginState> get stream =>
+  _i8.Stream<_i3.LoginState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i3.LoginState>.empty())
-          as _i7.Stream<_i3.LoginState>);
+          as _i8.Stream<_i3.LoginState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i8.LoginEvent? event) =>
+  void add(_i9.LoginEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i8.LoginEvent? event) =>
+  void onEvent(_i9.LoginEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -84,23 +85,23 @@ class MockLoginBloc extends _i1.Mock implements _i6.LoginBloc {
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i8.LoginEvent>(
-          _i9.EventHandler<E, _i3.LoginState>? handler,
-          {_i9.EventTransformer<E>? transformer}) =>
+  void on<E extends _i9.LoginEvent>(
+          _i10.EventHandler<E, _i3.LoginState>? handler,
+          {_i10.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i9.Transition<_i8.LoginEvent, _i3.LoginState>? transition) =>
+          _i10.Transition<_i9.LoginEvent, _i3.LoginState>? transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i7.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  void onChange(_i9.Change<_i3.LoginState>? change) =>
+  void onChange(_i10.Change<_i3.LoginState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -113,47 +114,74 @@ class MockLoginBloc extends _i1.Mock implements _i6.LoginBloc {
           returnValueForMissingStub: null);
 }
 
-/// A class which mocks [SetIsSkipUsecase].
+/// A class which mocks [WalkthroughBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSetIsSkipUsecase extends _i1.Mock implements _i10.SetIsSkipUsecase {
-  MockSetIsSkipUsecase() {
+class MockWalkthroughBloc extends _i1.Mock implements _i11.WalkthroughBloc {
+  MockWalkthroughBloc() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.WalkthroughRepository get repository =>
-      (super.noSuchMethod(Invocation.getter(#repository),
-              returnValue: _FakeWalkthroughRepository_2())
-          as _i4.WalkthroughRepository);
+  _i4.SetIsSkipUsecase get setIsSkipUsecase =>
+      (super.noSuchMethod(Invocation.getter(#setIsSkipUsecase),
+          returnValue: _FakeSetIsSkipUsecase_2()) as _i4.SetIsSkipUsecase);
   @override
-  _i7.Future<_i5.Either<_i11.Failure, void>> call(
-          _i12.WalkthroughParams? params) =>
-      (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<_i5.Either<_i11.Failure, void>>.value(
-                  _FakeEither_3<_i11.Failure, void>()))
-          as _i7.Future<_i5.Either<_i11.Failure, void>>);
-}
-
-/// A class which mocks [GetIsSkipUsecase].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockGetIsSkipUsecase extends _i1.Mock implements _i13.GetIsSkipUsecase {
-  MockGetIsSkipUsecase() {
-    _i1.throwOnMissingStub(this);
-  }
-
+  _i5.GetIsSkipUsecase get getIsSkipUsecase =>
+      (super.noSuchMethod(Invocation.getter(#getIsSkipUsecase),
+          returnValue: _FakeGetIsSkipUsecase_3()) as _i5.GetIsSkipUsecase);
   @override
-  _i4.WalkthroughRepository get repository =>
-      (super.noSuchMethod(Invocation.getter(#repository),
-              returnValue: _FakeWalkthroughRepository_2())
-          as _i4.WalkthroughRepository);
+  _i6.WalkthroughState get state =>
+      (super.noSuchMethod(Invocation.getter(#state),
+          returnValue: _FakeWalkthroughState_4()) as _i6.WalkthroughState);
   @override
-  _i7.Future<_i5.Either<_i11.Failure, _i14.WalkthroughEntity>> call(
-          _i15.NoParam? param) =>
-      (super.noSuchMethod(Invocation.method(#call, [param]),
-          returnValue:
-              Future<_i5.Either<_i11.Failure, _i14.WalkthroughEntity>>.value(
-                  _FakeEither_3<_i11.Failure, _i14.WalkthroughEntity>())) as _i7
-          .Future<_i5.Either<_i11.Failure, _i14.WalkthroughEntity>>);
+  _i8.Stream<_i6.WalkthroughState> get stream =>
+      (super.noSuchMethod(Invocation.getter(#stream),
+              returnValue: Stream<_i6.WalkthroughState>.empty())
+          as _i8.Stream<_i6.WalkthroughState>);
+  @override
+  bool get isClosed =>
+      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+          as bool);
+  @override
+  void add(_i12.WalkthroughEvent? event) =>
+      super.noSuchMethod(Invocation.method(#add, [event]),
+          returnValueForMissingStub: null);
+  @override
+  void onEvent(_i12.WalkthroughEvent? event) =>
+      super.noSuchMethod(Invocation.method(#onEvent, [event]),
+          returnValueForMissingStub: null);
+  @override
+  void emit(_i6.WalkthroughState? state) =>
+      super.noSuchMethod(Invocation.method(#emit, [state]),
+          returnValueForMissingStub: null);
+  @override
+  void on<E extends _i12.WalkthroughEvent>(
+          _i10.EventHandler<E, _i6.WalkthroughState>? handler,
+          {_i10.EventTransformer<E>? transformer}) =>
+      super.noSuchMethod(
+          Invocation.method(#on, [handler], {#transformer: transformer}),
+          returnValueForMissingStub: null);
+  @override
+  void onTransition(
+          _i10.Transition<_i12.WalkthroughEvent, _i6.WalkthroughState>?
+              transition) =>
+      super.noSuchMethod(Invocation.method(#onTransition, [transition]),
+          returnValueForMissingStub: null);
+  @override
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+  @override
+  void onChange(_i10.Change<_i6.WalkthroughState>? change) =>
+      super.noSuchMethod(Invocation.method(#onChange, [change]),
+          returnValueForMissingStub: null);
+  @override
+  void addError(Object? error, [StackTrace? stackTrace]) =>
+      super.noSuchMethod(Invocation.method(#addError, [error, stackTrace]),
+          returnValueForMissingStub: null);
+  @override
+  void onError(Object? error, StackTrace? stackTrace) =>
+      super.noSuchMethod(Invocation.method(#onError, [error, stackTrace]),
+          returnValueForMissingStub: null);
 }
