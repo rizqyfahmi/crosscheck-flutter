@@ -20,7 +20,6 @@ class WalkthroughView extends StatelessWidget {
       body: BlocConsumer<WalkthroughBloc, WalkthroughState>(
         listener: (context, state) {
           if ((state is WalkthroughSkipSuccess) || (state is WalkthroughSkipFailed)) {
-            print("state view: $state");
             Navigator.pushReplacement(
               context, 
               PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation)  => const LoginView(),
