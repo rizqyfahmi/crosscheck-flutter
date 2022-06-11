@@ -53,20 +53,35 @@ class MyApp extends StatelessWidget {
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
+  void navigate(BuildContext context, Widget destination) {
+    Navigator.pushReplacement(
+      context, 
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation)  => destination,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<WalkthroughBloc, WalkthroughState>(
-        buildWhen: (previous, current) {
-          return current is! WalkthroughInitial;
-        },
-        builder: (context, state) {
-          if (state is WalkthroughLoadSkipSuccess) {
-            return const LoginView();
+      body: BlocListener<WalkthroughBloc, WalkthroughState>(
+        listener: (context, state) {
+          if (state is WalkthroughLoadSkipFailed) {
+            return navigate(context, const WalkthroughView());
           }
 
-          return const WalkthroughView();
+          if (
+              (state is WalkthroughLoadSkipSuccess) || 
+              (state is WalkthroughSkipSuccess) ||
+              (state is WalkthroughSkipFailed)
+          ) {
+            return navigate(context, const LoginView());
+          }
         },
+        child: const Scaffold(),
       ),
     );
   }
