@@ -12,11 +12,10 @@ class GetActiveBottomNavigationUsecase implements Usecase<BottomNavigationEntity
   const GetActiveBottomNavigationUsecase({
     required this.repository
   });
-  
-  @override
-  Future<Either<Failure, BottomNavigationEntity>> call(NoParam param) {
-    // TODO: implement call
-    throw UnimplementedError();
-  }
 
+  @override
+  Future<Either<Failure, BottomNavigationEntity>> call(NoParam param) async {
+    return await repository.getActiveBottomNavigation();
+  }
+  
 }
