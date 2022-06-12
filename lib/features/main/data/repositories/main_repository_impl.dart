@@ -14,9 +14,13 @@ class MainRepositoryImpl implements MainRepository {
   });
   
   @override
-  Future<Either<Failure, BottomNavigationEntity>> getActiveBottomNavigation() {
-    // TODO: implement getActiveBottomNavigation
-    throw UnimplementedError();
+  Future<Either<Failure, BottomNavigationEntity>> getActiveBottomNavigation() async {
+    try {
+      final response = await mainLocalDataSource.getActiveBottomNavigation();
+      return Right(response);
+    } on CacheException catch (e) {
+      return Left(CachedFailure(message: e.message));
+    }
   }
   
 }
