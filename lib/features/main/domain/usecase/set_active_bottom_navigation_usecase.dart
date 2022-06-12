@@ -14,9 +14,11 @@ class SetActiveBottomNavigationUsecase implements Usecase<BottomNavigationEntity
   });
   
   @override
-  Future<Either<Failure, BottomNavigationEntity>> call(BottomNavigationModel param) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, BottomNavigationEntity>> call(BottomNavigationModel param) async {
+    
+    await repository.setActiveBottomNavigation(param);
+    return await repository.getActiveBottomNavigation();
+
   }
 
 }
