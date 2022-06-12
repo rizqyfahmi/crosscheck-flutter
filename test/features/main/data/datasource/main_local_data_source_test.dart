@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
 import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
@@ -42,5 +44,27 @@ void main() {
       )
     );
     verify(mockSharedPreference.getString("CACHED_BOTTOM_NAVIGATION"));
+  });
+
+  test("Should not throw CacheException when set active bottom navigation is success", () async {
+    const param = BottomNavigationModel(currentPageIndex: 1);
+    when(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON()))).thenAnswer((_) async => true);
+
+    await mainLocalDataSource.setActiveBottomNavigation(param);
+
+    verify(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON())));
+  });
+
+  test("Should throw CacheException when set active bottom navigation is failed", () async {
+    const param = BottomNavigationModel(currentPageIndex: 1);
+    when(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON()))).thenAnswer((_) async => false);
+
+    final call = mainLocalDataSource.setActiveBottomNavigation;
+
+    expect(call(param), throwsA(
+      predicate((e) => e is CacheException)
+    ));
+
+    verify(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON())));
   });
 }
