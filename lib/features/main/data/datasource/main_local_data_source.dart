@@ -21,8 +21,11 @@ class MainLocalDataSourceImpl implements MainLocalDataSource {
   
   @override
   Future<BottomNavigationModel> getActiveBottomNavigation() {
-    // TODO: implement getActiveBottomNavigation
-    throw UnimplementedError();
+    final response = sharedPreferences.getString("CACHED_BOTTOM_NAVIGATION");
+
+    if (response != null) return Future.value(BottomNavigationModel.fromJSON(json.decode(response)));
+
+    throw CacheException(message: Failure.cacheError);
   }
   
 }
