@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/usecase/usecase.dart';
 import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
@@ -16,7 +17,11 @@ class SetActiveBottomNavigationUsecase implements Usecase<BottomNavigationEntity
   @override
   Future<Either<Failure, BottomNavigationEntity>> call(BottomNavigationModel param) async {
     
-    await repository.setActiveBottomNavigation(param);
+    try {
+      await repository.setActiveBottomNavigation(param);
+    } on CacheException catch (e) {
+      return Left(CachedFailure(message: e.message));
+    }
     return await repository.getActiveBottomNavigation();
 
   }
