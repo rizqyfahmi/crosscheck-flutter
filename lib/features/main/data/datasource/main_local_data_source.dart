@@ -9,6 +9,8 @@ abstract class MainLocalDataSource {
   
   Future<BottomNavigationModel> getActiveBottomNavigation();
 
+  Future<void> setActiveBottomNavigation(BottomNavigationModel param);
+
 }
 
 class MainLocalDataSourceImpl implements MainLocalDataSource {
@@ -26,6 +28,12 @@ class MainLocalDataSourceImpl implements MainLocalDataSource {
     if (response != null) return Future.value(BottomNavigationModel.fromJSON(json.decode(response)));
 
     throw CacheException(message: Failure.cacheError);
+  }
+  
+  @override
+  Future<void> setActiveBottomNavigation(BottomNavigationModel param) {
+    // TODO: implement setActiveBottomNavigation
+    throw UnimplementedError();
   }
   
 }

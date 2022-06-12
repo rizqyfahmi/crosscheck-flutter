@@ -25,9 +25,8 @@ class MainRepositoryImpl implements MainRepository {
   }
 
   @override
-  Future<void> setActiveBottomNavigation(BottomNavigationModel param) {
-    // TODO: implement setActiveBottomNavigation
-    throw UnimplementedError();
+  Future<void> setActiveBottomNavigation(BottomNavigationModel param) async {
+    await mainLocalDataSource.setActiveBottomNavigation(param);
   }
   
 }
