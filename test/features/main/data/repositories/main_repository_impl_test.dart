@@ -24,7 +24,7 @@ void main() {
     mainRepository = MainRepositoryImpl(mainLocalDataSource: mockMainLocalDataSource);
   });
 
-  test("Should BottomNavigationActivity when get active botom navigation is success", () async {
+  test("Should BottomNavigationActivity when get active bottom navigation is success", () async {
     BottomNavigationEntity entity = const BottomNavigationModel(currentPageIndex: 1);
 
     when(mockMainLocalDataSource.getActiveBottomNavigation()).thenAnswer((_) async => const BottomNavigationModel(currentPageIndex: 1));
@@ -44,5 +44,15 @@ void main() {
     expect(result, Left(CachedFailure(message: Failure.cacheError)));
     verify(mockMainLocalDataSource.getActiveBottomNavigation());
 
+  });
+
+  test("Should call localDataSource.setActiveBottomNavigation when active bottom navigation would be set", () async {
+    const param = BottomNavigationModel(currentPageIndex: 1);
+    when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenAnswer((_) async => Future.value());
+
+    await mainRepository.setActiveBottomNavigation(param);
+
+    verify(mockMainLocalDataSource.setActiveBottomNavigation(param));
+    
   });
 }

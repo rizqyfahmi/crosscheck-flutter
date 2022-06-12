@@ -38,4 +38,11 @@ class MockMainLocalDataSource extends _i1.Mock
               returnValue: Future<_i2.BottomNavigationModel>.value(
                   _FakeBottomNavigationModel_0()))
           as _i4.Future<_i2.BottomNavigationModel>);
+  @override
+  _i4.Future<void> setActiveBottomNavigation(
+          _i2.BottomNavigationModel? param) =>
+      (super.noSuchMethod(
+          Invocation.method(#setActiveBottomNavigation, [param]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
 }
