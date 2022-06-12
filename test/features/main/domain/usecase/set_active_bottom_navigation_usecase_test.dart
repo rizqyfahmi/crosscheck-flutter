@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
@@ -35,7 +36,7 @@ void main() {
     verify(mockMainRepository.getActiveBottomNavigation());
   });
 
-  test("Should CachedFailure void when set active bottom navigation is failed", () async {
+  test("Should return CachedFailure void when set active bottom navigation is failed", () async {
     const param = BottomNavigationModel(currentPageIndex: 1);
     when(mockMainRepository.setActiveBottomNavigation(param)).thenAnswer((_) async => Future.value());
     when(mockMainRepository.getActiveBottomNavigation()).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
@@ -45,5 +46,17 @@ void main() {
     expect(result, Left(CachedFailure(message: Failure.cacheError)));
     verify(mockMainRepository.setActiveBottomNavigation(param));
     verify(mockMainRepository.getActiveBottomNavigation());
+  });
+
+  test("Should return CacheException when set active bottom navigation is getting an exception", () async {
+    const param = BottomNavigationModel(currentPageIndex: 1);
+    when(mockMainRepository.setActiveBottomNavigation(param)).thenThrow(CacheException(message: Failure.cacheError));
+    
+
+    final result = await setActiveBottomNavigationUsecase(param);
+
+    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    verify(mockMainRepository.setActiveBottomNavigation(param));
+    verifyNever(mockMainRepository.getActiveBottomNavigation());
   });
 }

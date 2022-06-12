@@ -46,7 +46,7 @@ void main() {
 
   });
 
-  test("Should call localDataSource.setActiveBottomNavigation when active bottom navigation would be set", () async {
+  test("Should not throw CacheException when set active bottom navigation is success", () async {
     const param = BottomNavigationModel(currentPageIndex: 1);
     when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenAnswer((_) async => Future.value());
 
@@ -54,5 +54,18 @@ void main() {
 
     verify(mockMainLocalDataSource.setActiveBottomNavigation(param));
     
+  });
+
+  test("Should throw CacheException when set active bottom navigation is failed", () async {
+    const param = BottomNavigationModel(currentPageIndex: 1);
+    when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenThrow(CacheException(message: Failure.cacheError));
+
+    final call = mainRepository.setActiveBottomNavigation;
+
+    expect(call(param), throwsA(
+      predicate((e) => e is CacheException)
+    ));
+
+    verify(mockMainLocalDataSource.setActiveBottomNavigation(param));
   });
 }
