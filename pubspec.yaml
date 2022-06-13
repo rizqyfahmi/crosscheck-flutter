@@ -33,6 +33,7 @@ dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
+  flutter_svg: ^1.1.0
   get_it: ^7.2.0
   http: ^0.13.4
   internet_connection_checker: ^0.0.1+4
