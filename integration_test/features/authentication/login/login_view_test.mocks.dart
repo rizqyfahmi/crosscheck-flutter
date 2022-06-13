@@ -2,17 +2,28 @@
 // in crosscheck/integration_test/features/authentication/login/login_view_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
-import 'package:crosscheck/core/error/failure.dart' as _i6;
+import 'package:crosscheck/core/error/failure.dart' as _i7;
+import 'package:crosscheck/core/param/param.dart' as _i14;
 import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
-    as _i8;
+    as _i9;
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
-    as _i7;
+    as _i8;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i2;
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart'
+    as _i5;
+import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart'
+    as _i12;
+import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart'
+    as _i11;
+import 'package:crosscheck/features/main/domain/repositories/main_repository.dart'
     as _i4;
+import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart'
+    as _i13;
+import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart'
+    as _i10;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -31,10 +42,12 @@ class _FakeAuthenticationRepository_0 extends _i1.Fake
 
 class _FakeEither_1<L, R> extends _i1.Fake implements _i3.Either<L, R> {}
 
+class _FakeMainRepository_2 extends _i1.Fake implements _i4.MainRepository {}
+
 /// A class which mocks [LoginUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLoginUsecase extends _i1.Mock implements _i4.LoginUsecase {
+class MockLoginUsecase extends _i1.Mock implements _i5.LoginUsecase {
   MockLoginUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -45,11 +58,57 @@ class MockLoginUsecase extends _i1.Mock implements _i4.LoginUsecase {
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.AuthenticationEntity>> call(
-          _i8.LoginParams? params) =>
+  _i6.Future<_i3.Either<_i7.Failure, _i8.AuthenticationEntity>> call(
+          _i9.LoginParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
               returnValue: Future<
-                      _i3.Either<_i6.Failure, _i7.AuthenticationEntity>>.value(
-                  _FakeEither_1<_i6.Failure, _i7.AuthenticationEntity>()))
-          as _i5.Future<_i3.Either<_i6.Failure, _i7.AuthenticationEntity>>);
+                      _i3.Either<_i7.Failure, _i8.AuthenticationEntity>>.value(
+                  _FakeEither_1<_i7.Failure, _i8.AuthenticationEntity>()))
+          as _i6.Future<_i3.Either<_i7.Failure, _i8.AuthenticationEntity>>);
+}
+
+/// A class which mocks [SetActiveBottomNavigationUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSetActiveBottomNavigationUsecase extends _i1.Mock
+    implements _i10.SetActiveBottomNavigationUsecase {
+  MockSetActiveBottomNavigationUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.MainRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeMainRepository_2()) as _i4.MainRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, _i11.BottomNavigationEntity>> call(
+          _i12.BottomNavigationModel? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+          returnValue: Future<
+                  _i3.Either<_i7.Failure, _i11.BottomNavigationEntity>>.value(
+              _FakeEither_1<_i7.Failure, _i11.BottomNavigationEntity>())) as _i6
+          .Future<_i3.Either<_i7.Failure, _i11.BottomNavigationEntity>>);
+}
+
+/// A class which mocks [GetActiveBottomNavigationUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetActiveBottomNavigationUsecase extends _i1.Mock
+    implements _i13.GetActiveBottomNavigationUsecase {
+  MockGetActiveBottomNavigationUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.MainRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeMainRepository_2()) as _i4.MainRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, _i11.BottomNavigationEntity>> call(
+          _i14.NoParam? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+          returnValue: Future<
+                  _i3.Either<_i7.Failure, _i11.BottomNavigationEntity>>.value(
+              _FakeEither_1<_i7.Failure, _i11.BottomNavigationEntity>())) as _i6
+          .Future<_i3.Either<_i7.Failure, _i11.BottomNavigationEntity>>);
 }
