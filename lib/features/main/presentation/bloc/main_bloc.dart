@@ -37,6 +37,9 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         }
       );
     });
+    on<MainResetActiveBottomNavigation>((event, emit) {
+      emit(const MainInit());
+    });
   }
   
 }

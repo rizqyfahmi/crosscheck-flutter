@@ -28,6 +28,9 @@ void main() async {
     ),
     BlocProvider<WalkthroughBloc>(
       create: (_) => di.locator<WalkthroughBloc>()..add(WalkthroughGetSkip())
+    ),
+    BlocProvider<MainBloc>(
+      create: (_) => di.locator<MainBloc>()
     )
   ];
   runApp(MyApp(providers: providers));

@@ -9,6 +9,7 @@ import 'package:crosscheck/features/authentication/presentation/authentication/v
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_event.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart';
+import 'package:crosscheck/features/main/presentation/view/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -119,6 +120,14 @@ class LoginView extends StatelessWidget {
             if (state is! LoginSuccess) return;
 
             context.read<AuthenticationBloc>().add(AuthenticationSetToken(token: state.token));
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => const MainView(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero
+              )
+            );
           },
           builder: (context, state) {
             return LoadingModal(
