@@ -32,7 +32,6 @@ void main() {
   late MockLoginUsecase mockLoginUsecase;
   late AuthenticationBloc authenticationBloc;
   late LoginBloc loginBloc;
-  late MainBloc mainBloc;
   late Widget testWidget;
 
   // Mock Result

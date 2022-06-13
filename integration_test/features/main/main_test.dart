@@ -8,7 +8,6 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
-import 'package:crosscheck/features/main/presentation/view/main_view.dart';
 import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
