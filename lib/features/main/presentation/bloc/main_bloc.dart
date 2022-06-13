@@ -25,6 +25,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         }
       );
     });
+    on<MainSetActiveBottomNavigation>((event, emit) async {});
   }
   
 }
