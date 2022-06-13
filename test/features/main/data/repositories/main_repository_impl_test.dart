@@ -25,9 +25,9 @@ void main() {
   });
 
   test("Should BottomNavigationActivity when get active bottom navigation is success", () async {
-    BottomNavigationEntity entity = const BottomNavigationModel(currentPageIndex: 1);
+    BottomNavigationEntity entity = const BottomNavigationModel(currentPage: BottomNavigation.event);
 
-    when(mockMainLocalDataSource.getActiveBottomNavigation()).thenAnswer((_) async => const BottomNavigationModel(currentPageIndex: 1));
+    when(mockMainLocalDataSource.getActiveBottomNavigation()).thenAnswer((_) async => const BottomNavigationModel(currentPage: BottomNavigation.event));
 
     final result = await mainRepository.getActiveBottomNavigation();
 
@@ -47,7 +47,7 @@ void main() {
   });
 
   test("Should not throw CacheException when set active bottom navigation is success", () async {
-    const param = BottomNavigationModel(currentPageIndex: 1);
+    const param = BottomNavigationModel(currentPage: BottomNavigation.event);
     when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenAnswer((_) async => Future.value());
 
     await mainRepository.setActiveBottomNavigation(param);
@@ -57,7 +57,7 @@ void main() {
   });
 
   test("Should throw CacheException when set active bottom navigation is failed", () async {
-    const param = BottomNavigationModel(currentPageIndex: 1);
+    const param = BottomNavigationModel(currentPage: BottomNavigation.event);
     when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenThrow(CacheException(message: Failure.cacheError));
 
     final call = mainRepository.setActiveBottomNavigation;

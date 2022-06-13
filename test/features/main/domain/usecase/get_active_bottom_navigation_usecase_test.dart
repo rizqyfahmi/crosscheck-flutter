@@ -24,11 +24,11 @@ void main() {
   });
 
   test("Should return BottomNavigationEntity when get active bottom navigation is success", () async {
-    when(mockMainRepository.getActiveBottomNavigation()).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPageIndex: 1)));
+    when(mockMainRepository.getActiveBottomNavigation()).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
 
     final result = await getActiveBottomNavigationUsesace(NoParam());
 
-    expect(result, const Right(BottomNavigationEntity(currentPageIndex: 1)));
+    expect(result, const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
     verify(mockMainRepository.getActiveBottomNavigation());
   });
 

@@ -32,7 +32,7 @@ class MainLocalDataSourceImpl implements MainLocalDataSource {
   
   @override
   Future<void> setActiveBottomNavigation(BottomNavigationModel param) async {
-    final response = await sharedPreferences.setString("CACHED_MAIN", json.encode(param.toJSON()));
+    final response = await sharedPreferences.setString("CACHED_BOTTOM_NAVIGATION", json.encode(param.toJSON()));
 
     if (!response) {
       throw CacheException(message: Failure.cacheError);

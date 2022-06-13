@@ -8,6 +8,12 @@ import 'package:crosscheck/features/authentication/domain/usecases/registration_
 import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
+import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
+import 'package:crosscheck/features/main/data/repositories/main_repository_impl.dart';
+import 'package:crosscheck/features/main/domain/repositories/main_repository.dart';
+import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
+import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
+import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
 import 'package:crosscheck/features/walkthrough/data/repositories/walkthrough_repository_impl.dart';
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart';
@@ -26,18 +32,23 @@ Future<void> init() async  {
   locator.registerFactory(() => RegistrationBloc(registrationUsecase: locator()));
   locator.registerFactory(() => LoginBloc(loginUsecase: locator()));
   locator.registerFactory(() => WalkthroughBloc(setIsSkipUsecase: locator(), getIsSkipUsecase: locator()));
+  locator.registerFactory(() => MainBloc(getActiveBottomNavigationUsecase: locator(), setActiveBottomNavigationUsecase: locator()));
 
   locator.registerLazySingleton(() => RegistrationUsecase(repository: locator()));
   locator.registerLazySingleton(() => LoginUsecase(repository: locator()));
   locator.registerLazySingleton(() => SetIsSkipUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetIsSkipUsecase(repository: locator()));
+  locator.registerLazySingleton(() => GetActiveBottomNavigationUsecase(repository: locator()));
+  locator.registerLazySingleton(() => SetActiveBottomNavigationUsecase(repository: locator()));
   locator.registerLazySingleton<WalkthroughRepository>(() => WalkthroughRepositoryImpl(walkthroughLocalDataSource: locator()));
   locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(
     remote: locator(), local: locator(), networkInfo: locator()
   ));
+  locator.registerLazySingleton<MainRepository>(() => MainRepositoryImpl(mainLocalDataSource: locator()));
   locator.registerLazySingleton<AuthenticationRemoteDataSource>(() => AuthenticationRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<AuthenticationLocalDataSource>(() => AuthenticationLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<WalkthroughLocalDataSource>(() => WalkthroughLocalDataSourceImpl(sharedPreferences: locator()));
+  locator.registerLazySingleton<MainLocalDataSource>(() => MainLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
   
   final sharedPreferences = await SharedPreferences.getInstance();

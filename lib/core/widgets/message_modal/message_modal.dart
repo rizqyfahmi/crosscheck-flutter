@@ -1,7 +1,8 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
-import 'package:crosscheck/assets/icons/crosscheck/crosscheck_icons.dart';
+import 'package:crosscheck/assets/icons/custom_icons.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 enum MessageModalStatus {
   success,
@@ -70,7 +71,7 @@ class _MessageModalState extends State<MessageModal> {
   Widget build(BuildContext context) {
 
     final color = widget.status == MessageModalStatus.error ? CustomColors.primary : CustomColors.success;
-    final icon = widget.status == MessageModalStatus.error ? Crosscheck.cross : Crosscheck.check;
+    final icon = widget.status == MessageModalStatus.error ? CustomIcons.cross : CustomIcons.check;
 
     if (!isShown) {
       return widget.child;
@@ -234,7 +235,7 @@ class _MessageModalState extends State<MessageModal> {
                                             shape: BoxShape.circle,
                                             color: color
                                           ),
-                                          child: Icon(icon, color: Colors.white, size: 128),
+                                          child: SvgPicture.asset(icon),
                                         ),
                                       ),
                                     ),

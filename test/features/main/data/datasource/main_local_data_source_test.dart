@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
 import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -23,12 +24,13 @@ void main() {
   });
 
   test("Should return BottomNavigationModel when get active bottom navigation is success", () async {
-    String jsonString = "{\"currentPageIndex\": 1}";
+    String jsonString = "{\"currentPage\": ${BottomNavigation.event.index}}";
+    
     when(mockSharedPreference.getString("CACHED_BOTTOM_NAVIGATION")).thenReturn(jsonString);
 
     final result = await mainLocalDataSource.getActiveBottomNavigation();
 
-    expect(result, const BottomNavigationModel(currentPageIndex: 1));
+    expect(result, const BottomNavigationModel(currentPage: BottomNavigation.event));
     verify(mockSharedPreference.getString("CACHED_BOTTOM_NAVIGATION"));
   });
 
@@ -47,17 +49,17 @@ void main() {
   });
 
   test("Should not throw CacheException when set active bottom navigation is success", () async {
-    const param = BottomNavigationModel(currentPageIndex: 1);
-    when(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON()))).thenAnswer((_) async => true);
+    const param = BottomNavigationModel(currentPage: BottomNavigation.event);
+    when(mockSharedPreference.setString("CACHED_BOTTOM_NAVIGATION", json.encode(param.toJSON()))).thenAnswer((_) async => true);
 
     await mainLocalDataSource.setActiveBottomNavigation(param);
 
-    verify(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON())));
+    verify(mockSharedPreference.setString("CACHED_BOTTOM_NAVIGATION", json.encode(param.toJSON())));
   });
 
   test("Should throw CacheException when set active bottom navigation is failed", () async {
-    const param = BottomNavigationModel(currentPageIndex: 1);
-    when(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON()))).thenAnswer((_) async => false);
+    const param = BottomNavigationModel(currentPage: BottomNavigation.event);
+    when(mockSharedPreference.setString("CACHED_BOTTOM_NAVIGATION", json.encode(param.toJSON()))).thenAnswer((_) async => false);
 
     final call = mainLocalDataSource.setActiveBottomNavigation;
 
@@ -65,6 +67,6 @@ void main() {
       predicate((e) => e is CacheException)
     ));
 
-    verify(mockSharedPreference.setString("CACHED_MAIN", json.encode(param.toJSON())));
+    verify(mockSharedPreference.setString("CACHED_BOTTOM_NAVIGATION", json.encode(param.toJSON())));
   });
 }

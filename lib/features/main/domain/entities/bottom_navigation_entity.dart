@@ -1,14 +1,21 @@
 import 'package:equatable/equatable.dart';
 
+enum BottomNavigation {
+  home,
+  event,
+  history,
+  setting
+}
+
 class BottomNavigationEntity extends Equatable {
   
-  final int currentPageIndex;
+  final BottomNavigation currentPage;
 
   const BottomNavigationEntity({
-    required this.currentPageIndex
+    required this.currentPage
   });
   
   @override
-  List<Object?> get props => [currentPageIndex];
+  List<Object?> get props => [currentPage];
   
 }

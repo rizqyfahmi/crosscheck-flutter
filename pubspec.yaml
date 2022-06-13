@@ -33,6 +33,7 @@ dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
+  flutter_svg: ^1.1.0
   get_it: ^7.2.0
   http: ^0.13.4
   internet_connection_checker: ^0.0.1+4
@@ -73,6 +74,13 @@ flutter:
     - lib/assets/images/logo.png
     - lib/assets/images/divider.png
     - lib/assets/images/illustration.png
+    - lib/assets/icons/home.svg
+    - lib/assets/icons/calendar.svg
+    - lib/assets/icons/history.svg
+    - lib/assets/icons/setting.svg
+    - lib/assets/icons/plus.svg
+    - lib/assets/icons/cross.svg
+    - lib/assets/icons/check.svg
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -94,9 +102,6 @@ flutter:
           weight: 500
         - asset: lib/assets/fonts/poppins/Poppins-Bold.ttf
           weight: 700
-    - family: Crosscheck
-      fonts:
-        - asset: lib/assets/icons/crosscheck/fonts/Crosscheck.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

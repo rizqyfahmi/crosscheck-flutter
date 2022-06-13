@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Home" transform="translate(-260.000000, -782.000000)" stroke="#130F26" stroke-width="1.5">
+            <g id="bottom-navigation" transform="translate(0.000000, 771.000000)">
+                <g id="History" transform="translate(251.000000, 11.000000)">
+                    <g id="Group" transform="translate(9.000000, 0.000000)">
+                        <line x1="15.596" y1="15.6963" x2="8.37598" y2="15.6963" id="Path"></line>
+                        <line x1="15.596" y1="11.9365" x2="8.37598" y2="11.9365" id="Path"></line>
+                        <line x1="11.1312" y1="8.17725" x2="8.37622" y2="8.17725" id="Path"></line>
+                        <path d="M3.61011,12 C3.61011,18.937 5.70811,21.25 12.0011,21.25 C18.2951,21.25 20.3921,18.937 20.3921,12 C20.3921,5.063 18.2951,2.75 12.0011,2.75 C5.70811,2.75 3.61011,5.063 3.61011,12 Z" id="Path"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

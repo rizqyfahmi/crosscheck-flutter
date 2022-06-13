@@ -8,6 +8,8 @@ import 'package:crosscheck/features/authentication/presentation/login/view/login
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_model.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart';
+import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +22,13 @@ import 'login_view_test.mocks.dart';
 @GenerateMocks([
   AuthenticationBloc,
   LoginBloc,
+  MainBloc,
   LoginUsecase
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
   late MockLoginBloc mockLoginBloc;
+  late MockMainBloc mockMainBloc;
   late MockLoginUsecase mockLoginUsecase;
   late AuthenticationBloc authenticationBloc;
   late LoginBloc loginBloc;
@@ -37,8 +41,13 @@ void main() {
     setUp(() {
       mockAuthenticationBloc = MockAuthenticationBloc();
       mockLoginBloc = MockLoginBloc();
+      mockMainBloc = MockMainBloc();
       mockLoginUsecase = MockLoginUsecase();
-      testWidget = buildWidget(authenticationBloc: mockAuthenticationBloc, loginBloc: mockLoginBloc);
+      testWidget = buildWidget(
+        authenticationBloc: mockAuthenticationBloc,
+        loginBloc: mockLoginBloc,
+        mainBloc: mockMainBloc
+      );
     });
 
     testWidgets("Should display login page properly", (WidgetTester tester) async {
@@ -87,8 +96,13 @@ void main() {
     setUp(() {
       authenticationBloc = AuthenticationBloc();
       mockLoginBloc = MockLoginBloc();
+      mockMainBloc = MockMainBloc();
       mockLoginUsecase = MockLoginUsecase();
-      testWidget = buildWidget(authenticationBloc: authenticationBloc, loginBloc: mockLoginBloc);
+      testWidget = buildWidget(
+        authenticationBloc: authenticationBloc, 
+        loginBloc: mockLoginBloc,
+        mainBloc: mockMainBloc
+      );
     });
 
     testWidgets("Should set token into authenticaton block when state is LoginSuccess", (WidgetTester tester) async {
@@ -96,6 +110,8 @@ void main() {
       when(mockLoginBloc.stream).thenAnswer((_) => Stream.fromIterable([
         const LoginSuccess(token: token)
       ]));
+      when(mockMainBloc.state).thenReturn(const MainInit());
+      when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       
       expect(authenticationBloc.state, const Unauthenticated());
       
@@ -111,7 +127,12 @@ void main() {
       mockLoginUsecase = MockLoginUsecase();
       authenticationBloc = AuthenticationBloc();
       loginBloc = LoginBloc(loginUsecase: mockLoginUsecase);
-      testWidget = buildWidget(authenticationBloc: authenticationBloc, loginBloc: loginBloc);
+      mockMainBloc = MockMainBloc();
+      testWidget = buildWidget(
+        authenticationBloc: authenticationBloc, 
+        loginBloc: loginBloc,
+        mainBloc: mockMainBloc
+      );
     });
 
     testWidgets("Should have username and password as the same as the value of their fields", (WidgetTester tester) async {
@@ -143,6 +164,8 @@ void main() {
 
     testWidgets("Should set token into authentication BLoC when submit login form is success", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+      when(mockMainBloc.state).thenReturn(const MainInit());
+      when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
 
       await tester.pumpWidget(testWidget);
       await tester.pump();
@@ -284,7 +307,8 @@ void main() {
 
 Widget buildWidget({
   required AuthenticationBloc authenticationBloc,
-  required LoginBloc loginBloc
+  required LoginBloc loginBloc,
+  required MainBloc mainBloc
 }) {
   return MultiBlocProvider(
         providers: [
@@ -293,6 +317,9 @@ Widget buildWidget({
       ),
       BlocProvider<LoginBloc>(
         create: (_) => loginBloc
+      ),
+      BlocProvider<MainBloc>(
+        create: (_) => mainBloc
       )
     ], 
     child: const MaterialApp(
