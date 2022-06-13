@@ -1,4 +1,5 @@
 import 'package:crosscheck/core/param/param.dart';
+import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_event.dart';
@@ -25,7 +26,17 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         }
       );
     });
-    on<MainSetActiveBottomNavigation>((event, emit) async {});
+    on<MainSetActiveBottomNavigation>((event, emit) async {
+      final response = await setActiveBottomNavigationUsecase(BottomNavigationModel(currentPageIndex: event.currentPage));
+      response.fold(
+        (error) {
+          emit(state);
+        }, 
+        (result) {
+          emit(MainChanged(model: state.model.copyWith(currentPageIndex: result.currentPageIndex)));
+        }
+      );
+    });
   }
   
 }
