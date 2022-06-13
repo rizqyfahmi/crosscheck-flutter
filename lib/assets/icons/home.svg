@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Schedules" transform="translate(-22.000000, -782.000000)">
+            <g id="bottom-navigation" transform="translate(0.000000, 771.000000)">
+                <g id="Home" transform="translate(16.000000, 11.000000)">
+                    <g id="Group" transform="translate(6.000000, 0.000000)">
+                        <rect id="Rectangle" fill-rule="nonzero" x="0" y="0" width="24" height="24"></rect>
+                        <line x1="9.07861" y1="16.1355" x2="14.8936" y2="16.1355" id="Path" stroke="#203A40" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <path d="M2.3999,13.713 C2.3999,8.082 3.0139,8.475 6.3189,5.41 C7.7649,4.246 10.0149,2 11.9579,2 C13.8999,2 16.1949,4.235 17.6539,5.41 C20.9589,8.475 21.5719,8.082 21.5719,13.713 C21.5719,22 19.6129,22 11.9859,22 C4.3589,22 2.3999,22 2.3999,13.713 Z" id="Path" stroke="#203A40" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
