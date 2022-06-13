@@ -1,3 +1,4 @@
+import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class MainEvent extends Equatable {
@@ -6,7 +7,7 @@ abstract class MainEvent extends Equatable {
 }
 
 class MainSetActiveBottomNavigation extends MainEvent {
-  final int currentPage;
+  final BottomNavigation currentPage;
 
   MainSetActiveBottomNavigation({
     required this.currentPage

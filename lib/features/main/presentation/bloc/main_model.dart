@@ -1,16 +1,17 @@
+import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class MainModel extends Equatable {
   
-  final int currentPageIndex;
+  final BottomNavigation currentPage;
 
   const MainModel({
-    required this.currentPageIndex
+    required this.currentPage
   });
 
-  MainModel copyWith({int? currentPageIndex}) => MainModel(currentPageIndex: currentPageIndex ?? this.currentPageIndex);
+  MainModel copyWith({BottomNavigation? currentPage}) => MainModel(currentPage: currentPage ?? this.currentPage);
 
   @override
-  List<Object?> get props => [currentPageIndex];
+  List<Object?> get props => [currentPage];
   
 }

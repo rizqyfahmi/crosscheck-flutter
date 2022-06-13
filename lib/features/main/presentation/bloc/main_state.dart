@@ -1,3 +1,4 @@
+import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,7 +15,7 @@ abstract class MainState extends Equatable {
 }
 
 class MainInit extends MainState {
-  const MainInit() : super(model: const MainModel(currentPageIndex: 0));
+  const MainInit() : super(model: const MainModel(currentPage: BottomNavigation.home));
 }
 
 class MainChanged extends MainState {

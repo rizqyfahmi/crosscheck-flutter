@@ -22,18 +22,18 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           emit(state);
         }, 
         (result) {
-          emit(MainChanged(model: state.model.copyWith(currentPageIndex: result.currentPageIndex)));
+          emit(MainChanged(model: state.model.copyWith(currentPage: result.currentPage)));
         }
       );
     });
     on<MainSetActiveBottomNavigation>((event, emit) async {
-      final response = await setActiveBottomNavigationUsecase(BottomNavigationModel(currentPageIndex: event.currentPage));
+      final response = await setActiveBottomNavigationUsecase(BottomNavigationModel(currentPage: event.currentPage));
       response.fold(
         (error) {
           emit(state);
         }, 
         (result) {
-          emit(MainChanged(model: state.model.copyWith(currentPageIndex: result.currentPageIndex)));
+          emit(MainChanged(model: state.model.copyWith(currentPage: result.currentPage)));
         }
       );
     });
