@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-class ActiviyEntitiy extends Equatable {
+class ActivityEntity extends Equatable {
   
-  final DateTime day;
-  final double total;
+  final DateTime date;
+  final int total;
 
-  const ActiviyEntitiy({
-    required this.day,
+  const ActivityEntity({
+    required this.date,
     required this.total
   });
 
   @override
-  List<Object?> get props => [day, total];
+  List<Object?> get props => [date, total];
   
 }

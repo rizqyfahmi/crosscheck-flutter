@@ -6,7 +6,7 @@ class DashboardEntity extends Equatable {
   final double progress;
   final double upcoming;
   final double completed;
-  final List<ActiviyEntitiy> activities;
+  final List<ActivityEntity> activities;
   
   const DashboardEntity({
     required this.progress,
@@ -15,6 +15,19 @@ class DashboardEntity extends Equatable {
     required this.activities
   });
 
+  DashboardEntity copyWith({
+    double? progress,
+    double? upcoming,
+    double? completed,
+    List<ActivityEntity>? activities
+  }) {
+    return DashboardEntity(
+      progress: progress ?? this.progress, 
+      upcoming: upcoming ?? this.upcoming, 
+      completed: completed ?? this.completed, 
+      activities: activities ?? this.activities
+    );
+  }
 
   @override
   List<Object?> get props => [progress, upcoming, completed, activities];

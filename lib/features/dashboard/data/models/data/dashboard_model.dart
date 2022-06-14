@@ -6,12 +6,15 @@ class DashboardModel extends DashboardEntity {
   const DashboardModel({required super.progress, required super.upcoming, required super.completed, required super.activities});
 
   factory DashboardModel.fromJSON(Map<String, dynamic> response) {
+    // print("response: ${response["activities"]}");
+    final upcoming = (response["upcoming"] as int).toDouble();
+    final completed = (response["completed"] as int).toDouble();
     return DashboardModel(
-      progress: response["progress"], 
-      upcoming: response["upcoming"], 
-      completed: response["completed"], 
-      activities: (response["activities"] as List<Map<String, dynamic>>).map(
-        (res) => ActivityModel.fromJSON(res["activities"])
+      progress: completed / (upcoming + completed), 
+      upcoming: upcoming, 
+      completed: completed, 
+      activities: (response["activities"] as List<dynamic>).map(
+        (res) => ActivityModel.fromJSON(res)
       ).toList()
     );
   }
