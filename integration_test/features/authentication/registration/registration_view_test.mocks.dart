@@ -13,17 +13,17 @@ import 'package:crosscheck/features/authentication/domain/repositories/authentic
     as _i5;
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart'
     as _i3;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart'
     as _i7;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart'
     as _i9;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_state.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart'
     as _i2;
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart'
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart'
     as _i11;
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart'
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_event.dart'
     as _i12;
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart'
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_state.dart'
     as _i4;
 import 'package:dartz/dartz.dart' as _i6;
 import 'package:flutter_bloc/flutter_bloc.dart' as _i10;

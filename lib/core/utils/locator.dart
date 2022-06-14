@@ -5,9 +5,9 @@ import 'package:crosscheck/features/authentication/data/repositories/authenticat
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart';
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
 import 'package:crosscheck/features/main/data/repositories/main_repository_impl.dart';
 import 'package:crosscheck/features/main/domain/repositories/main_repository.dart';
@@ -19,7 +19,7 @@ import 'package:crosscheck/features/walkthrough/data/repositories/walkthrough_re
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

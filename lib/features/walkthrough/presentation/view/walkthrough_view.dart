@@ -2,9 +2,9 @@ import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_event.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_state.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

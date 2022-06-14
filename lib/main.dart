@@ -1,15 +1,15 @@
 import 'package:crosscheck/core/utils/locator.dart' as di;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/views/registration_view.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
 import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_event.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_state.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

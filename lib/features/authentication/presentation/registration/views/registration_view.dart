@@ -5,11 +5,11 @@ import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/core/widgets/text_error/text_error.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_event.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
