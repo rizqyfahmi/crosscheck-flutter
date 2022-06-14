@@ -14,10 +14,8 @@ class GetDashboardUsecase implements Usecase<DashboardEntity, DashboardParams> {
   });
   
   @override
-  Future<Either<Failure, DashboardEntity>> call(DashboardParams params) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, DashboardEntity>> call(DashboardParams params) async {
+    return await repository.getDashboard(params);
   }
-
   
 }
