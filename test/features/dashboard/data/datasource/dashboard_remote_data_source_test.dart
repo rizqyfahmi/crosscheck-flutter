@@ -35,8 +35,8 @@ void main() {
     ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
     ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
   ];
-  const double upcoming = 20;
-  const double completed = 5;
+  const int upcoming = 20;
+  const int completed = 5;
   final DashboardModel model = DashboardModel(progress: completed / (upcoming + completed), upcoming: upcoming, completed: completed, activities: activities);
 
   setUp(() {

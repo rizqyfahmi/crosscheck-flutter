@@ -31,9 +31,9 @@ void main() {
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
   ];
-  final double upcoming = activities.map((e) => e.total).reduce((value, result) => value + result).toDouble();
-  final double completed = activities.where((element) => element.date.weekday <= currentDate.weekday).map((e) => e.total).reduce((value, result) => value + result).toDouble();
-  final DashboardEntity entity = DashboardEntity(progress: completed / upcoming + completed, upcoming: upcoming, completed: completed, activities: activities);
+  const int upcoming = 20;
+  const int completed = 5;
+  final DashboardEntity entity = DashboardEntity(progress: completed / (upcoming + completed), upcoming: upcoming, completed: completed, activities: activities);
   
   setUp(() {
     mockDashboardRepository = MockDashboardRepository();
