@@ -21,19 +21,19 @@ void main() {
 
   // Mock Result
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  final currentDate = DateTime.now();
-  final List<ActiviyEntitiy> activities = [
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
+  final currentDate = DateTime.parse("2022-06-14");
+  final List<ActivityEntity> activities = [
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
   ];
-  final double upcoming = activities.map((e) => e.total).reduce((value, result) => value + result);
-  final double completed = activities.where((element) => element.day.weekday <= currentDate.weekday).map((e) => e.total).reduce((value, result) => value + result);
-  final DashboardEntity entity = DashboardEntity(progress: upcoming / completed, upcoming: upcoming, completed: completed, activities: activities);
+  final double upcoming = activities.map((e) => e.total).reduce((value, result) => value + result).toDouble();
+  final double completed = activities.where((element) => element.date.weekday <= currentDate.weekday).map((e) => e.total).reduce((value, result) => value + result).toDouble();
+  final DashboardEntity entity = DashboardEntity(progress: completed / upcoming + completed, upcoming: upcoming, completed: completed, activities: activities);
   
   setUp(() {
     mockDashboardRepository = MockDashboardRepository();

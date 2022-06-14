@@ -2,6 +2,7 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/dashboard/data/datasource/dashboard_remote_data_source.dart';
+import 'package:crosscheck/features/dashboard/data/models/data/activity_model.dart';
 import 'package:crosscheck/features/dashboard/data/models/data/dashboard_model.dart';
 import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/data/repositories/dashboard_repository_impl.dart';
@@ -25,20 +26,24 @@ void main() {
   late DashboardRepository dashboardRepository;
 
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  final currentDate = DateTime.now();
-  final List<ActiviyEntitiy> activities = [
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
-    ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
+  final currentDate = DateTime.parse("2022-06-14");
+  
+  
+  
+
+  final List<ActivityEntity> mockActivities = [
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
+    ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
   ];
-  final double upcoming = activities.map((e) => e.total).reduce((value, result) => value + result);
-  final double completed = activities.where((element) => element.day.weekday <= currentDate.weekday).map((e) => e.total).reduce((value, result) => value + result);
-  final DashboardModel model = DashboardModel(progress: upcoming / completed, upcoming: upcoming, completed: completed, activities: activities);
-  final DashboardEntity entity = model;
+  const double upcoming = 20;
+  const double completed = 5;
+  final DashboardModel mockModel = DashboardModel(progress: completed / (upcoming + completed), upcoming: upcoming, completed: completed, activities: mockActivities);
+
   setUp(() {
     mockDashboardRemoteDataSource = MockDashboardRemoteDataSource();
     mockNetworkInfo = MockNetworkInfo();
@@ -72,10 +77,22 @@ void main() {
   });
 
   test("Should return DashboardActivity when get dashboard is success", () async {
-    when(mockDashboardRemoteDataSource.getDashboard(token)).thenAnswer((_) async => model);
+    when(mockDashboardRemoteDataSource.getDashboard(token)).thenAnswer((_) async => mockModel);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
     final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+
+    final List<ActivityEntity> expectedActivities = [
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
+      ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
+    ];
+
+    final DashboardEntity entity = DashboardEntity(progress: completed / (upcoming + completed), upcoming: upcoming, completed: completed, activities: expectedActivities);
 
     expect(result, Right(entity));
 
