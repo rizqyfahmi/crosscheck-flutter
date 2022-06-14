@@ -4,10 +4,10 @@ import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_
 import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_event.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_model.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_state.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_model.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

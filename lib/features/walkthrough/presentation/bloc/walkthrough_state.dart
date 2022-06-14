@@ -1,5 +1,5 @@
 
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_model.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class WalkthroughState extends Equatable {

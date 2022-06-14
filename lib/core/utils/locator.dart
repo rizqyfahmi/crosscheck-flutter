@@ -19,7 +19,7 @@ import 'package:crosscheck/features/walkthrough/data/repositories/walkthrough_re
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

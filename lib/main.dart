@@ -7,9 +7,9 @@ import 'package:crosscheck/features/authentication/presentation/registration/vie
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
 import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_bloc.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_event.dart';
-import 'package:crosscheck/features/walkthrough/presentation/view_models/walkthrough_state.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
+import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
