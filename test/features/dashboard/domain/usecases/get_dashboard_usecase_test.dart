@@ -20,10 +20,8 @@ void main() {
   late GetDashboardUsecase getDashboardUsecase;
 
   // Mock Result
-  final currentDate = DateTime.now();
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  const double upcoming = 50;
-  const double completed = 15;
+  final currentDate = DateTime.now();
   final List<ActiviyEntitiy> activities = [
     ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
     ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
@@ -33,6 +31,8 @@ void main() {
     ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
     ActiviyEntitiy(day: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
   ];
+  final double upcoming = activities.map((e) => e.total).reduce((value, result) => value + result);
+  final double completed = activities.where((element) => element.day.weekday <= currentDate.weekday).map((e) => e.total).reduce((value, result) => value + result);
   final DashboardEntity entity = DashboardEntity(progress: upcoming / completed, upcoming: upcoming, completed: completed, activities: activities);
   
   setUp(() {
