@@ -4,8 +4,8 @@ import 'package:equatable/equatable.dart';
 class DashboardEntity extends Equatable {
 
   final double progress;
-  final double upcoming;
-  final double completed;
+  final int upcoming;
+  final int completed;
   final List<ActivityEntity> activities;
   
   const DashboardEntity({
@@ -17,8 +17,8 @@ class DashboardEntity extends Equatable {
 
   DashboardEntity copyWith({
     double? progress,
-    double? upcoming,
-    double? completed,
+    int? upcoming,
+    int? completed,
     List<ActivityEntity>? activities
   }) {
     return DashboardEntity(

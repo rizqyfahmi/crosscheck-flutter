@@ -7,8 +7,8 @@ class DashboardModel extends DashboardEntity {
 
   factory DashboardModel.fromJSON(Map<String, dynamic> response) {
     // print("response: ${response["activities"]}");
-    final upcoming = (response["upcoming"] as int).toDouble();
-    final completed = (response["completed"] as int).toDouble();
+    final upcoming = (response["upcoming"] as int);
+    final completed = (response["completed"] as int);
     return DashboardModel(
       progress: completed / (upcoming + completed), 
       upcoming: upcoming, 
