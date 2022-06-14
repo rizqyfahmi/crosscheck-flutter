@@ -1,6 +1,6 @@
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart';
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_state.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

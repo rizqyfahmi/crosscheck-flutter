@@ -13,11 +13,11 @@ import 'package:crosscheck/features/authentication/domain/repositories/authentic
     as _i8;
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart'
     as _i3;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart'
     as _i10;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_event.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart'
     as _i12;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_state.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart'
     as _i2;
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart'
     as _i14;

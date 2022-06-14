@@ -1,5 +1,5 @@
 import 'package:crosscheck/core/utils/locator.dart' as di;
-import 'package:crosscheck/features/authentication/presentation/authentication/view_models/authentication_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
