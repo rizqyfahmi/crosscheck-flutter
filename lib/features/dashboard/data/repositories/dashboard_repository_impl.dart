@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/dashboard/data/datasource/dashboard_remote_data_source.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
@@ -17,9 +18,19 @@ class DashboardRepositoryImpl implements DashboardRepository {
   });
   
   @override
-  Future<Either<Failure, DashboardEntity>> getDashboard(DashboardParams params) {
-    // TODO: implement getDashboard
-    throw UnimplementedError();
+  Future<Either<Failure, DashboardEntity>> getDashboard(DashboardParams params) async {
+    bool isConnected = await networkInfo.isConnected;
+    if (!isConnected) {
+      return Left(NetworkFailure());
+    }
+
+    try {
+      final response = await remote.getDashboard(params.token);
+      return Right(response);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    }
+
   }
   
 }
