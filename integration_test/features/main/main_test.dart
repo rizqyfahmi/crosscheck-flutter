@@ -1,9 +1,11 @@
+import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
+import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
@@ -83,6 +85,7 @@ void main() {
       return const Right(AuthenticationEntity(token: token));
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -103,17 +106,211 @@ void main() {
       await tester.pumpAndSettle();
 
       await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text("Home"), findsWidgets);
       expect(find.text("Event"), findsWidgets);
       expect(find.text("History"), findsWidgets);
       expect(find.text("Settings"), findsWidgets);
       expect(find.byKey(const Key("plusButton")), findsOneWidget);
+
+      Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.primary);
+      Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.secondary);
+      Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.secondary);
+      Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.secondary);
+
     });
     
-    
+  });
 
+  testWidgets("Should go to event menu properly", (WidgetTester tester) async {
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
+    when(mockLoginUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return const Right(AuthenticationEntity(token: token));
+    });
+    when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
+
+    await tester.runAsync(() async {
+      await tester.pumpWidget(main);
+      await tester.pumpAndSettle();
+
+      verify(mockGetIsSkipUsecase(NoParam()));
+      await tester.tap(find.byKey(const Key("getStartedButton")));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Home"), findsWidgets);
+      expect(find.text("Event"), findsWidgets);
+      expect(find.text("History"), findsWidgets);
+      expect(find.text("Settings"), findsWidgets);
+      expect(find.byKey(const Key("plusButton")), findsOneWidget);
+
+      Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.primary);
+      Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.secondary);
+      Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.secondary);
+      Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.secondary);
+
+      await tester.tap(find.byKey(const Key("navEvent")));
+      await tester.pumpAndSettle();
+
+      homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.secondary);
+      eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.primary);
+      historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.secondary);
+      settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.secondary);
+
+    });
+    
+  });
+
+  testWidgets("Should go to history menu properly", (WidgetTester tester) async {
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
+    when(mockLoginUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return const Right(AuthenticationEntity(token: token));
+    });
+    when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.history))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.history)));
+
+    await tester.runAsync(() async {
+      await tester.pumpWidget(main);
+      await tester.pumpAndSettle();
+
+      verify(mockGetIsSkipUsecase(NoParam()));
+      await tester.tap(find.byKey(const Key("getStartedButton")));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Home"), findsWidgets);
+      expect(find.text("Event"), findsWidgets);
+      expect(find.text("History"), findsWidgets);
+      expect(find.text("Settings"), findsWidgets);
+      expect(find.byKey(const Key("plusButton")), findsOneWidget);
+
+      Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.primary);
+      Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.secondary);
+      Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.secondary);
+      Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.secondary);
+
+      await tester.tap(find.byKey(const Key("navHistory")));
+      await tester.pumpAndSettle();
+
+      homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.secondary);
+      eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.secondary);
+      historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.primary);
+      settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.secondary);
+
+    });
+    
+  });
+
+  testWidgets("Should go to settings menu properly", (WidgetTester tester) async {
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
+    when(mockLoginUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return const Right(AuthenticationEntity(token: token));
+    });
+    when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
+
+    await tester.runAsync(() async {
+      await tester.pumpWidget(main);
+      await tester.pumpAndSettle();
+
+      verify(mockGetIsSkipUsecase(NoParam()));
+      await tester.tap(find.byKey(const Key("getStartedButton")));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key("submitButton")));
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Home"), findsWidgets);
+      expect(find.text("Event"), findsWidgets);
+      expect(find.text("History"), findsWidgets);
+      expect(find.text("Settings"), findsWidgets);
+      expect(find.byKey(const Key("plusButton")), findsOneWidget);
+
+      Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.primary);
+      Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.secondary);
+      Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.secondary);
+      Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.secondary);
+
+      await tester.tap(find.byKey(const Key("navSetting")));
+      await tester.pumpAndSettle();
+
+      homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
+      expect(homeText.style?.color, CustomColors.secondary);
+      eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
+      expect(eventText.style?.color, CustomColors.secondary);
+      historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
+      expect(historyText.style?.color, CustomColors.secondary);
+      settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
+      expect(settingText.style?.color, CustomColors.primary);
+
+    });
+    
   });
 
 }
