@@ -6,11 +6,11 @@ import 'dart:async' as _i8;
 
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart'
     as _i2;
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart'
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart'
     as _i7;
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_event.dart'
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_event.dart'
     as _i9;
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart'
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_state.dart'
     as _i3;
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart'
     as _i5;

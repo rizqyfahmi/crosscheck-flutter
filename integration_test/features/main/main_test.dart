@@ -3,7 +3,7 @@ import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';

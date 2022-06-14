@@ -1,4 +1,4 @@
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_model.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginState extends Equatable {

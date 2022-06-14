@@ -1,8 +1,8 @@
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_event.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_event.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

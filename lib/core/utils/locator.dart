@@ -6,7 +6,7 @@ import 'package:crosscheck/features/authentication/domain/repositories/authentic
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
 import 'package:crosscheck/features/main/data/repositories/main_repository_impl.dart';

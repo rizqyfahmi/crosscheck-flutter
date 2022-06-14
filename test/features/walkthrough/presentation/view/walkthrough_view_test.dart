@@ -1,8 +1,8 @@
 
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/login/view_models/login_state.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/login/bloc/login_state.dart';
 import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
