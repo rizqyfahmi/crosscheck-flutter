@@ -1,9 +1,9 @@
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_model.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_event.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_model.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {

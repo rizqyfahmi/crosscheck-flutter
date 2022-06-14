@@ -19,11 +19,11 @@ import 'package:crosscheck/features/authentication/presentation/authentication/b
     as _i9;
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart'
     as _i2;
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart'
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart'
     as _i11;
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_event.dart'
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_event.dart'
     as _i12;
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart'
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_state.dart'
     as _i4;
 import 'package:dartz/dartz.dart' as _i6;
 import 'package:flutter_bloc/flutter_bloc.dart' as _i10;

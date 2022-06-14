@@ -1,4 +1,4 @@
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_model.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class RegistrationState extends Equatable {

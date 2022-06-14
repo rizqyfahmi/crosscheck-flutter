@@ -3,9 +3,9 @@ import 'package:crosscheck/features/authentication/domain/entities/authenticatio
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_bloc.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_model.dart';
-import 'package:crosscheck/features/authentication/presentation/registration/view_models/registration_state.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_model.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_state.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/views/registration_view.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
