@@ -10,4 +10,5 @@ class CustomColors {
   static const placeholderText = Color.fromRGBO(170, 182, 190, 1);
   static const borderField = Color.fromRGBO(221, 221, 221, 1);
   static const success = Color.fromRGBO(0, 172, 124, 1);
+  static const welcome = Color.fromRGBO(170, 182, 190, 1);
 }
