@@ -16,7 +16,9 @@ abstract class DashboardState extends Equatable {
 
 class DashboardInit extends DashboardState {
   
-  const DashboardInit() : super(model: const DashboardModel());
+  DashboardInit() : super(
+    model: DashboardModel()
+  );
   
 }
 

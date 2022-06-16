@@ -40,6 +40,18 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     on<MainResetActiveBottomNavigation>((event, emit) {
       emit(const MainInit());
     });
+    on<MainShowLoading>((event, emit) {
+      emit(MainLoading(model: state.model));
+    });
+    on<MainHideLoading>((event, emit) {
+      emit(MainLoadingCompleted(model: state.model));
+    });
+    on<MainSetGeneralError>((event, emit) {
+     emit(MainGeneralError(message: event.message, model: state.model)); 
+    });
+    on<MainResetGeneralError>((event, emit) {
+      emit(MainNoGeneralError(model: state.model));
+    });
   }
   
 }

@@ -37,7 +37,7 @@ void main() {
   ];
   const int upcoming = 20;
   const int completed = 5;
-  final DashboardModel model = DashboardModel(progress: completed / (upcoming + completed), upcoming: upcoming, completed: completed, activities: activities);
+  final DashboardModel model = DashboardModel(progress: 20.0, upcoming: upcoming, completed: completed, activities: activities);
 
   setUp(() {
     mockClient = MockClient();

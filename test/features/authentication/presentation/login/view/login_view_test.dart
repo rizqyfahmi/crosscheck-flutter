@@ -8,6 +8,8 @@ import 'package:crosscheck/features/authentication/presentation/login/view/login
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_model.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_state.dart';
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
 import 'package:dartz/dartz.dart';
@@ -23,12 +25,14 @@ import 'login_view_test.mocks.dart';
   AuthenticationBloc,
   LoginBloc,
   MainBloc,
+  DashboardBloc,
   LoginUsecase
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
   late MockLoginBloc mockLoginBloc;
   late MockMainBloc mockMainBloc;
+  late MockDashboardBloc mockDashboardBloc;
   late MockLoginUsecase mockLoginUsecase;
   late AuthenticationBloc authenticationBloc;
   late LoginBloc loginBloc;
@@ -42,11 +46,13 @@ void main() {
       mockAuthenticationBloc = MockAuthenticationBloc();
       mockLoginBloc = MockLoginBloc();
       mockMainBloc = MockMainBloc();
+      mockDashboardBloc = MockDashboardBloc();
       mockLoginUsecase = MockLoginUsecase();
       testWidget = buildWidget(
         authenticationBloc: mockAuthenticationBloc,
         loginBloc: mockLoginBloc,
-        mainBloc: mockMainBloc
+        mainBloc: mockMainBloc,
+        dashboardBloc: mockDashboardBloc
       );
     });
 
@@ -97,11 +103,13 @@ void main() {
       authenticationBloc = AuthenticationBloc();
       mockLoginBloc = MockLoginBloc();
       mockMainBloc = MockMainBloc();
+      mockDashboardBloc = MockDashboardBloc();
       mockLoginUsecase = MockLoginUsecase();
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc, 
         loginBloc: mockLoginBloc,
-        mainBloc: mockMainBloc
+        mainBloc: mockMainBloc,
+        dashboardBloc: mockDashboardBloc
       );
     });
 
@@ -112,6 +120,8 @@ void main() {
       ]));
       when(mockMainBloc.state).thenReturn(const MainInit());
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+      when(mockDashboardBloc.state).thenReturn(DashboardInit());
+      when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       
       expect(authenticationBloc.state, const Unauthenticated());
       
@@ -127,11 +137,13 @@ void main() {
       mockLoginUsecase = MockLoginUsecase();
       authenticationBloc = AuthenticationBloc();
       loginBloc = LoginBloc(loginUsecase: mockLoginUsecase);
+      mockDashboardBloc = MockDashboardBloc();
       mockMainBloc = MockMainBloc();
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc, 
         loginBloc: loginBloc,
-        mainBloc: mockMainBloc
+        mainBloc: mockMainBloc,
+        dashboardBloc: mockDashboardBloc
       );
     });
 
@@ -166,6 +178,8 @@ void main() {
       when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
       when(mockMainBloc.state).thenReturn(const MainInit());
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+      when(mockDashboardBloc.state).thenReturn(DashboardInit());
+      when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
 
       await tester.pumpWidget(testWidget);
       await tester.pump();
@@ -308,10 +322,11 @@ void main() {
 Widget buildWidget({
   required AuthenticationBloc authenticationBloc,
   required LoginBloc loginBloc,
-  required MainBloc mainBloc
+  required MainBloc mainBloc,
+  required DashboardBloc dashboardBloc
 }) {
   return MultiBlocProvider(
-        providers: [
+    providers: [
       BlocProvider<AuthenticationBloc>(
         create: (_) => authenticationBloc
       ),
@@ -320,6 +335,9 @@ Widget buildWidget({
       ),
       BlocProvider<MainBloc>(
         create: (_) => mainBloc
+      ),
+      BlocProvider<DashboardBloc>(
+        create: (_) => dashboardBloc
       )
     ], 
     child: const MaterialApp(

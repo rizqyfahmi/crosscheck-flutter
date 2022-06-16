@@ -9,11 +9,9 @@ abstract class DashboardEvent extends Equatable{
 
 class DashboardGetData extends DashboardEvent {
   final String token;
-  final DateTime date;
-
+  
   DashboardGetData({
-    required this.token,
-    required this.date
+    required this.token
   });
 
   @override

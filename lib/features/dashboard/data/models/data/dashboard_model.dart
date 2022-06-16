@@ -10,7 +10,7 @@ class DashboardModel extends DashboardEntity {
     final upcoming = (response["upcoming"] as int);
     final completed = (response["completed"] as int);
     return DashboardModel(
-      progress: completed / (upcoming + completed), 
+      progress: (completed / (upcoming + completed)) * 100, 
       upcoming: upcoming, 
       completed: completed, 
       activities: (response["activities"] as List<dynamic>).map(

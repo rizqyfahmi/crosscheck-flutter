@@ -21,3 +21,26 @@ class MainInit extends MainState {
 class MainChanged extends MainState {
   const MainChanged({required super.model});
 }
+
+class MainLoading extends MainState {
+  const MainLoading({required super.model});
+}
+
+class MainLoadingCompleted extends MainState {
+  const MainLoadingCompleted({required super.model});
+}
+
+class MainGeneralError extends MainState {
+
+  final String message;
+
+  const MainGeneralError({required this.message, required super.model});
+
+  @override
+  List<Object?> get props => [...super.props, message];
+  
+}
+
+class MainNoGeneralError extends MainState {
+  const MainNoGeneralError({required super.model});
+}

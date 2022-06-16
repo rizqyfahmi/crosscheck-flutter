@@ -1,7 +1,13 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/icons/custom_icons.dart';
+import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
+import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
 import 'package:crosscheck/core/widgets/plus_button/plus_button.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
+import 'package:crosscheck/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_event.dart';
@@ -57,101 +63,129 @@ class MainView extends StatelessWidget {
     );
   }
 
+  Widget buildContent(BuildContext context, MainState state) {
+    switch (state.model.currentPage) {
+      case BottomNavigation.setting:
+        return const Center(
+          child: Text("Settings"),
+        );
+      case BottomNavigation.history:
+        return const Center(
+          child: Text("History"),
+        );
+      case BottomNavigation.event:
+        return const Center(
+          child: Text("Event"),
+        );
+      default:
+        return const DashboardView();
+    }
+  }
+
+  Widget buildNavigation(BuildContext context, MainState state) {
+    return Container(
+      height: 72,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 0.4,
+            color: Colors.black.withOpacity(0.1)
+          )
+        ]
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildMenu(
+                stringKey: "navHome",
+                icon: CustomIcons.home, 
+                title: "Home", 
+                isActive: state.model.currentPage == BottomNavigation.home, 
+                onPressed: () {
+                  context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.home));
+                }
+              ),
+              buildMenu(
+                stringKey: "navEvent",
+                icon: CustomIcons.calendar,
+                title: "Event",
+                isActive: state.model.currentPage == BottomNavigation.event,
+                onPressed: () {
+                  context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.event));
+                }
+              ),
+              const PlusButton(
+                key: Key("plusButton"),
+              ),
+              buildMenu(
+                stringKey: "navHistory",
+                icon: CustomIcons.history,
+                title: "History",
+                isActive: state.model.currentPage == BottomNavigation.history,
+                onPressed: () {
+                  context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.history));
+                }
+              ),
+              buildMenu(
+                stringKey: "navSetting",
+                icon: CustomIcons.setting,
+                title: "Settings",
+                isActive: state.model.currentPage == BottomNavigation.setting,
+                onPressed: () {
+                  context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.setting));
+                }
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<MainBloc, MainState>(
+      body: BlocConsumer<MainBloc, MainState>(
+        listener: (context, state) {
+
+          if (state is! MainResetGeneralError) return;
+           
+          final dashboardBloc = context.watch<DashboardBloc>();
+          if (dashboardBloc.state is DashboardGeneralError) {
+            context.read<DashboardBloc>().add(DashboardResetGeneralError());
+          }
+        },
         builder: (context, state) {
           if (state is MainInit) {
             context.read<MainBloc>().add(MainGetActiveBottomNavigation());
           }
 
-          switch (state.model.currentPage) {
-            case BottomNavigation.setting:
-              return const Center(
-                child: Text("Settings"),
-              );
-            case BottomNavigation.history:
-              return const Center(
-                child: Text("History"),
-              );
-            case BottomNavigation.event:
-              return const Center(
-                child: Text("Event"),
-              );
-            default:
-              return const Center(
-                child: Text("Home"),
-              );
-          }
-        },
-      ),
-      bottomNavigationBar: BlocBuilder<MainBloc, MainState>(
-        builder: (context, state) {
-          return Container(
-            height: 72,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 0.4,
-                  color: Colors.black.withOpacity(0.1)
-                )
-              ]
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    buildMenu(
-                      stringKey: "navHome",
-                      icon: CustomIcons.home, 
-                      title: "Home", 
-                      isActive: state.model.currentPage == BottomNavigation.home, 
-                      onPressed: () {
-                        context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.home));
-                      }
-                    ),
-                    buildMenu(
-                      stringKey: "navEvent",
-                      icon: CustomIcons.calendar,
-                      title: "Event",
-                      isActive: state.model.currentPage == BottomNavigation.event,
-                      onPressed: () {
-                        context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.event));
-                      }
-                    ),
-                    const PlusButton(
-                      key: Key("plusButton"),
-                    ),
-                    buildMenu(
-                      stringKey: "navHistory",
-                      icon: CustomIcons.history,
-                      title: "History",
-                      isActive: state.model.currentPage == BottomNavigation.history,
-                      onPressed: () {
-                        context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.history));
-                      }
-                    ),
-                    buildMenu(
-                      stringKey: "navSetting",
-                      icon: CustomIcons.setting,
-                      title: "Settings",
-                      isActive: state.model.currentPage == BottomNavigation.setting,
-                      onPressed: () {
-                        context.read<MainBloc>().add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.setting));
-                      }
-                    )
-                  ],
-                )
-              ],
+          return LoadingModal(
+            isLoading: state is MainLoading,
+            child: MessageModal(
+              status: MessageModalStatus.error,
+              message: state is MainGeneralError ? state.message : null,
+              onDismissed: () {
+                context.read<MainBloc>().add(MainResetGeneralError());
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: buildContent(context, state)
+                  ),
+                  buildNavigation(context, state)
+                ],
+              ),
             ),
           );
-        }
+          
+        },
       ),
     );
   }

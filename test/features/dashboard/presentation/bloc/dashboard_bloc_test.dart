@@ -24,7 +24,7 @@ void main() {
   late DashboardModel dashboardBlocModel;
 
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-  final currentDate = DateTime.parse("2022-06-14");
+  final currentDate = DateTime.now();
   final List<ActivityEntity> activities = [
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
@@ -37,20 +37,22 @@ void main() {
   const int upcoming = 20;
   const int completed = 5;
   final double weeklyTotal = activities.map((e) => double.parse(e.total.toString())).reduce((value, result) => value + result);
-  final DashboardEntity entity = DashboardEntity(progress: completed / (upcoming + completed), upcoming: upcoming, completed: completed, activities: activities);
+  final DashboardEntity entity = DashboardEntity(progress: (completed / (upcoming + completed)) * 100, upcoming: upcoming, completed: completed, activities: activities);
   setUp(() {
     dashboardBlocModel = DashboardModel(
       username: "N/A",
       upcoming: 20,
       completed: 5,
-      progress: (completed / (upcoming + completed)),
+      progress: "20%",
       taskText: "You have 20 tasks right now",
       activities: activities.map((activity) {
+        final calculatedProgress = (activity.total / weeklyTotal) * 100;
         return ActivityModel(
-          progress: ((activity.total / weeklyTotal) * 100).toStringAsFixed(0), 
-          isActive: currentDate.weekday == activity.date.day, 
+          progress: (calculatedProgress).toStringAsFixed(0), 
+          isActive: currentDate.weekday == activity.date.weekday, 
           date: activity.date, 
-          total: activity.total
+          total: activity.total,
+          heightBar: (calculatedProgress / 100 * 160)
         );
       }).toList()
     );
@@ -59,17 +61,17 @@ void main() {
   });
 
   test("Should return DashboardInit at first time", () {
-    expect(dashboardBloc.state, const DashboardInit());
+    expect(dashboardBloc.state, DashboardInit());
   });
 
   test("Should return DashboardSuccess when get dashboard is success", () async {
 
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
-    dashboardBloc.add(DashboardGetData(token: token, date: currentDate));
+    dashboardBloc.add(DashboardGetData(token: token));
     
     final expected = [
-      const DashboardLoading(model: DashboardModel()),
+      DashboardLoading(model: DashboardModel()),
       DashboardSuccess(model: dashboardBlocModel)
     ];
 
@@ -81,13 +83,13 @@ void main() {
 
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
-    dashboardBloc.add(DashboardGetData(token: token, date: currentDate));
+    dashboardBloc.add(DashboardGetData(token: token));
     dashboardBloc.add(DashboardResetData());
     
     final expected = [
-      const DashboardLoading(model: DashboardModel()),
+      DashboardLoading(model: DashboardModel()),
       DashboardSuccess(model: dashboardBlocModel),
-      const DashboardInit()
+      DashboardInit()
     ];
 
     expectLater(dashboardBloc.stream, emitsInOrder(expected));
@@ -98,11 +100,11 @@ void main() {
 
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
-    dashboardBloc.add(DashboardGetData(token: token, date: currentDate));
+    dashboardBloc.add(DashboardGetData(token: token));
     
     final expected = [
-      const DashboardLoading(model: DashboardModel()),
-      const DashboardGeneralError(message: Failure.generalError, model: DashboardModel())
+      DashboardLoading(model: DashboardModel()),
+      DashboardGeneralError(message: Failure.generalError, model: DashboardModel())
     ];
 
     expectLater(dashboardBloc.stream, emitsInOrder(expected));
@@ -113,13 +115,13 @@ void main() {
 
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
-    dashboardBloc.add(DashboardGetData(token: token, date: currentDate));
+    dashboardBloc.add(DashboardGetData(token: token));
     dashboardBloc.add(DashboardResetGeneralError());
     
     final expected = [
-      const DashboardLoading(model: DashboardModel()),
-      const DashboardGeneralError(message: Failure.generalError, model: DashboardModel()),
-      const DashboardNoGeneralError(model: DashboardModel())
+      DashboardLoading(model: DashboardModel()),
+      DashboardGeneralError(message: Failure.generalError, model: DashboardModel()),
+      DashboardNoGeneralError(model: DashboardModel())
     ];
 
     expectLater(dashboardBloc.stream, emitsInOrder(expected));

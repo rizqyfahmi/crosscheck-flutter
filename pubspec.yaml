@@ -81,6 +81,9 @@ flutter:
     - lib/assets/icons/plus.svg
     - lib/assets/icons/cross.svg
     - lib/assets/icons/check.svg
+    - lib/assets/icons/avatar.svg
+    - lib/assets/icons/cloud.svg
+    - lib/assets/icons/cloud_small.svg
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
