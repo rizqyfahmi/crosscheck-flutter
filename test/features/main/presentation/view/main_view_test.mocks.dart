@@ -2,19 +2,33 @@
 // in crosscheck/test/features/main/presentation/view/main_view_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
+import 'dart:async' as _i9;
 
-import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart'
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart'
+    as _i8;
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart'
+    as _i10;
+import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart'
     as _i2;
-import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart'
-    as _i3;
-import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart'
-    as _i5;
-import 'package:crosscheck/features/main/presentation/bloc/main_event.dart'
+import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart'
+    as _i6;
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart'
+    as _i14;
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart'
+    as _i15;
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart'
     as _i7;
-import 'package:crosscheck/features/main/presentation/bloc/main_state.dart'
+import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart'
+    as _i3;
+import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart'
     as _i4;
-import 'package:flutter_bloc/flutter_bloc.dart' as _i8;
+import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart'
+    as _i12;
+import 'package:crosscheck/features/main/presentation/bloc/main_event.dart'
+    as _i13;
+import 'package:crosscheck/features/main/presentation/bloc/main_state.dart'
+    as _i5;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -27,71 +41,217 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeGetActiveBottomNavigationUsecase_0 extends _i1.Fake
-    implements _i2.GetActiveBottomNavigationUsecase {}
+class _FakeAuthenticationState_0 extends _i1.Fake
+    implements _i2.AuthenticationState {}
 
-class _FakeSetActiveBottomNavigationUsecase_1 extends _i1.Fake
-    implements _i3.SetActiveBottomNavigationUsecase {}
+class _FakeGetActiveBottomNavigationUsecase_1 extends _i1.Fake
+    implements _i3.GetActiveBottomNavigationUsecase {}
 
-class _FakeMainState_2 extends _i1.Fake implements _i4.MainState {}
+class _FakeSetActiveBottomNavigationUsecase_2 extends _i1.Fake
+    implements _i4.SetActiveBottomNavigationUsecase {}
 
-/// A class which mocks [MainBloc].
+class _FakeMainState_3 extends _i1.Fake implements _i5.MainState {}
+
+class _FakeGetDashboardUsecase_4 extends _i1.Fake
+    implements _i6.GetDashboardUsecase {}
+
+class _FakeDashboardState_5 extends _i1.Fake implements _i7.DashboardState {}
+
+/// A class which mocks [AuthenticationBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMainBloc extends _i1.Mock implements _i5.MainBloc {
-  MockMainBloc() {
+class MockAuthenticationBloc extends _i1.Mock
+    implements _i8.AuthenticationBloc {
+  MockAuthenticationBloc() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.GetActiveBottomNavigationUsecase get getActiveBottomNavigationUsecase =>
-      (super.noSuchMethod(Invocation.getter(#getActiveBottomNavigationUsecase),
-              returnValue: _FakeGetActiveBottomNavigationUsecase_0())
-          as _i2.GetActiveBottomNavigationUsecase);
+  _i2.AuthenticationState get state => (super.noSuchMethod(
+      Invocation.getter(#state),
+      returnValue: _FakeAuthenticationState_0()) as _i2.AuthenticationState);
   @override
-  _i3.SetActiveBottomNavigationUsecase get setActiveBottomNavigationUsecase =>
-      (super.noSuchMethod(Invocation.getter(#setActiveBottomNavigationUsecase),
-              returnValue: _FakeSetActiveBottomNavigationUsecase_1())
-          as _i3.SetActiveBottomNavigationUsecase);
-  @override
-  _i4.MainState get state => (super.noSuchMethod(Invocation.getter(#state),
-      returnValue: _FakeMainState_2()) as _i4.MainState);
-  @override
-  _i6.Stream<_i4.MainState> get stream => (super.noSuchMethod(
-      Invocation.getter(#stream),
-      returnValue: Stream<_i4.MainState>.empty()) as _i6.Stream<_i4.MainState>);
+  _i9.Stream<_i2.AuthenticationState> get stream =>
+      (super.noSuchMethod(Invocation.getter(#stream),
+              returnValue: Stream<_i2.AuthenticationState>.empty())
+          as _i9.Stream<_i2.AuthenticationState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i7.MainEvent? event) =>
+  void add(_i10.AuthenticationEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i7.MainEvent? event) =>
+  void onEvent(_i10.AuthenticationEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
-  void emit(_i4.MainState? state) =>
+  void emit(_i2.AuthenticationState? state) =>
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i7.MainEvent>(_i8.EventHandler<E, _i4.MainState>? handler,
-          {_i8.EventTransformer<E>? transformer}) =>
+  void on<E extends _i10.AuthenticationEvent>(
+          _i11.EventHandler<E, _i2.AuthenticationState>? handler,
+          {_i11.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
-  void onTransition(_i8.Transition<_i7.MainEvent, _i4.MainState>? transition) =>
+  void onTransition(
+          _i11.Transition<_i10.AuthenticationEvent, _i2.AuthenticationState>?
+              transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i6.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+  _i9.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  void onChange(_i8.Change<_i4.MainState>? change) =>
+  void onChange(_i11.Change<_i2.AuthenticationState>? change) =>
+      super.noSuchMethod(Invocation.method(#onChange, [change]),
+          returnValueForMissingStub: null);
+  @override
+  void addError(Object? error, [StackTrace? stackTrace]) =>
+      super.noSuchMethod(Invocation.method(#addError, [error, stackTrace]),
+          returnValueForMissingStub: null);
+  @override
+  void onError(Object? error, StackTrace? stackTrace) =>
+      super.noSuchMethod(Invocation.method(#onError, [error, stackTrace]),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [MainBloc].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMainBloc extends _i1.Mock implements _i12.MainBloc {
+  MockMainBloc() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.GetActiveBottomNavigationUsecase get getActiveBottomNavigationUsecase =>
+      (super.noSuchMethod(Invocation.getter(#getActiveBottomNavigationUsecase),
+              returnValue: _FakeGetActiveBottomNavigationUsecase_1())
+          as _i3.GetActiveBottomNavigationUsecase);
+  @override
+  _i4.SetActiveBottomNavigationUsecase get setActiveBottomNavigationUsecase =>
+      (super.noSuchMethod(Invocation.getter(#setActiveBottomNavigationUsecase),
+              returnValue: _FakeSetActiveBottomNavigationUsecase_2())
+          as _i4.SetActiveBottomNavigationUsecase);
+  @override
+  _i5.MainState get state => (super.noSuchMethod(Invocation.getter(#state),
+      returnValue: _FakeMainState_3()) as _i5.MainState);
+  @override
+  _i9.Stream<_i5.MainState> get stream => (super.noSuchMethod(
+      Invocation.getter(#stream),
+      returnValue: Stream<_i5.MainState>.empty()) as _i9.Stream<_i5.MainState>);
+  @override
+  bool get isClosed =>
+      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+          as bool);
+  @override
+  void add(_i13.MainEvent? event) =>
+      super.noSuchMethod(Invocation.method(#add, [event]),
+          returnValueForMissingStub: null);
+  @override
+  void onEvent(_i13.MainEvent? event) =>
+      super.noSuchMethod(Invocation.method(#onEvent, [event]),
+          returnValueForMissingStub: null);
+  @override
+  void emit(_i5.MainState? state) =>
+      super.noSuchMethod(Invocation.method(#emit, [state]),
+          returnValueForMissingStub: null);
+  @override
+  void on<E extends _i13.MainEvent>(
+          _i11.EventHandler<E, _i5.MainState>? handler,
+          {_i11.EventTransformer<E>? transformer}) =>
+      super.noSuchMethod(
+          Invocation.method(#on, [handler], {#transformer: transformer}),
+          returnValueForMissingStub: null);
+  @override
+  void onTransition(
+          _i11.Transition<_i13.MainEvent, _i5.MainState>? transition) =>
+      super.noSuchMethod(Invocation.method(#onTransition, [transition]),
+          returnValueForMissingStub: null);
+  @override
+  _i9.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
+  @override
+  void onChange(_i11.Change<_i5.MainState>? change) =>
+      super.noSuchMethod(Invocation.method(#onChange, [change]),
+          returnValueForMissingStub: null);
+  @override
+  void addError(Object? error, [StackTrace? stackTrace]) =>
+      super.noSuchMethod(Invocation.method(#addError, [error, stackTrace]),
+          returnValueForMissingStub: null);
+  @override
+  void onError(Object? error, StackTrace? stackTrace) =>
+      super.noSuchMethod(Invocation.method(#onError, [error, stackTrace]),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [DashboardBloc].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDashboardBloc extends _i1.Mock implements _i14.DashboardBloc {
+  MockDashboardBloc() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.GetDashboardUsecase get getDashboardUsecase => (super.noSuchMethod(
+      Invocation.getter(#getDashboardUsecase),
+      returnValue: _FakeGetDashboardUsecase_4()) as _i6.GetDashboardUsecase);
+  @override
+  _i7.DashboardState get state => (super.noSuchMethod(Invocation.getter(#state),
+      returnValue: _FakeDashboardState_5()) as _i7.DashboardState);
+  @override
+  _i9.Stream<_i7.DashboardState> get stream =>
+      (super.noSuchMethod(Invocation.getter(#stream),
+              returnValue: Stream<_i7.DashboardState>.empty())
+          as _i9.Stream<_i7.DashboardState>);
+  @override
+  bool get isClosed =>
+      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+          as bool);
+  @override
+  String getProgress(double? rawProgress) =>
+      (super.noSuchMethod(Invocation.method(#getProgress, [rawProgress]),
+          returnValue: '') as String);
+  @override
+  void add(_i15.DashboardEvent? event) =>
+      super.noSuchMethod(Invocation.method(#add, [event]),
+          returnValueForMissingStub: null);
+  @override
+  void onEvent(_i15.DashboardEvent? event) =>
+      super.noSuchMethod(Invocation.method(#onEvent, [event]),
+          returnValueForMissingStub: null);
+  @override
+  void emit(_i7.DashboardState? state) =>
+      super.noSuchMethod(Invocation.method(#emit, [state]),
+          returnValueForMissingStub: null);
+  @override
+  void on<E extends _i15.DashboardEvent>(
+          _i11.EventHandler<E, _i7.DashboardState>? handler,
+          {_i11.EventTransformer<E>? transformer}) =>
+      super.noSuchMethod(
+          Invocation.method(#on, [handler], {#transformer: transformer}),
+          returnValueForMissingStub: null);
+  @override
+  void onTransition(
+          _i11.Transition<_i15.DashboardEvent, _i7.DashboardState>?
+              transition) =>
+      super.noSuchMethod(Invocation.method(#onTransition, [transition]),
+          returnValueForMissingStub: null);
+  @override
+  _i9.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
+  @override
+  void onChange(_i11.Change<_i7.DashboardState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override

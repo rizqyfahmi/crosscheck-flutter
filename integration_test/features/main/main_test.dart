@@ -5,6 +5,11 @@ import 'package:crosscheck/features/authentication/domain/entities/authenticatio
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
+import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
+import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
+import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
+import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
@@ -30,7 +35,8 @@ import 'main_test.mocks.dart';
   SetIsSkipUsecase,
   GetIsSkipUsecase,
   SetActiveBottomNavigationUsecase,
-  GetActiveBottomNavigationUsecase
+  GetActiveBottomNavigationUsecase,
+  GetDashboardUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -38,13 +44,28 @@ void main() {
   late MockGetIsSkipUsecase mockGetIsSkipUsecase;
   late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
   late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
+  late MockGetDashboardUsecase mockGetDashboardUsecase;
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
   late LoginBloc loginBloc;
   late MainBloc mainBloc;
+  late DashboardBloc dashboardBloc;
   late Widget main;
 
   const String token = "eyJhbGci OiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+  final currentDate = DateTime.now();
+  final List<ActivityEntity> activities = [
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
+    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
+  ];
+  const int upcoming = 20;
+  const int completed = 5;
+  final DashboardEntity entity = DashboardEntity(progress: 20, upcoming: upcoming, completed: completed, activities: activities);
 
   setUp(() {
     mockLoginUsecase = MockLoginUsecase();
@@ -52,6 +73,7 @@ void main() {
     mockGetIsSkipUsecase = MockGetIsSkipUsecase();
     mockGetActiveBottomNavigationUsecase = MockGetActiveBottomNavigationUsecase();
     mockSetActiveBottomNavigationUsecase = MockSetActiveBottomNavigationUsecase();
+    mockGetDashboardUsecase = MockGetDashboardUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -60,6 +82,7 @@ void main() {
       getActiveBottomNavigationUsecase: mockGetActiveBottomNavigationUsecase,
       setActiveBottomNavigationUsecase: mockSetActiveBottomNavigationUsecase
     );
+    dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
 
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(
@@ -73,6 +96,9 @@ void main() {
       ),
       BlocProvider<MainBloc>(
         create: (_) => mainBloc
+      ),
+      BlocProvider<DashboardBloc>(
+        create: (_) => dashboardBloc
       )
     ]);
   });
@@ -86,6 +112,7 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
+    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -136,6 +163,7 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
+    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -198,6 +226,7 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.history))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.history)));
+    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -260,6 +289,7 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
+    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);

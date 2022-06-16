@@ -29,6 +29,7 @@ class LoadingModal extends StatelessWidget {
         ),
         Center(
           child: Container(
+            key: const Key("loadingIndicator"),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(12))

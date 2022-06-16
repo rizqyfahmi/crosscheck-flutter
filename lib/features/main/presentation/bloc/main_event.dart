@@ -19,3 +19,15 @@ class MainSetActiveBottomNavigation extends MainEvent {
 
 class MainGetActiveBottomNavigation extends MainEvent {}
 class MainResetActiveBottomNavigation extends MainEvent {}
+class MainShowLoading extends MainEvent {}
+class MainHideLoading extends MainEvent {}
+class MainSetGeneralError extends MainEvent {
+  final String message;
+
+  MainSetGeneralError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+
+}
+class MainResetGeneralError extends MainEvent {}

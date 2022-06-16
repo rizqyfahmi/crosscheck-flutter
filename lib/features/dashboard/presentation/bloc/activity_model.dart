@@ -1,17 +1,21 @@
-import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
+import 'package:equatable/equatable.dart';
 
-class ActivityModel extends ActivityEntity {
+class ActivityModel extends Equatable {
 
   final String progress;
   final bool isActive;
+  final double heightBar;
+  final DateTime? date;
+  final int total;
 
   const ActivityModel({
-    required this.progress, 
-    required this.isActive,
-    required super.date, 
-    required super.total
+    this.progress = "0%", 
+    this.isActive = false,
+    this.heightBar = 0,
+    this.date, 
+    this.total = 0,
   });
 
   @override
-  List<Object?> get props => [...super.props, progress, isActive];
+  List<Object?> get props => [progress, isActive, heightBar, date, total];
 }

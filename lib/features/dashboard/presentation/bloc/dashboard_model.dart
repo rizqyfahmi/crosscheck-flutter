@@ -8,18 +8,30 @@ class DashboardModel extends Equatable {
   final String taskText;
   final int upcoming;
   final int completed;
-  final double progress;
-  final List<ActivityModel> activities;
+  final String progress;
+  late final List<ActivityModel> activities;
 
-  const DashboardModel({
-    this.username = "",
-    this.photoPath = "",
-    this.taskText = "",
+  DashboardModel({
+    this.username = "N/A",
+    this.photoPath = "",  
+    this.taskText = "You have no task right now",
     this.upcoming = 0,
     this.completed = 0,
-    this.progress = 0,
-    this.activities = const []
-  });
+    this.progress = "0%",
+    List<ActivityModel> activities = const []
+  }) {
+    final currentDateTime = DateTime.now();
+    final currentDate = DateTime(currentDateTime.year, currentDateTime.month, currentDateTime.day);
+    this.activities = activities.isEmpty ? [
+      ActivityModel(date: currentDate..subtract(Duration(days: currentDate.weekday - DateTime.monday))),
+      ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday))),
+      ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday))),
+      ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday))),
+      ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday))),
+      ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday))),
+      ActivityModel(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday))),
+    ] : activities;
+  }
 
   DashboardModel copyWith({
     String? username,
@@ -27,7 +39,7 @@ class DashboardModel extends Equatable {
     String? taskText,
     int? upcoming,
     int? completed,
-    double? progress,
+    String? progress,
     List<ActivityModel>? activities
   }) {
     return DashboardModel(
