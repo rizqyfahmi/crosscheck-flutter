@@ -3,15 +3,15 @@ import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
-import 'package:crosscheck/features/dashboard/presentation/bloc/activity_model.dart';
+import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
+import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_model.dart';
-import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
+import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
+import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
-import 'package:crosscheck/features/main/presentation/bloc/main_model.dart';
-import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,14 +22,17 @@ import 'dashboard_view_test.mocks.dart';
 
 @GenerateMocks([
   AuthenticationBloc,
-  DashboardBloc,
-  MainBloc
+  SetActiveBottomNavigationUsecase,
+  GetActiveBottomNavigationUsecase,
+  GetDashboardUsecase
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
-  late MockDashboardBloc mockDashboardBloc;
-  late MockMainBloc mockMainBloc;
-  late DashboardModel dashboardBlocModel;
+  late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
+  late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
+  late MockGetDashboardUsecase mockGetDashboardUsecase;
+  late DashboardBloc dashboardBloc;
+  late MainBloc mainBloc;
   late Widget testWidget;
 
   const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -43,40 +46,31 @@ void main() {
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
   ];
-  final double weeklyTotal = activities.map((e) => double.parse(e.total.toString())).reduce((value, result) => value + result);
   setUp(() {
-    dashboardBlocModel = DashboardModel(
-      username: "N/A",
-      upcoming: 23,
-      completed: 2,
-      progress: "8%",
-      taskText: "You have 23 tasks right now",
-      activities: activities.map((activity) {
-        final calculatedProgress = (activity.total / weeklyTotal) * 100;
-        return ActivityModel(
-          progress: (calculatedProgress).toStringAsFixed(0), 
-          isActive: currentDate.weekday == activity.date.weekday, 
-          date: activity.date, 
-          total: activity.total,
-          heightBar: (calculatedProgress / 100 * 160)
-        );
-      }).toList()
-    );
     mockAuthenticationBloc = MockAuthenticationBloc();
-    mockDashboardBloc = MockDashboardBloc();
-    mockMainBloc = MockMainBloc();
-    testWidget = buildWidget(authenticationBloc: mockAuthenticationBloc, dashboardBloc: mockDashboardBloc, mainBloc: mockMainBloc);
+    mockSetActiveBottomNavigationUsecase = MockSetActiveBottomNavigationUsecase();
+    mockGetActiveBottomNavigationUsecase = MockGetActiveBottomNavigationUsecase();
+    mainBloc = MainBloc(
+      getActiveBottomNavigationUsecase: mockGetActiveBottomNavigationUsecase,
+      setActiveBottomNavigationUsecase: mockSetActiveBottomNavigationUsecase
+    );
+    mockGetDashboardUsecase = MockGetDashboardUsecase();
+    dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
+    testWidget = buildWidget(
+      authenticationBloc: mockAuthenticationBloc, 
+      dashboardBloc: dashboardBloc, 
+      mainBloc: mainBloc
+    );
   });
 
   testWidgets("Should display initial dashboard page properly", (WidgetTester tester) async {
-    when(mockMainBloc.state).thenReturn(const MainChanged(model: MainModel(currentPage: BottomNavigation.home)));
-    when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      const MainLoading(model: MainModel(currentPage: BottomNavigation.home))
-    ]));
     when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockDashboardBloc.state).thenReturn(DashboardInit());
-    when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return Right(DashboardEntity(progress: 8, upcoming: 23, completed: 2, activities: activities));
+    });
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
@@ -91,22 +85,17 @@ void main() {
   });
 
   testWidgets("Should display loading modal properly", (WidgetTester tester) async {
-    when(mockMainBloc.state).thenReturn(const MainChanged(model: MainModel(currentPage: BottomNavigation.home)));
-    when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      const MainLoading(model: MainModel(currentPage: BottomNavigation.home))
-    ]));
     when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockDashboardBloc.state).thenReturn(DashboardInit());
-    when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      DashboardLoading(model: DashboardModel()),
-    ]).asyncExpand((state) async* {
-      yield state;
+    when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-    }));
+      return Right(DashboardEntity(progress: 8, upcoming: 23, completed: 2, activities: activities));
+    });
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
+      await tester.pump();
       await tester.pump();
 
       expect(find.text("Loading..."), findsOneWidget);
@@ -118,45 +107,23 @@ void main() {
   });
 
   testWidgets("Should properly load data on dashboard page", (WidgetTester tester) async {
-    when(mockMainBloc.state).thenReturn(const MainInit());
-    when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      const MainChanged(model: MainModel(currentPage: BottomNavigation.home)),
-      const MainLoading(model: MainModel(currentPage: BottomNavigation.home)),
-      const MainLoadingCompleted(model: MainModel(currentPage: BottomNavigation.home))
-    ]).asyncExpand((state) async* {
-      yield state;
-      await Future.delayed(const Duration(seconds: 1));
-    }));
     when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockDashboardBloc.state).thenReturn(DashboardInit());
-    when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      DashboardLoading(model: DashboardModel()),
-      DashboardSuccess(model: dashboardBlocModel)
-    ]).asyncExpand((state) async* {
-      await Future.delayed(const Duration(seconds: 1));
-      yield state;
-    }));
+    when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return Right(DashboardEntity(progress: 8, upcoming: 23, completed: 2, activities: activities));
+    });
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
       await tester.pump();
-
-      await Future.delayed(const Duration(seconds: 1));
       await tester.pump();
 
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
-
-      await Future.delayed(const Duration(seconds: 1));
-      await tester.pump();
-
-      await Future.delayed(const Duration(seconds: 1));
-      await tester.pump();
-      
-      await Future.delayed(const Duration(seconds: 1));
-      await tester.pump();
+      expect(find.text("Loading..."), findsNothing);
       
       expect(find.text("You have 23 tasks right now"), findsOneWidget);
       expect(find.text("8%"), findsOneWidget);
@@ -165,36 +132,23 @@ void main() {
   });
 
   testWidgets("Should display error modal when get dashboard is failed", (WidgetTester tester) async {
-    when(mockMainBloc.state).thenReturn(const MainChanged(model: MainModel(currentPage: BottomNavigation.home)));
-    when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      const MainLoading(model: MainModel(currentPage: BottomNavigation.home)),
-      const MainGeneralError(model: MainModel(currentPage: BottomNavigation.home), message: Failure.generalError)
-    ]).asyncExpand((state) async* {
-      yield state;
-      if (state is MainGeneralError) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
-    }));
     when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockDashboardBloc.state).thenReturn(DashboardInit());
-    when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      DashboardLoading(model: DashboardModel()),
-      DashboardGeneralError(model: DashboardModel(), message: Failure.generalError)
-    ]).asyncExpand((state) async* {
-      yield state;
-      if (state is DashboardLoading) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
-    }));
+    when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return Left(ServerFailure(message: Failure.generalError));
+    });
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
       await tester.pump();
+      await tester.pump();
 
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
+      expect(find.text("Loading..."), findsNothing);
 
       expect(find.text(Failure.generalError), findsOneWidget);
     });
@@ -202,44 +156,30 @@ void main() {
   });
 
   testWidgets("Should display error modal when get dashboard is failed", (WidgetTester tester) async {
-    when(mockMainBloc.state).thenReturn(const MainChanged(model: MainModel(currentPage: BottomNavigation.home)));
-    when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      const MainLoading(model: MainModel(currentPage: BottomNavigation.home)),
-      const MainGeneralError(model: MainModel(currentPage: BottomNavigation.home), message: Failure.generalError),
-      const MainNoGeneralError(model: MainModel(currentPage: BottomNavigation.home))
-    ]).asyncExpand((state) async* {
-      yield state;
-      if (state is MainGeneralError) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
-    }));
     when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockDashboardBloc.state).thenReturn(DashboardInit());
-    when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([
-      DashboardLoading(model: DashboardModel()),
-      DashboardGeneralError(model: DashboardModel(), message: Failure.generalError),
-      DashboardNoGeneralError(model: DashboardModel())
-    ]).asyncExpand((state) async* {
-      yield state;
-      if ((state is DashboardLoading) || (state is DashboardGeneralError)) {
-        await Future.delayed(const Duration(seconds: 1));
-      }
-    }));
+    when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return Left(ServerFailure(message: Failure.generalError));
+    });
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
       await tester.pump();
+      await tester.pump();
 
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
+      expect(find.text("Loading..."), findsNothing);
 
       expect(find.text(Failure.generalError), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
-      await tester.pump();
 
-      expect(find.text(Failure.generalError), findsNothing);
+      await tester.ensureVisible(find.byKey(const Key("dismissButton")));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key("dismissButton")));
+      await tester.pump();
     });
 
   });
