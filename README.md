@@ -4,4 +4,4 @@ Some events happen everywhere, all the time. Discover upcoming events near you q
 
 ## Getting Started
 
-The aim of this project was to determine the implementation of MVVM, TDD, and Clean Architecture in Flutter. Therefore, the main programming language it used is dart.
+The aim of this project was to determine the implementation of SOLID Principles, BLoC Patter, TDD, and Clean Architecture in Flutter. Therefore, the main programming language it used is dart.

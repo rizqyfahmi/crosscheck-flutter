@@ -29,7 +29,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'dashboard_test.mocks.dart';
+import 'dashboard_view_test.mocks.dart';
 
 @GenerateMocks([
   LoginUsecase,
