@@ -71,6 +71,17 @@ class TextStyles {
   );
   /// TextStyle(
   ///   fontFamily: FontFamily.poppins,
+  ///   fontSize: 16,
+  ///   fontWeight: normal/regular
+  /// )
+  ///
+  static const poppinsRegular16 = TextStyle(
+    fontFamily: FontFamily.poppins,
+    fontSize: 16,
+    fontWeight: FontWeight.normal
+  );
+  /// TextStyle(
+  ///   fontFamily: FontFamily.poppins,
   ///   fontSize: 14,
   ///   fontWeight: normal/regular
   /// )

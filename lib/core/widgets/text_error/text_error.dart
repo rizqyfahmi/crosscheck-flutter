@@ -1,5 +1,3 @@
-import 'package:crosscheck/assets/colors/custom_colors.dart';
-import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class TextError extends StatelessWidget {
@@ -20,8 +18,8 @@ class TextError extends StatelessWidget {
       child: Text(
         data ?? "",
         textAlign: TextAlign.left,
-        style: TextStyles.poppinsRegular12.copyWith(
-          color: CustomColors.primary,
+        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+          color: Theme.of(context).colorScheme.primary
         ),
       ),
     );

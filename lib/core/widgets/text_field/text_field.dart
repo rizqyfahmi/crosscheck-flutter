@@ -18,6 +18,7 @@ class BorderedTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       obscureText: obscureText,
+      style: Theme.of(context).textTheme.bodyText1,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: const EdgeInsets.all(18),
@@ -26,7 +27,7 @@ class BorderedTextField extends StatelessWidget {
           color: CustomColors.placeholderText
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: CustomColors.ternary),
+          borderSide: const BorderSide(color: CustomColors.tertiary),
           borderRadius: BorderRadius.circular(12)
         ),
         enabledBorder: OutlineInputBorder(
