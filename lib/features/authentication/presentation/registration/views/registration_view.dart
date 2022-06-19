@@ -32,10 +32,12 @@ class RegistrationView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 32),
-        const Center(
+        Center(
           child: Text(
             "Create your account",
-            style: TextStyles.poppinsBold22,
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+              color: Theme.of(context).colorScheme.onBackground
+            ),
           ),
         ),
         const SizedBox(height: 48),
@@ -98,14 +100,16 @@ class RegistrationView extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  primary: CustomColors.primary
+                  primary: Theme.of(context).colorScheme.primary
                 ),
                 onPressed: () {
                   context.read<RegistrationBloc>().add(RegistrationSubmit());
                 },
-                child: const Text(
+                child: Text(
                   "Create an account",
-                  style: TextStyles.poppinsMedium18,
+                  style: Theme.of(context).textTheme.button?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary
+                  ),
                 )
               ),
             ),
@@ -117,8 +121,8 @@ class RegistrationView extends StatelessWidget {
           children: [
             Text(
               "Already have an account? ",
-              style: TextStyles.poppinsMedium14.copyWith(
-                color: CustomColors.secondary
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                color: Theme.of(context).colorScheme.onBackground
               ),
             ),
             TextButton(
@@ -150,6 +154,7 @@ class RegistrationView extends StatelessWidget {
     EdgeInsets padding = MediaQuery.of(context).padding;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: BlocConsumer<RegistrationBloc, RegistrationState>(
           listener: (context, state) {
@@ -186,8 +191,8 @@ class RegistrationView extends StatelessWidget {
                             const SizedBox(height: 16),
                             Text(
                               "By creating and/or using an account, you agree",
-                              style: TextStyles.poppinsMedium12.copyWith(
-                                color: CustomColors.secondary
+                              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                color: Theme.of(context).colorScheme.onBackground
                               )
                             ),
                             Row(
@@ -195,8 +200,8 @@ class RegistrationView extends StatelessWidget {
                               children: [
                                 Text(
                                   "to our ",
-                                  style: TextStyles.poppinsMedium12.copyWith(
-                                    color: CustomColors.secondary
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                    color: Theme.of(context).colorScheme.onBackground
                                   ),
                                 ),
                                 TextButton(
@@ -210,8 +215,8 @@ class RegistrationView extends StatelessWidget {
                                   onPressed: () {},
                                   child: Text(
                                     "Term & Conditions.",
-                                    style: TextStyles.poppinsMedium12.copyWith(
-                                      color: CustomColors.primary
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary
                                     ),
                                   )
                                 )

@@ -1,6 +1,5 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
-import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
@@ -36,13 +35,18 @@ class WalkthroughView extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.background,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SafeArea(
                       bottom: false,
                       child: Row(
                         children: const [
-                          Expanded(child: Image(image: AssetImage(Images.illustration)))
+                          Expanded(
+                            child: Image(
+                              key: Key("illustration"),
+                              image: AssetImage(Images.illustration)
+                            )
+                          )
                         ],
                       ),
                     ),
@@ -58,13 +62,19 @@ class WalkthroughView extends StatelessWidget {
                       children: [
                         Stack(
                           children: [
-                            Container(
-                              height: 1,
-                              width: double.infinity,
-                              decoration: const BoxDecoration(color: Colors.white),
+                            Positioned(
+                              top: -1,
+                              bottom: 0,
+                              right: 0,
+                              left: 0,
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.background
+                                ),
+                              ),
                             ),
                             const Image(
-                              key: Key("illustration"),
                               fit: BoxFit.contain,
                               image: AssetImage(Images.divider)
                             ),
@@ -75,8 +85,9 @@ class WalkthroughView extends StatelessWidget {
                               child: Text(
                                 "Welcome",
                                 textAlign: TextAlign.center,
-                                style: TextStyles.poppinsBold22
-                                    .copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.headline1?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimary
+                                ),
                               ),
                             ),
                           ],
@@ -89,7 +100,9 @@ class WalkthroughView extends StatelessWidget {
                               Text(
                                 "Focus on your short and long-term habit to improve productivity and achieve your goals. Enjoy your way to better time management",
                                 textAlign: TextAlign.center,
-                                style: TextStyles.poppinsRegular14.copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimary
+                                ),
                               ),
                               const SizedBox(height: 64),
                               Row(
@@ -101,7 +114,7 @@ class WalkthroughView extends StatelessWidget {
                                         context.read<WalkthroughBloc>().add(const WalkthroughSetSkip(isSkip: true));
                                       }, 
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                        primary: Theme.of(context).colorScheme.background,
                                         padding: const EdgeInsets.all(16),
                                         minimumSize: Size.zero,
                                         shape: RoundedRectangleBorder(
@@ -110,8 +123,8 @@ class WalkthroughView extends StatelessWidget {
                                       ),
                                       child: Text(
                                         "Get started",
-                                        style: TextStyles.poppinsMedium18.copyWith(
-                                          color: CustomColors.primary
+                                        style: Theme.of(context).textTheme.button?.copyWith(
+                                          color: Theme.of(context).colorScheme.primary
                                         ),
                                       )
                                     ),

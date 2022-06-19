@@ -59,7 +59,7 @@ class _MessageModalState extends State<MessageModal> {
           tempTitle,
           textAlign: TextAlign.center,
           style: TextStyles.poppinsBold18.copyWith(
-            color: CustomColors.ternary
+            color: CustomColors.tertiary
           )
         ),
         const SizedBox(height: 16)

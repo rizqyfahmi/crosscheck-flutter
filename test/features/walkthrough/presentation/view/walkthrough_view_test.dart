@@ -1,5 +1,8 @@
 
+import 'package:crosscheck/assets/colors/custom_colors.dart';
+import 'package:crosscheck/assets/fonts/fonts.dart';
 import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_state.dart';
@@ -170,6 +173,30 @@ Widget buildWidget({
       ),
     ], 
     child: MaterialApp(
+      theme: ThemeData(
+        backgroundColor: CustomColors.secondary,
+        fontFamily: FontFamily.poppins,
+        colorScheme: const ColorScheme(
+          brightness: Brightness.light, 
+          primary: CustomColors.primary, 
+          onPrimary: Colors.white, 
+          secondary: CustomColors.secondary, 
+          onSecondary: Colors.white, 
+          error: CustomColors.primary, 
+          onError: Colors.white, 
+          background: Colors.white, 
+          onBackground: CustomColors.secondary, 
+          surface: Colors.white, 
+          onSurface: Colors.white
+        ),
+        textTheme: const TextTheme(
+          headline1: TextStyles.poppinsBold24,
+          subtitle1: TextStyles.poppinsBold16,
+          bodyText1: TextStyles.poppinsRegular14,
+          bodyText2: TextStyles.poppinsRegular12,
+          button: TextStyles.poppinsRegular16
+        )
+      ),
       home: child,
       routes: {
         WalkthroughView.routeName: (context) => const WalkthroughView(),

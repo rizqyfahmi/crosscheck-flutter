@@ -1,8 +1,6 @@
-import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
 import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
 import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
-import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/core/widgets/text_field/text_field.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart';
@@ -32,10 +30,12 @@ class LoginView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 32),
-        const Center(
+        Center(
           child: Text(
             "Welcome back!",
-            style: TextStyles.poppinsBold22,
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+              color: Theme.of(context).colorScheme.onBackground
+            ),
           ),
         ),
         const SizedBox(height: 48),
@@ -69,14 +69,16 @@ class LoginView extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  primary: CustomColors.primary
+                  primary: Theme.of(context).colorScheme.primary
                 ),
                 onPressed: () {
                   context.read<LoginBloc>().add(LoginSubmit());
                 },
-                child: const Text(
+                child: Text(
                   "Sign in",
-                  style: TextStyles.poppinsMedium18,
+                  style: Theme.of(context).textTheme.button?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary
+                  ),
                 )
               ),
             ),
@@ -97,8 +99,8 @@ class LoginView extends StatelessWidget {
               onPressed: () {},
               child: Text(
                 "Forgot Password?",
-                style: TextStyles.poppinsMedium14.copyWith(
-                  color: CustomColors.primary
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: Theme.of(context).colorScheme.primary
                 ),
               )
             )
@@ -114,6 +116,7 @@ class LoginView extends StatelessWidget {
     EdgeInsets padding = MediaQuery.of(context).padding;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
@@ -161,9 +164,9 @@ class LoginView extends StatelessWidget {
                               children: [
                                 Text(
                                   "Don't have an account? ",
-                                  style: TextStyles.poppinsMedium12.copyWith(
-                                    color: CustomColors.secondary
-                                  )
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                    color: Theme.of(context).colorScheme.onBackground
+                                  ),
                                 ),
                                 TextButton(
                                   key: const Key("signUpTextButton"),
@@ -176,8 +179,8 @@ class LoginView extends StatelessWidget {
                                   onPressed: () {},
                                   child: Text(
                                     "Sign up",
-                                    style: TextStyles.poppinsMedium12.copyWith(
-                                      color: CustomColors.primary
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary
                                     ),
                                   )
                                 )

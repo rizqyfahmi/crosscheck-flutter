@@ -5,6 +5,17 @@ class TextStyles {
   TextStyles._();
   /// TextStyle(
   ///   fontFamily: FontFamily.poppins,
+  ///   fontSize: 34,
+  ///   fontWeight: bold
+  /// )
+  ///
+  static const poppinsBold34 = TextStyle(
+    fontFamily: FontFamily.poppins,
+    fontSize: 34,
+    fontWeight: FontWeight.bold
+  );
+  /// TextStyle(
+  ///   fontFamily: FontFamily.poppins,
   ///   fontSize: 32,
   ///   fontWeight: bold
   /// )
@@ -67,6 +78,17 @@ class TextStyles {
   static const poppinsRegular18 = TextStyle(
     fontFamily: FontFamily.poppins,
     fontSize: 18,
+    fontWeight: FontWeight.normal
+  );
+  /// TextStyle(
+  ///   fontFamily: FontFamily.poppins,
+  ///   fontSize: 16,
+  ///   fontWeight: normal/regular
+  /// )
+  ///
+  static const poppinsRegular16 = TextStyle(
+    fontFamily: FontFamily.poppins,
+    fontSize: 16,
     fontWeight: FontWeight.normal
   );
   /// TextStyle(
