@@ -1,7 +1,6 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/icons/custom_icons.dart';
 import 'package:crosscheck/core/widgets/cloudy_card/cloudy_card.dart';
-import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart';
@@ -21,6 +20,7 @@ class DashboardView extends StatelessWidget {
     final token = authenticationBloc.state.token;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocConsumer<DashboardBloc, DashboardState>(
         listener: (context, state) {
 
@@ -59,15 +59,17 @@ class DashboardView extends StatelessWidget {
                                 children: [
                                   Text(
                                     "Welcome back, ",
-                                    style: TextStyles.poppinsRegular18.copyWith(
-                                      color: CustomColors.welcome
+                                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                      color: Theme.of(context).colorScheme.surfaceTint,
+                                      fontWeight: FontWeight.w500
                                     ),
                                   ),
                                   Text(
                                     state.model.username,
                                     key: const Key("usernameText"),
-                                    style: TextStyles.poppinsRegular18.copyWith(
-                                      color: CustomColors.primary
+                                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500
                                     ),
                                   )
                                 ],
@@ -76,7 +78,9 @@ class DashboardView extends StatelessWidget {
                               Text(
                                 state.model.taskText,
                                 key: const Key("taskText"),
-                                style: TextStyles.poppinsBold24,
+                                style: Theme.of(context).textTheme.headline1?.copyWith(
+                                  color: Theme.of(context).colorScheme.onBackground
+                                ),
                               )
                             ],
                           )
@@ -86,10 +90,12 @@ class DashboardView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 32),
-                    const Text(
+                    Text(
                       "Task Summary",
                       textAlign: TextAlign.left,
-                      style: TextStyles.poppinsBold16,
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground
+                      ),
                     ),
                     const SizedBox(height: 16),
                     CloudyCard(
@@ -107,14 +113,15 @@ class DashboardView extends StatelessWidget {
                                     Text(
                                       state.model.progress,
                                       key: const Key("progressText"),
-                                      style: TextStyles.poppinsBold32.copyWith(
-                                        color: CustomColors.secondary
+                                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                        color: Theme.of(context).colorScheme.onBackground
                                       ),
                                     ),
                                     Text(
                                       "Progress",
-                                      style: TextStyles.poppinsMedium16.copyWith(
-                                        color: CustomColors.secondary
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                        color: Theme.of(context).colorScheme.onBackground,
+                                        fontWeight: FontWeight.w500
                                       ),
                                     )
                                   ],
@@ -144,15 +151,16 @@ class DashboardView extends StatelessWidget {
                                           Text(
                                             state.model.upcoming.toString(),
                                             key: const Key("upcomingText"),
-                                            style: TextStyles.poppinsBold32.copyWith(
-                                              color: CustomColors.secondary
+                                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                              color: Theme.of(context).colorScheme.onBackground
                                             ),
                                           ),
                                           Text(
                                             "Upcomming",
-                                            style: TextStyles.poppinsMedium16.copyWith(
-                                              color: CustomColors.secondary
-                                            ),
+                                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                              color: Theme.of(context).colorScheme.onBackground,
+                                              fontWeight: FontWeight.w500
+                                            )
                                           )
                                         ],
                                       )
@@ -180,14 +188,15 @@ class DashboardView extends StatelessWidget {
                                           Text(
                                             state.model.completed.toString(),
                                             key: const Key("completedText"),
-                                            style: TextStyles.poppinsBold32.copyWith(
-                                              color: CustomColors.secondary
+                                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                              color: Theme.of(context).colorScheme.onBackground
                                             ),
                                           ),
                                           Text(
                                             "Completed",
-                                            style: TextStyles.poppinsMedium16.copyWith(
-                                              color: CustomColors.secondary
+                                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                              color: Theme.of(context).colorScheme.onBackground,
+                                              fontWeight: FontWeight.w500
                                             ),
                                           )
                                         ],
@@ -202,10 +211,12 @@ class DashboardView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 32),
-                    const Text(
+                    Text(
                       "Weekly Events",
                       textAlign: TextAlign.left,
-                      style: TextStyles.poppinsBold16,
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground
+                      ),
                     ),
                     const SizedBox(height: 16),
                     buildChart(context, state),  
@@ -259,7 +270,10 @@ class DashboardView extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     entry.value,
-                    style: TextStyles.poppinsMedium14,
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontWeight: FontWeight.w500
+                    ),
                   )
                 ],
               ),

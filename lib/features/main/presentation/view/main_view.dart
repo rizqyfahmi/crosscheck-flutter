@@ -1,4 +1,3 @@
-import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/icons/custom_icons.dart';
 import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
 import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
@@ -23,6 +22,7 @@ class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
 
   Widget buildMenu({
+    required BuildContext context,
     String? stringKey,
     required String icon,
     required String title,
@@ -46,7 +46,7 @@ class MainView extends StatelessWidget {
           SvgPicture.asset(
             key: Key("${stringKey}Icon"),
             icon,
-            color: isActive ? CustomColors.primary : CustomColors.secondary,
+            color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onBackground,
             height: 24,
             width: 24,
           ),
@@ -55,7 +55,7 @@ class MainView extends StatelessWidget {
             title,
             key: Key("${stringKey}Text"),
             style: TextStyles.poppinsMedium12.copyWith(
-              color: isActive ? CustomColors.primary : CustomColors.secondary,
+              color: isActive ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onBackground,
             ),
           )
         ],
@@ -86,12 +86,12 @@ class MainView extends StatelessWidget {
     return Container(
       height: 72,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
         boxShadow: [
           BoxShadow(
             blurRadius: 0.4,
-            color: Colors.black.withOpacity(0.1)
+            color: Theme.of(context).shadowColor,
           )
         ]
       ),
@@ -103,6 +103,7 @@ class MainView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               buildMenu(
+                context: context,
                 stringKey: "navHome",
                 icon: CustomIcons.home, 
                 title: "Home", 
@@ -112,6 +113,7 @@ class MainView extends StatelessWidget {
                 }
               ),
               buildMenu(
+                context: context,
                 stringKey: "navEvent",
                 icon: CustomIcons.calendar,
                 title: "Event",
@@ -124,6 +126,7 @@ class MainView extends StatelessWidget {
                 key: Key("plusButton"),
               ),
               buildMenu(
+                context: context,
                 stringKey: "navHistory",
                 icon: CustomIcons.history,
                 title: "History",
@@ -133,6 +136,7 @@ class MainView extends StatelessWidget {
                 }
               ),
               buildMenu(
+                context: context,
                 stringKey: "navSetting",
                 icon: CustomIcons.setting,
                 title: "Settings",
@@ -151,6 +155,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocConsumer<MainBloc, MainState>(
         listener: (context, state) {
 

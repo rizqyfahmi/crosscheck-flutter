@@ -61,6 +61,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             theme: ThemeData(
+              shadowColor: Colors.black.withOpacity(0.5),
               backgroundColor: CustomColors.secondary,
               fontFamily: FontFamily.poppins,
               colorScheme: const ColorScheme(
@@ -70,15 +71,18 @@ class MyApp extends StatelessWidget {
                 secondary: CustomColors.secondary, 
                 onSecondary: Colors.white, 
                 error: CustomColors.primary, 
-                onError: Colors.white, 
+                onError: CustomColors.secondary, 
                 background: Colors.white, 
                 onBackground: CustomColors.secondary, 
                 surface: Colors.white, 
-                onSurface: Colors.white
+                onSurface: Colors.white,
+                surfaceTint: CustomColors.placeholderText
               ),
               textTheme: const TextTheme(
+                headlineLarge: TextStyles.poppinsBold34,
                 headline1: TextStyles.poppinsBold24,
                 subtitle1: TextStyles.poppinsBold16,
+                subtitle2: TextStyles.poppinsRegular16,
                 bodyText1: TextStyles.poppinsRegular14,
                 bodyText2: TextStyles.poppinsRegular12,
                 button: TextStyles.poppinsRegular16
