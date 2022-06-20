@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/core/usecase/usecase.dart';
@@ -12,9 +13,14 @@ class SetThemeUsecase implements Usecase<void, SettingsModel> {
   const SetThemeUsecase({required this.repository});
   
   @override
-  Future<Either<Failure, void>> call(SettingsModel param) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, void>> call(SettingsModel params) async {
+
+    try {
+      await repository.setTheme(params);
+      return const Right(null);
+    } on CacheException catch (e) {
+      return Left(CachedFailure(message: e.message));
+    }
   }
   
 }
