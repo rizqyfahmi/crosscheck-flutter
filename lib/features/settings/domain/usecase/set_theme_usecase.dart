@@ -1,6 +1,5 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/core/usecase/usecase.dart';
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
