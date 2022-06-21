@@ -30,8 +30,13 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   
   @override
   Future<SettingsModel> getTheme() {
-    // TODO: implement getTheme
-    throw UnimplementedError();
+    final response = sharedPreferences.getString("CACHED_SETTINGS");
+
+    if (response != null) {
+      return Future.value(SettingsModel.fromJSON(json.decode(response)));
+    }
+
+    throw CacheException(message: Failure.cacheError);
   }
   
 }
