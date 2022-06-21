@@ -9,6 +9,8 @@ abstract class SettingsLocalDataSource {
   
   Future<void> setTheme(SettingsModel params);
 
+  Future<SettingsModel> getTheme();
+
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -24,6 +26,12 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     if (!response) {
       throw CacheException(message: Failure.cacheError);
     }
+  }
+  
+  @override
+  Future<SettingsModel> getTheme() {
+    // TODO: implement getTheme
+    throw UnimplementedError();
   }
   
 }
