@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
@@ -17,9 +18,13 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Future<Either<Failure, SettingsEntity>> getTheme() {
-    // TODO: implement getTheme
-    throw UnimplementedError();
+  Future<Either<Failure, SettingsEntity>> getTheme() async {
+    try {
+      final response = await settingsLocalDataSource.getTheme();
+      return Right(response);
+    } on CacheException catch (e) {
+      return Left(CachedFailure(message: e.message));
+    }
   }
   
 }
