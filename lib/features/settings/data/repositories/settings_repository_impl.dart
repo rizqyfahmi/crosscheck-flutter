@@ -9,9 +9,8 @@ class SettingsRepositoryImpl implements SettingsRepository {
   const SettingsRepositoryImpl({required this.settingsLocalDataSource});
   
   @override
-  Future<void> setTheme(SettingsModel params) {
-    // TODO: implement setTheme
-    throw UnimplementedError();
+  Future<void> setTheme(SettingsModel params) async {
+    await settingsLocalDataSource.setTheme(params);
   }
   
 }
