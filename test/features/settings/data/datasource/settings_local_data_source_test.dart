@@ -41,7 +41,29 @@ void main() {
     expect(call(params), throwsA(
       predicate((error) => error is CacheException)
     ));
-    
+
     verify(mockSharedPreferences.setString("CACHED_SETTINGS", json.encode(params.toJSON())));
+  });
+
+  test("Should get theme properly", () async {
+    final mocked = "{\"themeMode\": ${Brightness.light.index}}";
+    when(mockSharedPreferences.getString("CACHED_SETTINGS")).thenReturn(mocked);
+
+    final result = await settingsLocalDataSource.getTheme();
+
+    expect(result, const SettingsModel(themeMode: Brightness.light));
+    verify(mockSharedPreferences.getString("CACHED_SETTINGS"));
+  });
+
+  test("Should return CachedException when get theme is failed", () async {
+    when(mockSharedPreferences.getString("CACHED_SETTINGS")).thenReturn(null);
+
+    final call = settingsLocalDataSource.getTheme;
+
+    expect(() => call(), throwsA(
+      predicate((error) => error is CacheException)
+    ));
+
+    verify(mockSharedPreferences.getString("CACHED_SETTINGS"));
   });
 }
