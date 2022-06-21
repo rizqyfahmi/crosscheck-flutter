@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SettingsLocalDataSource {
   
-  Future<void> setTheme(SettingsModel params);
+  Future<void> setTheme(SettingsParams params);
 
   Future<SettingsModel> getTheme();
 
@@ -20,7 +21,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   SettingsLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
-  Future<void> setTheme(SettingsModel params) async {
+  Future<void> setTheme(SettingsParams params) async {
     final response = await sharedPreferences.setString("CACHED_SETTINGS", json.encode(params.toJSON()));
 
     if (!response) {

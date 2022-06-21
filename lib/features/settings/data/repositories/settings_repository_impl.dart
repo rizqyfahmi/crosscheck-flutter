@@ -1,7 +1,7 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
-import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart';
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart';
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -13,7 +13,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   const SettingsRepositoryImpl({required this.settingsLocalDataSource});
   
   @override
-  Future<void> setTheme(SettingsModel params) async {
+  Future<void> setTheme(SettingsParams params) async {
     await settingsLocalDataSource.setTheme(params);
   }
 

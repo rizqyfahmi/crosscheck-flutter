@@ -5,7 +5,7 @@
 import 'dart:async' as _i4;
 
 import 'package:crosscheck/core/error/failure.dart' as _i6;
-import 'package:crosscheck/features/settings/data/models/data/settings_model.dart'
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart'
     as _i5;
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart'
     as _i7;
@@ -36,7 +36,7 @@ class MockSettingsRepository extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> setTheme(_i5.SettingsModel? params) =>
+  _i4.Future<void> setTheme(_i5.SettingsParams? params) =>
       (super.noSuchMethod(Invocation.method(#setTheme, [params]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);

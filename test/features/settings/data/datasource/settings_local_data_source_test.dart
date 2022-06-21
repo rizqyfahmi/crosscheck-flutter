@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -24,7 +25,7 @@ void main() {
   });
 
   test("Should set theme properly", () async {
-    const params = SettingsModel(themeMode: Brightness.light);
+    const params = SettingsParams(themeMode: Brightness.light);
     when(mockSharedPreferences.setString("CACHED_SETTINGS", json.encode(params.toJSON()))).thenAnswer((_) async => true);
 
     await settingsLocalDataSource.setTheme(params);
@@ -33,7 +34,7 @@ void main() {
   });
 
   test("Should return CacheException when set theme is failed", () async {
-    const params = SettingsModel(themeMode: Brightness.light);
+    const params = SettingsParams(themeMode: Brightness.light);
     when(mockSharedPreferences.setString("CACHED_SETTINGS", json.encode(params.toJSON()))).thenAnswer((_) async => false);
 
     final call = settingsLocalDataSource.setTheme;

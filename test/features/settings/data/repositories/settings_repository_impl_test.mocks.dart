@@ -2,12 +2,14 @@
 // in crosscheck/test/features/settings/data/repositories/settings_repository_impl_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart'
-    as _i2;
+    as _i3;
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart'
-    as _i4;
+    as _i2;
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart'
+    as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -20,18 +22,25 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
+class _FakeSettingsModel_0 extends _i1.Fake implements _i2.SettingsModel {}
+
 /// A class which mocks [SettingsLocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSettingsLocalDataSource extends _i1.Mock
-    implements _i2.SettingsLocalDataSource {
+    implements _i3.SettingsLocalDataSource {
   MockSettingsLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<void> setTheme(_i4.SettingsModel? params) =>
+  _i4.Future<void> setTheme(_i5.SettingsParams? params) =>
       (super.noSuchMethod(Invocation.method(#setTheme, [params]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
+  @override
+  _i4.Future<_i2.SettingsModel> getTheme() => (super.noSuchMethod(
+          Invocation.method(#getTheme, []),
+          returnValue: Future<_i2.SettingsModel>.value(_FakeSettingsModel_0()))
+      as _i4.Future<_i2.SettingsModel>);
 }
