@@ -12,9 +12,8 @@ class GetThemeUsecase implements Usecase<SettingsEntity, NoParam> {
   GetThemeUsecase({required this.settingsRepository});
   
   @override
-  Future<Either<Failure, SettingsEntity>> call(NoParam param) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, SettingsEntity>> call(NoParam param) async {
+    return await settingsRepository.getTheme();
   }
   
 }
