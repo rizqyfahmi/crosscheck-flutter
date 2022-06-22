@@ -1,18 +1,18 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/usecase/usecase.dart';
-import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart';
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class SetThemeUsecase implements Usecase<void, SettingsModel> {
+class SetThemeUsecase implements Usecase<void, SettingsParams> {
 
   final SettingsRepository repository;
 
   const SetThemeUsecase({required this.repository});
   
   @override
-  Future<Either<Failure, void>> call(SettingsModel params) async {
+  Future<Either<Failure, void>> call(SettingsParams params) async {
 
     try {
       await repository.setTheme(params);

@@ -19,6 +19,12 @@ import 'package:crosscheck/features/main/domain/repositories/main_repository.dar
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
+import 'package:crosscheck/features/settings/data/repositories/settings_repository_impl.dart';
+import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
+import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
+import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
 import 'package:crosscheck/features/walkthrough/data/repositories/walkthrough_repository_impl.dart';
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart';
@@ -39,6 +45,7 @@ Future<void> init() async  {
   locator.registerFactory(() => WalkthroughBloc(setIsSkipUsecase: locator(), getIsSkipUsecase: locator()));
   locator.registerFactory(() => MainBloc(getActiveBottomNavigationUsecase: locator(), setActiveBottomNavigationUsecase: locator()));
   locator.registerFactory(() => DashboardBloc(getDashboardUsecase: locator()));
+  locator.registerFactory(() => SettingsBloc(setThemeUsecase: locator(), getThemeUsecase: locator()));
 
   locator.registerLazySingleton(() => RegistrationUsecase(repository: locator()));
   locator.registerLazySingleton(() => LoginUsecase(repository: locator()));
@@ -47,19 +54,22 @@ Future<void> init() async  {
   locator.registerLazySingleton(() => GetActiveBottomNavigationUsecase(repository: locator()));
   locator.registerLazySingleton(() => SetActiveBottomNavigationUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetDashboardUsecase(repository: locator()));
+  locator.registerLazySingleton(() => SetThemeUsecase(repository: locator()));
+  locator.registerLazySingleton(() => GetThemeUsecase(repository: locator()));
   locator.registerLazySingleton<WalkthroughRepository>(() => WalkthroughRepositoryImpl(walkthroughLocalDataSource: locator()));
-  locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(
-    remote: locator(), local: locator(), networkInfo: locator()
-  ));
+  locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
   locator.registerLazySingleton<MainRepository>(() => MainRepositoryImpl(mainLocalDataSource: locator()));
   locator.registerLazySingleton<DashboardRepository>(() => DashboardRepositoryImpl(remote: locator(), networkInfo: locator()));
+  locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(settingsLocalDataSource: locator()));
+
   locator.registerLazySingleton<AuthenticationRemoteDataSource>(() => AuthenticationRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<AuthenticationLocalDataSource>(() => AuthenticationLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<WalkthroughLocalDataSource>(() => WalkthroughLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<MainLocalDataSource>(() => MainLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<DashboardRemoteDataSource>(() => DashboardRemoteDataSourceImpl(client: locator()));
+  locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(sharedPreferences: locator()));
+
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
-  
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerLazySingleton(() => sharedPreferences);
   locator.registerLazySingleton(() => http.Client());

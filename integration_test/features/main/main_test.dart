@@ -15,6 +15,11 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart';
+import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
+import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
@@ -36,7 +41,9 @@ import 'main_test.mocks.dart';
   GetIsSkipUsecase,
   SetActiveBottomNavigationUsecase,
   GetActiveBottomNavigationUsecase,
-  GetDashboardUsecase
+  GetDashboardUsecase,
+  SetThemeUsecase,
+  GetThemeUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -45,11 +52,14 @@ void main() {
   late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
   late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
   late MockGetDashboardUsecase mockGetDashboardUsecase;
+  late MockSetThemeUsecase mockSetThemeUsecase;
+  late MockGetThemeUsecase mockGetThemeUsecase;
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
   late LoginBloc loginBloc;
   late MainBloc mainBloc;
   late DashboardBloc dashboardBloc;
+  late SettingsBloc settingsBloc;
   late Widget main;
 
   const String token = "eyJhbGci OiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -74,6 +84,8 @@ void main() {
     mockGetActiveBottomNavigationUsecase = MockGetActiveBottomNavigationUsecase();
     mockSetActiveBottomNavigationUsecase = MockSetActiveBottomNavigationUsecase();
     mockGetDashboardUsecase = MockGetDashboardUsecase();
+    mockSetThemeUsecase = MockSetThemeUsecase();
+    mockGetThemeUsecase = MockGetThemeUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -83,6 +95,7 @@ void main() {
       setActiveBottomNavigationUsecase: mockSetActiveBottomNavigationUsecase
     );
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
+    settingsBloc = SettingsBloc(setThemeUsecase: mockSetThemeUsecase, getThemeUsecase: mockGetThemeUsecase);
 
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(
@@ -99,6 +112,9 @@ void main() {
       ),
       BlocProvider<DashboardBloc>(
         create: (_) => dashboardBloc
+      ),
+      BlocProvider<SettingsBloc>(
+        create: (_) => settingsBloc..add(SettingsLoad())
       )
     ]);
   });
@@ -113,6 +129,7 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -144,11 +161,11 @@ void main() {
       Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
       expect(homeText.style?.color, CustomColors.primary);
       Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
-      expect(eventText.style?.color, CustomColors.secondary);
+      expect(eventText.style?.color, isNot(CustomColors.primary));
       Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
-      expect(historyText.style?.color, CustomColors.secondary);
+      expect(historyText.style?.color, isNot(CustomColors.primary));
       Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
-      expect(settingText.style?.color, CustomColors.secondary);
+      expect(settingText.style?.color, isNot(CustomColors.primary));
 
     });
     
@@ -164,6 +181,7 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -195,23 +213,23 @@ void main() {
       Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
       expect(homeText.style?.color, CustomColors.primary);
       Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
-      expect(eventText.style?.color, CustomColors.secondary);
+      expect(eventText.style?.color, isNot(CustomColors.primary));
       Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
-      expect(historyText.style?.color, CustomColors.secondary);
+      expect(historyText.style?.color, isNot(CustomColors.primary));
       Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
-      expect(settingText.style?.color, CustomColors.secondary);
+      expect(settingText.style?.color, isNot(CustomColors.primary));
 
       await tester.tap(find.byKey(const Key("navEvent")));
       await tester.pumpAndSettle();
 
       homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
-      expect(homeText.style?.color, CustomColors.secondary);
+      expect(homeText.style?.color, isNot(CustomColors.primary));
       eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
       expect(eventText.style?.color, CustomColors.primary);
       historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
-      expect(historyText.style?.color, CustomColors.secondary);
+      expect(historyText.style?.color, isNot(CustomColors.primary));
       settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
-      expect(settingText.style?.color, CustomColors.secondary);
+      expect(settingText.style?.color, isNot(CustomColors.primary));
 
     });
     
@@ -227,6 +245,7 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.history))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.history)));
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -258,23 +277,23 @@ void main() {
       Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
       expect(homeText.style?.color, CustomColors.primary);
       Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
-      expect(eventText.style?.color, CustomColors.secondary);
+      expect(eventText.style?.color, isNot(CustomColors.primary));
       Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
-      expect(historyText.style?.color, CustomColors.secondary);
+      expect(historyText.style?.color, isNot(CustomColors.primary));
       Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
-      expect(settingText.style?.color, CustomColors.secondary);
+      expect(settingText.style?.color, isNot(CustomColors.primary));
 
       await tester.tap(find.byKey(const Key("navHistory")));
       await tester.pumpAndSettle();
 
       homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
-      expect(homeText.style?.color, CustomColors.secondary);
+      expect(homeText.style?.color, isNot(CustomColors.primary));
       eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
-      expect(eventText.style?.color, CustomColors.secondary);
+      expect(eventText.style?.color, isNot(CustomColors.primary));
       historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
       expect(historyText.style?.color, CustomColors.primary);
       settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
-      expect(settingText.style?.color, CustomColors.secondary);
+      expect(settingText.style?.color, isNot(CustomColors.primary));
 
     });
     
@@ -290,6 +309,7 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
     when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -321,21 +341,21 @@ void main() {
       Text homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
       expect(homeText.style?.color, CustomColors.primary);
       Text eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
-      expect(eventText.style?.color, CustomColors.secondary);
+      expect(eventText.style?.color, isNot(CustomColors.primary));
       Text historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
-      expect(historyText.style?.color, CustomColors.secondary);
+      expect(historyText.style?.color, isNot(CustomColors.primary));
       Text settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
-      expect(settingText.style?.color, CustomColors.secondary);
+      expect(settingText.style?.color, isNot(CustomColors.primary));
 
       await tester.tap(find.byKey(const Key("navSetting")));
       await tester.pumpAndSettle();
 
       homeText = tester.widget<Text>(find.byKey(const Key("navHomeText")));
-      expect(homeText.style?.color, CustomColors.secondary);
+      expect(homeText.style?.color, isNot(CustomColors.primary));
       eventText = tester.widget<Text>(find.byKey(const Key("navEventText")));
-      expect(eventText.style?.color, CustomColors.secondary);
+      expect(eventText.style?.color, isNot(CustomColors.primary));
       historyText = tester.widget<Text>(find.byKey(const Key("navHistoryText")));
-      expect(historyText.style?.color, CustomColors.secondary);
+      expect(historyText.style?.color, isNot(CustomColors.primary));
       settingText = tester.widget<Text>(find.byKey(const Key("navSettingText")));
       expect(settingText.style?.color, CustomColors.primary);
 

@@ -11,6 +11,7 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_event.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
+import 'package:crosscheck/features/settings/presentation/view/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -67,7 +68,7 @@ class MainView extends StatelessWidget {
     switch (state.model.currentPage) {
       case BottomNavigation.setting:
         return const Center(
-          child: Text("Settings"),
+          child: SettingsView(),
         );
       case BottomNavigation.history:
         return const Center(
