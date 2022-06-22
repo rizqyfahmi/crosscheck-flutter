@@ -28,6 +28,7 @@ class SettingsModel extends Equatable {
     textTheme: const TextTheme(
       headlineLarge: TextStyles.poppinsBold34,
       headline1: TextStyles.poppinsBold24,
+      headline2: TextStyles.poppinsBold20,
       subtitle1: TextStyles.poppinsBold16,
       subtitle2: TextStyles.poppinsRegular16,
       bodyText1: TextStyles.poppinsRegular14,
@@ -49,8 +50,8 @@ class SettingsModel extends Equatable {
       onSecondary: Colors.white, 
       error: CustomColors.primary, 
       onError: CustomColors.secondary, 
-      background: Colors.white, 
-      onBackground: CustomColors.secondary, 
+      background: CustomColors.secondary, 
+      onBackground: Colors.white, 
       surface: Colors.white, 
       onSurface: Colors.white,
       surfaceTint: CustomColors.placeholderText
@@ -58,6 +59,7 @@ class SettingsModel extends Equatable {
     textTheme: const TextTheme(
       headlineLarge: TextStyles.poppinsBold34,
       headline1: TextStyles.poppinsBold24,
+      headline2: TextStyles.poppinsBold20,
       subtitle1: TextStyles.poppinsBold16,
       subtitle2: TextStyles.poppinsRegular16,
       bodyText1: TextStyles.poppinsRegular14,

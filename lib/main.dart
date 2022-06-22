@@ -1,7 +1,4 @@
-import 'package:crosscheck/assets/colors/custom_colors.dart';
-import 'package:crosscheck/assets/fonts/fonts.dart';
 import 'package:crosscheck/core/utils/locator.dart' as di;
-import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/view/login_view.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
@@ -10,6 +7,9 @@ import 'package:crosscheck/features/authentication/presentation/registration/vie
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
 import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
@@ -38,6 +38,9 @@ void main() async {
     ),
     BlocProvider<DashboardBloc>(
       create: (_) => di.locator<DashboardBloc>()
+    ),
+    BlocProvider<SettingsBloc>(
+      create: (_) => di.locator<SettingsBloc>()..add(SettingsLoad())
     )
   ];
   runApp(MyApp(providers: providers));
@@ -54,40 +57,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: providers,
-      child: BlocConsumer<WalkthroughBloc, WalkthroughState>(
-        listener: (context, state) {
-          
-        },
+      child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
           return MaterialApp(
-            theme: ThemeData(
-              shadowColor: Colors.black.withOpacity(0.5),
-              backgroundColor: CustomColors.secondary,
-              fontFamily: FontFamily.poppins,
-              colorScheme: const ColorScheme(
-                brightness: Brightness.light, 
-                primary: CustomColors.primary, 
-                onPrimary: Colors.white, 
-                secondary: CustomColors.secondary, 
-                onSecondary: Colors.white, 
-                error: CustomColors.primary, 
-                onError: CustomColors.secondary, 
-                background: Colors.white, 
-                onBackground: CustomColors.secondary, 
-                surface: Colors.white, 
-                onSurface: Colors.white,
-                surfaceTint: CustomColors.placeholderText
-              ),
-              textTheme: const TextTheme(
-                headlineLarge: TextStyles.poppinsBold34,
-                headline1: TextStyles.poppinsBold24,
-                subtitle1: TextStyles.poppinsBold16,
-                subtitle2: TextStyles.poppinsRegular16,
-                bodyText1: TextStyles.poppinsRegular14,
-                bodyText2: TextStyles.poppinsRegular12,
-                button: TextStyles.poppinsRegular16
-              )
-            ),
+            theme: state.model.themeData,
             home: const MainPage(),
             routes: {
               WalkthroughView.routeName: (context) => const WalkthroughView(),

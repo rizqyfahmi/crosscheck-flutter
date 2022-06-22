@@ -28,7 +28,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         (result) {
           ThemeData themeData = SettingsModel.light;
 
-          if (result.themeMode.index == Brightness.dark.index) {
+          if (result.themeMode == Brightness.dark) {
             themeData = SettingsModel.dark;
           }
 

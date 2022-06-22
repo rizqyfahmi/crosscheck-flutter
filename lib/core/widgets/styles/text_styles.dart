@@ -38,6 +38,17 @@ class TextStyles {
   );
   /// TextStyle(
   ///   fontFamily: FontFamily.poppins,
+  ///   fontSize: 20,
+  ///   fontWeight: bold
+  /// )
+  ///
+  static const poppinsBold20 = TextStyle(
+    fontFamily: FontFamily.poppins,
+    fontSize: 20,
+    fontWeight: FontWeight.bold
+  );
+  /// TextStyle(
+  ///   fontFamily: FontFamily.poppins,
   ///   fontSize: 22,
   ///   fontWeight: bold
   /// )

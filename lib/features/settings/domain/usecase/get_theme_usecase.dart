@@ -7,13 +7,13 @@ import 'package:dartz/dartz.dart';
 
 class GetThemeUsecase implements Usecase<SettingsEntity, NoParam> {
 
-  final SettingsRepository settingsRepository;
+  final SettingsRepository repository;
 
-  GetThemeUsecase({required this.settingsRepository});
+  GetThemeUsecase({required this.repository});
   
   @override
   Future<Either<Failure, SettingsEntity>> call(NoParam param) async {
-    return await settingsRepository.getTheme();
+    return await repository.getTheme();
   }
   
 }

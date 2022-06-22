@@ -37,8 +37,8 @@ class LoadingModal extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                SizedBox(
+              children: [
+                const SizedBox(
                   height: 48,
                   width: 48,
                   child: LoadingIndicator(
@@ -46,11 +46,13 @@ class LoadingModal extends StatelessWidget {
                     colors: [CustomColors.primary],
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "Loading...",
-                  key: Key("loadingText"),
-                  style: TextStyles.poppinsMedium14,
+                  key: const Key("loadingText"),
+                  style: TextStyles.poppinsMedium14.copyWith(
+                    color: CustomColors.secondary
+                  ),
                 )
               ],
             ),

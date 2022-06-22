@@ -21,7 +21,7 @@ void main() {
 
   setUp(() {
     mockSettingsRepository = MockSettingsRepository();
-    getThemeUsecase = GetThemeUsecase(settingsRepository: mockSettingsRepository);
+    getThemeUsecase = GetThemeUsecase(repository: mockSettingsRepository);
   });
 
   test("Should get theme properly", () async {
