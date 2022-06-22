@@ -63,8 +63,8 @@ class MockGetThemeUsecase extends _i1.Mock implements _i8.GetThemeUsecase {
   }
 
   @override
-  _i2.SettingsRepository get settingsRepository =>
-      (super.noSuchMethod(Invocation.getter(#settingsRepository),
+  _i2.SettingsRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
           returnValue: _FakeSettingsRepository_0()) as _i2.SettingsRepository);
   @override
   _i5.Future<_i3.Either<_i6.Failure, _i9.SettingsEntity>> call(

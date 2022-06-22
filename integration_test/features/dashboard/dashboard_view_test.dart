@@ -16,6 +16,11 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart';
+import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
+import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
@@ -37,7 +42,9 @@ import 'dashboard_view_test.mocks.dart';
   GetIsSkipUsecase,
   SetActiveBottomNavigationUsecase,
   GetActiveBottomNavigationUsecase,
-  GetDashboardUsecase
+  GetDashboardUsecase,
+  SetThemeUsecase,
+  GetThemeUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -46,11 +53,14 @@ void main() {
   late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
   late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
   late MockGetDashboardUsecase mockGetDashboardUsecase;
+  late MockSetThemeUsecase mockSetThemeUsecase;
+  late MockGetThemeUsecase mockGetThemeUsecase;
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
   late LoginBloc loginBloc;
   late MainBloc mainBloc;
   late DashboardBloc dashboardBloc;
+  late SettingsBloc settingsBloc;
   late Widget main;
 
   const String token = "eyJhbGci OiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -75,6 +85,8 @@ void main() {
     mockGetActiveBottomNavigationUsecase = MockGetActiveBottomNavigationUsecase();
     mockSetActiveBottomNavigationUsecase = MockSetActiveBottomNavigationUsecase();
     mockGetDashboardUsecase = MockGetDashboardUsecase();
+    mockSetThemeUsecase = MockSetThemeUsecase();
+    mockGetThemeUsecase = MockGetThemeUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -84,6 +96,7 @@ void main() {
       setActiveBottomNavigationUsecase: mockSetActiveBottomNavigationUsecase
     );
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
+    settingsBloc = SettingsBloc(setThemeUsecase: mockSetThemeUsecase, getThemeUsecase: mockGetThemeUsecase);
 
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(
@@ -100,6 +113,9 @@ void main() {
       ),
       BlocProvider<DashboardBloc>(
         create: (_) => dashboardBloc
+      ),
+      BlocProvider<SettingsBloc>(
+        create: (_) => settingsBloc..add(SettingsLoad())
       )
     ]);
   });
@@ -117,6 +133,7 @@ void main() {
       await Future.delayed(const Duration(seconds: 2));
       return Right(entity);
     });
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -187,6 +204,7 @@ void main() {
       await Future.delayed(const Duration(seconds: 2));
       return Left(ServerFailure(message: Failure.generalError));
     });
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
