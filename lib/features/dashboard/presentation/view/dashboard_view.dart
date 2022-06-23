@@ -59,6 +59,7 @@ class DashboardView extends StatelessWidget {
                                 children: [
                                   Text(
                                     "Welcome back, ",
+                                    key: const Key("labelWelcomeBack"),
                                     style: Theme.of(context).textTheme.subtitle2?.copyWith(
                                       color: Theme.of(context).colorScheme.surfaceTint,
                                       fontWeight: FontWeight.w500
@@ -92,6 +93,7 @@ class DashboardView extends StatelessWidget {
                     const SizedBox(height: 32),
                     Text(
                       "Task Summary",
+                      key: const Key("labelTaskSummary"),
                       textAlign: TextAlign.left,
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: Theme.of(context).colorScheme.onBackground
@@ -119,6 +121,7 @@ class DashboardView extends StatelessWidget {
                                     ),
                                     Text(
                                       "Progress",
+                                      key: const Key("labelProgress"),
                                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                         color: Theme.of(context).colorScheme.onBackground,
                                         fontWeight: FontWeight.w500
@@ -157,6 +160,7 @@ class DashboardView extends StatelessWidget {
                                           ),
                                           Text(
                                             "Upcomming",
+                                            key: const Key("labelUpcomming"),
                                             style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                               color: Theme.of(context).colorScheme.onBackground,
                                               fontWeight: FontWeight.w500
@@ -194,6 +198,7 @@ class DashboardView extends StatelessWidget {
                                           ),
                                           Text(
                                             "Completed",
+                                            key: const Key("labelCompleted"),
                                             style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                               color: Theme.of(context).colorScheme.onBackground,
                                               fontWeight: FontWeight.w500

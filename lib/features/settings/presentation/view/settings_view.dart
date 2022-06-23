@@ -151,6 +151,7 @@ class SettingsView extends StatelessWidget {
                 ),
                 child: Text(
                   "Change Password",
+                  key: const Key("textChangePassword"),
                   style: Theme.of(context).textTheme.subtitle1?.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                     fontWeight: FontWeight.w400,
@@ -163,6 +164,7 @@ class SettingsView extends StatelessWidget {
                   Expanded(
                     child: Text(
                       "Dark Mode",
+                      key: const Key("textDarkMode"),
                       textAlign: TextAlign.left,
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: Theme.of(context).colorScheme.onBackground,
@@ -196,6 +198,7 @@ class SettingsView extends StatelessWidget {
                 ),
                 child: Text(
                   "About",
+                  key: const Key("textAbout"),
                   style: Theme.of(context).textTheme.subtitle1?.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                     fontWeight: FontWeight.w400,
@@ -212,6 +215,7 @@ class SettingsView extends StatelessWidget {
                 ),
                 child: Text(
                   "Logout",
+                  key: const Key("textLogout"),
                   style: Theme.of(context).textTheme.subtitle1?.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                     fontWeight: FontWeight.w400,

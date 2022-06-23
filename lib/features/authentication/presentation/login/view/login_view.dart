@@ -7,6 +7,7 @@ import 'package:crosscheck/features/authentication/presentation/authentication/b
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_event.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_state.dart';
+import 'package:crosscheck/features/authentication/presentation/registration/views/registration_view.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class LoginView extends StatelessWidget {
         Center(
           child: Text(
             "Welcome back!",
+            key: const Key("textWelcomeBack"),
             style: Theme.of(context).textTheme.headline1?.copyWith(
               color: Theme.of(context).colorScheme.onBackground
             ),
@@ -76,6 +78,7 @@ class LoginView extends StatelessWidget {
                 },
                 child: Text(
                   "Sign in",
+                  key: const Key("textSignIn"),
                   style: Theme.of(context).textTheme.button?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary
                   ),
@@ -99,6 +102,7 @@ class LoginView extends StatelessWidget {
               onPressed: () {},
               child: Text(
                 "Forgot Password?",
+                key: const Key("textForgotPassword"),
                 style: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context).colorScheme.primary
                 ),
@@ -164,6 +168,7 @@ class LoginView extends StatelessWidget {
                               children: [
                                 Text(
                                   "Don't have an account? ",
+                                  key: const Key("textDontHaveAnAccount"),
                                   style: Theme.of(context).textTheme.bodyText2?.copyWith(
                                     color: Theme.of(context).colorScheme.onBackground
                                   ),
@@ -176,9 +181,12 @@ class LoginView extends StatelessWidget {
                                     elevation: 0,
                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, RegistrationView.routeName);
+                                  },
                                   child: Text(
                                     "Sign up",
+                                    key: const Key("textSignUp"),
                                     style: Theme.of(context).textTheme.bodyText2?.copyWith(
                                       color: Theme.of(context).colorScheme.primary
                                     ),
