@@ -1,17 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationState extends Equatable {
-  final String token;
-
-  const AuthenticationState({required this.token});
+  const AuthenticationState();
 
   @override
   List<Object?> get props => [];
 }
 
-class Unauthenticated extends AuthenticationState {
-  const Unauthenticated() : super(token: "");
-}
-class Authenticated extends AuthenticationState {
-  const Authenticated({required super.token});
-}
+class Unauthenticated extends AuthenticationState {}
+class Authenticated extends AuthenticationState {}

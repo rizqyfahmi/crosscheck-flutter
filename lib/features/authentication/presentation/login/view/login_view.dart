@@ -126,7 +126,7 @@ class LoginView extends StatelessWidget {
           listener: (context, state) {
             if (state is! LoginSuccess) return;
 
-            context.read<AuthenticationBloc>().add(AuthenticationSetToken(token: state.token));
+            context.read<AuthenticationBloc>().add(AuthenticationSetAuthenticated());
             Navigator.pushReplacement(
               context,
               PageRouteBuilder(

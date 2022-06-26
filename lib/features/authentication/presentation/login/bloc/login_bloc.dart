@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginGeneralError(message: error.message, model: state.model));
         }, 
         (result) {
-          emit(LoginSuccess(token: result.token));
+          emit(const LoginSuccess());
         }
       );
     });

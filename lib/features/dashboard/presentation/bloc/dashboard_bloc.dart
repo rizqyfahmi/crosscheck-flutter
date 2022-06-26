@@ -1,5 +1,5 @@
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
+import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/activity_model.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart';
@@ -14,7 +14,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<DashboardGetData>((event, emit) async {
       emit(DashboardLoading(model: state.model));
 
-      final response = await getDashboardUsecase(DashboardParams(token: event.token));
+      final response = await getDashboardUsecase(NoParam());
 
       response.fold(
         (error) {

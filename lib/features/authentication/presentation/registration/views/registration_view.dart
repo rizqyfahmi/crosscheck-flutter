@@ -165,7 +165,7 @@ class RegistrationView extends StatelessWidget {
           listener: (context, state) {
             if (state is! RegistrationSuccess) return;
 
-            context.read<AuthenticationBloc>().add(AuthenticationSetToken(token: state.token));
+            context.read<AuthenticationBloc>().add(AuthenticationSetAuthenticated());
           },
           builder: (context, state) {
             return LoadingModal(

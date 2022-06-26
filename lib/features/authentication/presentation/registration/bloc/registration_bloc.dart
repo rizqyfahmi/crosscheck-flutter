@@ -38,16 +38,16 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       for (var error in event.errors) {
         switch (error["field"]) {
           case "name":
-            errorName = error["error"];
+            errorName = error["message"];
             break;
           case "email":
-            errorEmail = error["error"];
+            errorEmail = error["message"];
             break;
           case "password":
-            errorPassword = error["error"];
+            errorPassword = error["message"];
             break;
           case "confirmPassword":
-            errorConfirmPassword = error["error"];
+            errorConfirmPassword = error["message"];
             break;
         }
       }
@@ -90,7 +90,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
         emit(RegistrationGeneralError(message: error.message, model: model));
       }, (result) {
-        emit(RegistrationSuccess(token: result.token));
+        emit(const RegistrationSuccess());
       });
     });
   }

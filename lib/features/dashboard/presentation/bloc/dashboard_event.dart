@@ -7,16 +7,6 @@ abstract class DashboardEvent extends Equatable{
 
 }
 
-class DashboardGetData extends DashboardEvent {
-  final String token;
-  
-  DashboardGetData({
-    required this.token
-  });
-
-  @override
-  List<Object?> get props => [token];
-}
-
+class DashboardGetData extends DashboardEvent {}
 class DashboardResetData extends DashboardEvent {}
 class DashboardResetGeneralError extends DashboardEvent {}

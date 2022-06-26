@@ -5,9 +5,9 @@ import 'package:crosscheck/features/authentication/domain/entities/authenticatio
 import 'package:dartz/dartz.dart';
 
 abstract class AuthenticationRepository {
-  Future<Either<Failure, AuthenticationEntity>>? registration(RegistrationParams params);
+  Future<Either<Failure, void>> registration(RegistrationParams params);
   
-  Future<Either<Failure, AuthenticationEntity>> login(LoginParams params);
+  Future<Either<Failure, void>> login(LoginParams params);
 
-  Future<void>? setToken(String token);
+  Future<Either<Failure, AuthenticationEntity>> getToken();
 }
