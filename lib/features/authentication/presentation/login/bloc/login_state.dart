@@ -25,9 +25,7 @@ class LoginLoading extends LoginState {
 }
 
 class LoginSuccess extends LoginState {
-  final String token;
-
-  const LoginSuccess({required this.token}) : super(model: const LoginModel());
+  const LoginSuccess() : super(model: const LoginModel());
 }
 
 class LoginGeneralError extends LoginState {

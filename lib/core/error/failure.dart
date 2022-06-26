@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 abstract class Failure extends Equatable {
   static const generalError = "Something went wrong";
   static const loginRequiredFieldError = "Username and password are required";
+  static const validationError = "Error Validation";
   static const cacheError = "Cache data error";
 
   @override

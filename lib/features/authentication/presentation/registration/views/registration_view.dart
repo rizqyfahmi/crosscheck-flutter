@@ -1,4 +1,3 @@
-import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/images/images.dart';
 import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
 import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
@@ -35,6 +34,7 @@ class RegistrationView extends StatelessWidget {
         Center(
           child: Text(
             "Create your account",
+            key: const Key("textCreateYourAccount"),
             style: Theme.of(context).textTheme.headline1?.copyWith(
               color: Theme.of(context).colorScheme.onBackground
             ),
@@ -107,6 +107,7 @@ class RegistrationView extends StatelessWidget {
                 },
                 child: Text(
                   "Create an account",
+                  key: const Key("textCreateAnAccount"),
                   style: Theme.of(context).textTheme.button?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary
                   ),
@@ -121,6 +122,7 @@ class RegistrationView extends StatelessWidget {
           children: [
             Text(
               "Already have an account? ",
+              key: const Key("textAlreadyHaveAnAccount"),
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground
               ),
@@ -133,11 +135,14 @@ class RegistrationView extends StatelessWidget {
                 elevation: 0,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: Text(
                 "Sign In",
+                key: const Key("textSignIn"),
                 style: TextStyles.poppinsMedium14.copyWith(
-                  color: CustomColors.primary
+                  color: Theme.of(context).colorScheme.primary
                 ),
               )
             )
@@ -160,7 +165,7 @@ class RegistrationView extends StatelessWidget {
           listener: (context, state) {
             if (state is! RegistrationSuccess) return;
 
-            context.read<AuthenticationBloc>().add(AuthenticationSetToken(token: state.token));
+            context.read<AuthenticationBloc>().add(AuthenticationSetAuthenticated());
           },
           builder: (context, state) {
             return LoadingModal(

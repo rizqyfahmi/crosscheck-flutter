@@ -2,7 +2,6 @@ import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/fonts/fonts.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart';
@@ -33,21 +32,20 @@ void main() async {
   late RegistrationModel model;
   late Widget testWidget;
   
-  const String token = "eyJhbGci OiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   const errorMessage = "Something went wrong";
   const List<Map<String, dynamic>> errors = [
     {
       "field": "name",
-      "error": "Your name should contain at least 8 characters"
+      "message":  "Your name should contain at least 8 characters"
     },
-    {"field": "email", "error": "Please enter a valid email address"},
+    {"field": "email", "message":  "Please enter a valid email address"},
     {
       "field": "password",
-      "error":"A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+      "message": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
     },
     {
       "field": "confirmPassword",
-      "error": "Your password and confirmation password do not match"
+      "message":  "Your password and confirmation password do not match"
     }
   ];
 
@@ -172,7 +170,7 @@ void main() async {
     testWidgets("Should display loading modal/dialog on submit registration", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return const Right(AuthenticationEntity(token: token));
+        return const Right(null);
       });
 
       await tester.pumpWidget(testWidget);
@@ -391,7 +389,7 @@ void main() async {
     testWidgets("Should return RegistrationSuccess when registration is success", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return const Right(AuthenticationEntity(token: token));
+        return const Right(null);
       });
 
       await tester.pumpWidget(testWidget);
@@ -415,7 +413,7 @@ void main() async {
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
-        expected = const RegistrationSuccess(token: token);
+        expected = const RegistrationSuccess();
         expect(registrationBloc.state, expected);
       });
     });
@@ -423,12 +421,12 @@ void main() async {
     testWidgets("Should return Authenticated after registration is success", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return const Right(AuthenticationEntity(token: token));
+        return const Right(null);
       });
 
       await tester.pumpWidget(testWidget);
       await tester.pumpAndSettle();
-      expect(authenticationBloc.state, const Unauthenticated());
+      expect(authenticationBloc.state, Unauthenticated());
 
       await tester.enterText(find.byKey(const Key("nameField")), "Fulan");
       await tester.enterText(find.byKey(const Key("emailField")), "fulan@email.com");
@@ -448,9 +446,9 @@ void main() async {
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
-        expected = const RegistrationSuccess(token: token);
+        expected = const RegistrationSuccess();
         expect(registrationBloc.state, expected);
-        expect(authenticationBloc.state, const Authenticated(token: token));
+        expect(authenticationBloc.state, Authenticated());
       });
     });
 

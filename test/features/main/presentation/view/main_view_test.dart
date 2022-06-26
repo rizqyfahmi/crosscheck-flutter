@@ -33,8 +33,6 @@ void main() {
   late MockSettingsBloc mockSettingsBloc;
   late Widget testWidget;
 
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-
   setUp(() {
     mockAuthenticationBloc = MockAuthenticationBloc();
     mockMainBloc = MockMainBloc();
@@ -51,7 +49,7 @@ void main() {
   testWidgets("Should display main view properly", (WidgetTester tester) async {
     when(mockMainBloc.state).thenReturn(const MainInit());
     when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockDashboardBloc.state).thenReturn(DashboardInit());
     when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
@@ -69,7 +67,7 @@ void main() {
   testWidgets("Should activate home at first time", (WidgetTester tester) async {
     when(mockMainBloc.state).thenReturn(const MainInit());
     when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockDashboardBloc.state).thenReturn(DashboardInit());
     when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
@@ -92,7 +90,7 @@ void main() {
     when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
       const MainChanged(model: MainModel(currentPage: BottomNavigation.event))
     ]));
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockDashboardBloc.state).thenReturn(DashboardInit());
     when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
@@ -115,7 +113,7 @@ void main() {
     when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
       const MainChanged(model: MainModel(currentPage: BottomNavigation.history))
     ]));
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockDashboardBloc.state).thenReturn(DashboardInit());
     when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
@@ -138,7 +136,7 @@ void main() {
     when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([
       const MainChanged(model: MainModel(currentPage: BottomNavigation.setting))
     ]));
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockDashboardBloc.state).thenReturn(DashboardInit());
     when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));

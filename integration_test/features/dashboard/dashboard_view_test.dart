@@ -2,11 +2,9 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/param/param.dart';
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
@@ -63,7 +61,6 @@ void main() {
   late SettingsBloc settingsBloc;
   late Widget main;
 
-  const String token = "eyJhbGci OiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   final currentDate = DateTime.now();
   final List<ActivityEntity> activities = [
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
@@ -125,11 +122,11 @@ void main() {
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return const Right(AuthenticationEntity(token: token));
+      return const Right(null);
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
-    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async {
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
       return Right(entity);
     });
@@ -196,11 +193,11 @@ void main() {
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return const Right(AuthenticationEntity(token: token));
+      return const Right(null);
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
-    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async {
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
       return Left(ServerFailure(message: Failure.generalError));
     });

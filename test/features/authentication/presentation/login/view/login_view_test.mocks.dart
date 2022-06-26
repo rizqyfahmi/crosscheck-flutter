@@ -6,8 +6,6 @@ import 'dart:async' as _i13;
 
 import 'package:crosscheck/core/error/failure.dart' as _i22;
 import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
-    as _i24;
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
     as _i23;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i10;
@@ -374,11 +372,9 @@ class MockLoginUsecase extends _i1.Mock implements _i3.LoginUsecase {
               returnValue: _FakeAuthenticationRepository_8())
           as _i10.AuthenticationRepository);
   @override
-  _i13.Future<_i11.Either<_i22.Failure, _i23.AuthenticationEntity>> call(
-          _i24.LoginParams? params) =>
+  _i13.Future<_i11.Either<_i22.Failure, void>> call(_i23.LoginParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-          returnValue: Future<
-                  _i11.Either<_i22.Failure, _i23.AuthenticationEntity>>.value(
-              _FakeEither_9<_i22.Failure, _i23.AuthenticationEntity>())) as _i13
-          .Future<_i11.Either<_i22.Failure, _i23.AuthenticationEntity>>);
+              returnValue: Future<_i11.Either<_i22.Failure, void>>.value(
+                  _FakeEither_9<_i22.Failure, void>()))
+          as _i13.Future<_i11.Either<_i22.Failure, void>>);
 }

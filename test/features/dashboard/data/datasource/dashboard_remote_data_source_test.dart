@@ -56,7 +56,7 @@ void main() {
   });
 
   test("Should throw ServerException when get dashboard is failed", () async {
-    when(mockClient.post(uri, headers: headers)).thenAnswer((_) async => http.Response(json.encode({"message": Failure.generalError}), 500));
+    when(mockClient.post(uri, headers: headers)).thenAnswer((_) async => http.Response(json.encode({"message":  Failure.generalError}), 500));
 
     final call = dashboardRemoteDataSource.getDashboard(token);
 

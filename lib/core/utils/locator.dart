@@ -53,7 +53,7 @@ Future<void> init() async  {
   locator.registerLazySingleton(() => GetIsSkipUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetActiveBottomNavigationUsecase(repository: locator()));
   locator.registerLazySingleton(() => SetActiveBottomNavigationUsecase(repository: locator()));
-  locator.registerLazySingleton(() => GetDashboardUsecase(repository: locator()));
+  locator.registerLazySingleton(() => GetDashboardUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton(() => SetThemeUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetThemeUsecase(repository: locator()));
   locator.registerLazySingleton<WalkthroughRepository>(() => WalkthroughRepositoryImpl(walkthroughLocalDataSource: locator()));

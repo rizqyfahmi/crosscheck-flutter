@@ -63,7 +63,7 @@ void main() {
   });
 
   test("Should set theme properly", () async {
-    const params = SettingsParams(themeMode: Brightness.dark);
+    final params = SettingsParams(themeMode: Brightness.dark);
     when(mockSetThemeUsecase(any)).thenAnswer((_) async => const Right(null));
 
     settingsBloc.add(SettingsChangeTheme(themeMode: Brightness.dark));
@@ -77,7 +77,7 @@ void main() {
   });
 
   test("Should set theme properly", () async {
-    const params = SettingsParams(themeMode: Brightness.dark);
+    final params = SettingsParams(themeMode: Brightness.dark);
     when(mockSetThemeUsecase(any)).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
 
     settingsBloc.add(SettingsChangeTheme(themeMode: Brightness.dark));

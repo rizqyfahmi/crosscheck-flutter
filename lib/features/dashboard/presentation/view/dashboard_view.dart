@@ -1,7 +1,6 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/icons/custom_icons.dart';
 import 'package:crosscheck/core/widgets/cloudy_card/cloudy_card.dart';
-import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
@@ -16,9 +15,6 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authenticationBloc = context.watch<AuthenticationBloc>();
-    final token = authenticationBloc.state.token;
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocConsumer<DashboardBloc, DashboardState>(
@@ -39,7 +35,7 @@ class DashboardView extends StatelessWidget {
         builder: (context, state) {
           
           if (state is DashboardInit) {
-            context.read<DashboardBloc>().add(DashboardGetData(token: token));
+            context.read<DashboardBloc>().add(DashboardGetData());
           }
 
           return SafeArea(
@@ -59,6 +55,7 @@ class DashboardView extends StatelessWidget {
                                 children: [
                                   Text(
                                     "Welcome back, ",
+                                    key: const Key("labelWelcomeBack"),
                                     style: Theme.of(context).textTheme.subtitle2?.copyWith(
                                       color: Theme.of(context).colorScheme.surfaceTint,
                                       fontWeight: FontWeight.w500
@@ -92,6 +89,7 @@ class DashboardView extends StatelessWidget {
                     const SizedBox(height: 32),
                     Text(
                       "Task Summary",
+                      key: const Key("labelTaskSummary"),
                       textAlign: TextAlign.left,
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: Theme.of(context).colorScheme.onBackground
@@ -119,6 +117,7 @@ class DashboardView extends StatelessWidget {
                                     ),
                                     Text(
                                       "Progress",
+                                      key: const Key("labelProgress"),
                                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                         color: Theme.of(context).colorScheme.onBackground,
                                         fontWeight: FontWeight.w500
@@ -157,6 +156,7 @@ class DashboardView extends StatelessWidget {
                                           ),
                                           Text(
                                             "Upcomming",
+                                            key: const Key("labelUpcomming"),
                                             style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                               color: Theme.of(context).colorScheme.onBackground,
                                               fontWeight: FontWeight.w500
@@ -194,6 +194,7 @@ class DashboardView extends StatelessWidget {
                                           ),
                                           Text(
                                             "Completed",
+                                            key: const Key("labelCompleted"),
                                             style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                               color: Theme.of(context).colorScheme.onBackground,
                                               fontWeight: FontWeight.w500

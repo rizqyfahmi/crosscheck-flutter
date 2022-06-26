@@ -40,7 +40,7 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
       final errors = (body["data"]["errors"] as List).map((error) {
         return {
           "field": error["field"],
-          "error": error["error"]
+          "message":  error["message"]
         };
       }).toList();
       throw ServerException(message: body["message"], errors: errors);  

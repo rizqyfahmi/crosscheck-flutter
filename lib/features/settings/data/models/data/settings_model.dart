@@ -1,8 +1,7 @@
-import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart';
 import 'package:flutter/material.dart';
 
-class SettingsModel extends SettingsEntity implements Param {
+class SettingsModel extends SettingsEntity {
   
   const SettingsModel({required super.themeMode});
 

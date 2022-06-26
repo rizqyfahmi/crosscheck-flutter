@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   
-  AuthenticationBloc() : super(const Unauthenticated()) {
-    on<AuthenticationSetToken>((event, emit) {
-      emit(Authenticated(token: event.token));
+  AuthenticationBloc() : super(Unauthenticated()) {
+    on<AuthenticationSetAuthenticated>((event, emit) {
+      emit(Authenticated());
     });
-    on<AuthenticationResetToken>((event, emit) {
-      emit(const Unauthenticated());
+    on<AuthenticationSetUnauthenticated>((event, emit) {
+      emit(Unauthenticated());
     });
   }
 

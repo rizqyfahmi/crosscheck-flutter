@@ -25,7 +25,7 @@ void main() {
   });
 
   test("Should set theme properly", () async {
-    const params = SettingsParams(themeMode: Brightness.light);
+    final params = SettingsParams(themeMode: Brightness.light);
     when(mockSharedPreferences.setString("CACHED_SETTINGS", json.encode(params.toJSON()))).thenAnswer((_) async => true);
 
     await settingsLocalDataSource.setTheme(params);
@@ -34,7 +34,7 @@ void main() {
   });
 
   test("Should return CacheException when set theme is failed", () async {
-    const params = SettingsParams(themeMode: Brightness.light);
+    final params = SettingsParams(themeMode: Brightness.light);
     when(mockSharedPreferences.setString("CACHED_SETTINGS", json.encode(params.toJSON()))).thenAnswer((_) async => false);
 
     final call = settingsLocalDataSource.setTheme;

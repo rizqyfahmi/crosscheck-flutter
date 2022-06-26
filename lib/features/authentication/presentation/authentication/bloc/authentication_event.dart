@@ -7,15 +7,5 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class AuthenticationSetToken extends AuthenticationEvent {
-  final String token;
-
-  const AuthenticationSetToken({
-    required this.token
-  });
-
-  @override
-  List<Object?> get props => [token];
-}
-
-class AuthenticationResetToken extends AuthenticationEvent {}
+class AuthenticationSetAuthenticated extends AuthenticationEvent {}
+class AuthenticationSetUnauthenticated extends AuthenticationEvent {}

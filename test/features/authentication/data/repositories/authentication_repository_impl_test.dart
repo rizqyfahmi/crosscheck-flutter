@@ -27,7 +27,7 @@ void main() {
   late MockAuthenticationLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
   late AuthenticationRepository repository;
-  late RegistrationParams params;
+  late RegistrationParams registrationParams;
   late LoginParams loginParams;
   
   // Mock Result
@@ -44,7 +44,7 @@ void main() {
       local: mockLocalDataSource,
       networkInfo: mockNetworkInfo
     );
-    params = RegistrationParams(
+    registrationParams = RegistrationParams(
       name: "Fulan",
       email: "fulan@email.com",
       password: "fulan123",
@@ -53,69 +53,127 @@ void main() {
     loginParams = LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
-  test("Should get AunthenticationModel on registration when device is online", () async {
-    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockRemoteDataSource.registration(params)).thenAnswer((_) async => responseModel);
+  group("Registration", () {
+    group("Offline device", () {
+      test("Should not register a new account and return NetworkFailure", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+        
+        final result = await repository.registration(registrationParams);
 
-    final result = await repository.registration(params);
+        expect(result, Left(NetworkFailure()));
+        verify(mockNetworkInfo.isConnected);
+        verifyNever(mockRemoteDataSource.registration(registrationParams));
+        verifyNever(mockLocalDataSource.setToken(any));
+      });
+    });
+    group("Online device", () {
+      test("Should register a new account and set authentication token properly", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.registration(any)).thenAnswer((_) async => responseModel);
+
+        final result = await repository.registration(registrationParams);
+
+        expect(result, const Right(null));
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.registration(registrationParams));
+        verify(mockLocalDataSource.setToken(any));
+      });
+
+      test("Should not register a new account and return ServerFailure when registration returns ServerException", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.registration(any)).thenThrow(ServerException(message: Failure.generalError));
+        
+        final result = await repository.registration(registrationParams);
+
+        expect(result, Left(ServerFailure(message: Failure.generalError)));
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.registration(registrationParams));
+        verifyNever(mockLocalDataSource.setToken(any));
+      });
+
+      test("Should not register a new account and return CachedFailure when registration returns CacheException", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.registration(any)).thenAnswer((_) async => responseModel);
+        when(mockLocalDataSource.setToken(any)).thenThrow(CacheException(message: Failure.cacheError));
+        
+        final result = await repository.registration(registrationParams);
+
+        expect(result, Left(CachedFailure(message: Failure.cacheError)));
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.registration(registrationParams));
+        verify(mockLocalDataSource.setToken(any));
+      });
+    });
+  });
+
+  group("Login", () {
+    group("Offline device", () {
+      test("Should not logged in and return NetworkFailure", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+        
+        final result = await repository.login(loginParams);
+
+        expect(result, Left(NetworkFailure()));
+        verify(mockNetworkInfo.isConnected);
+        verifyNever(mockRemoteDataSource.login(loginParams));
+        verifyNever(mockLocalDataSource.setToken(any));
+      });
+    });
+    group("Online device", () {
+      test("Should logged in and set authentication token properly", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.login(any)).thenAnswer((_) async => responseModel);
+
+        final result = await repository.login(loginParams);
+
+        expect(result, const Right(null));
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.login(loginParams));
+        verify(mockLocalDataSource.setToken(any));
+      });
+
+      test("Should not logged in and return ServerFailure when registration returns ServerException", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.login(any)).thenThrow(ServerException(message: Failure.generalError));
+        
+        final result = await repository.login(loginParams);
+
+        expect(result, Left(ServerFailure(message: Failure.generalError)));
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.login(loginParams));
+        verifyNever(mockLocalDataSource.setToken(any));
+      });
+
+      test("Should not logged in and return CachedFailure when registration returns CacheException", () async {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.login(any)).thenAnswer((_) async => responseModel);
+        when(mockLocalDataSource.setToken(any)).thenThrow(CacheException(message: Failure.cacheError));
+        
+        final result = await repository.login(loginParams);
+
+        expect(result, Left(CachedFailure(message: Failure.cacheError)));
+        verify(mockNetworkInfo.isConnected);
+        verify(mockRemoteDataSource.login(loginParams));
+        verify(mockLocalDataSource.setToken(any));
+      });
+    });
+  });
+
+  test("Should get cached token properly", () async {
+    when(mockLocalDataSource.getToken()).thenAnswer((_) async => AuthenticationModel(token: token));
+
+    final result = await repository.getToken();
 
     expect(result, Right(authenticationEntity));
-    verify(mockNetworkInfo.isConnected);
-    verifyNoMoreInteractions(mockNetworkInfo);
-    verify(mockRemoteDataSource.registration(params));
-    verifyNoMoreInteractions(mockRemoteDataSource);
+    verify(mockLocalDataSource.getToken());
   });
 
-  test("Should get NetworkFailure on registration when device is offline", () async {
-    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-    
-    final result = await repository.registration(params);
+  test("Should returns CachedFailure when get token returns CacheException ", () async {
+    when(mockLocalDataSource.getToken()).thenThrow(CacheException(message: Failure.cacheError));
 
-    expect(result, Left(NetworkFailure()));
-    verify(mockNetworkInfo.isConnected);
-    verifyNoMoreInteractions(mockNetworkInfo);
+    final result = await repository.getToken();
+
+    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    verify(mockLocalDataSource.getToken());
   });
-
-  test("Should setToken is called when token would be cached", () async {
-    when(mockLocalDataSource.setToken(token)).thenAnswer((_) async => true);
-
-    await repository.setToken(token);
-
-    verify(mockLocalDataSource.setToken(token));
-    verifyNoMoreInteractions(mockLocalDataSource);
-  });
-
-  test("Should get AuthenticationModel on login when device is online", () async {
-    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockRemoteDataSource.login(loginParams)).thenAnswer((_) async => responseModel);
-
-    final result = await repository.login(loginParams);
-    
-    expect(result, Right(authenticationEntity));
-    verify(mockNetworkInfo.isConnected);
-    verify(mockRemoteDataSource.login(loginParams));
-  });
-
-  test("Should get NetworkFailure when login is failed because of device is offline", () async {
-    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-    when(mockRemoteDataSource.login(loginParams)).thenAnswer((_) async => responseModel);
-
-    final result = await repository.login(loginParams);
-
-    expect(result, Left(NetworkFailure()));
-    verify(mockNetworkInfo.isConnected);
-    verifyNever(mockRemoteDataSource.login(loginParams));
-  });
-
-  test("Should get ServerFailure when login is failed because of ServerException", () async {
-    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockRemoteDataSource.login(loginParams)).thenThrow(ServerException(message: "Something went wrong"));
-
-    final result = await repository.login(loginParams);
-    
-    expect(result, Left(ServerFailure(message: "Something went wrong")));
-    verify(mockNetworkInfo.isConnected);
-    verify(mockRemoteDataSource.login(loginParams));
-  });
-
 }

@@ -28,9 +28,7 @@ class RegistrationLoading extends RegistrationState {
 }
 
 class RegistrationSuccess extends RegistrationState {
-  final String token;
-
-  const RegistrationSuccess({required this.token}) : super(model: const RegistrationModel());
+  const RegistrationSuccess() : super(model: const RegistrationModel());
 }
 
 class RegistrationGeneralError extends RegistrationState {

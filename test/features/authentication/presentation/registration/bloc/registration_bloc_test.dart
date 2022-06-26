@@ -1,6 +1,5 @@
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/registration/bloc/registration_event.dart';
@@ -20,23 +19,22 @@ void main() {
   late RegistrationParams registrationParams;
 
   // Mock Result
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   const List <Map<String, dynamic>> errors = [
     {
       "field": "name",
-      "error": "Your name should contain at least 8 characters"
+      "message":  "Your name should contain at least 8 characters"
     },
     {
       "field": "email",
-      "error": "Please enter a valid email address"
+      "message":  "Please enter a valid email address"
     },
     {
       "field": "password",
-      "error": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+      "message":  "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
     },
     {
       "field": "confirmPassword",
-      "error": "Your password and confirmation password do not match"
+      "message":  "Your password and confirmation password do not match"
     }
   ];
 
@@ -310,7 +308,7 @@ void main() {
     });
 
     test("Should reset error fields on loading/before registration submit", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Right(null));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
@@ -336,7 +334,7 @@ void main() {
     });
 
     test("Should return RegistrationSuccess(token: token) when registration is success", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Right(null));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
@@ -344,7 +342,7 @@ void main() {
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "")),
         const RegistrationLoading(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "")),
-        const RegistrationSuccess(token: token)
+        const RegistrationSuccess()
       ];
       
       bloc.add(const RegistrationSetName("Fulan"));
@@ -360,7 +358,7 @@ void main() {
       
       final result = await mockRegistrationUseCase(registrationParams);
 
-      expect(result, const Right(AuthenticationEntity(token: token)));
+      expect(result, const Right(null));
       verify(mockRegistrationUseCase(registrationParams));
 
     });
