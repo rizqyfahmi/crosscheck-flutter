@@ -29,13 +29,13 @@ void main() {
   test("Should set theme properly", () async {
     when(mockSettingsLocalDataSource.setTheme(any)).thenAnswer((_) async => Future.value());
 
-    await settingsRepository.setTheme(const SettingsParams(themeMode: Brightness.light));
+    await settingsRepository.setTheme(SettingsParams(themeMode: Brightness.light));
 
-    verify(mockSettingsLocalDataSource.setTheme(const SettingsParams(themeMode: Brightness.light)));
+    verify(mockSettingsLocalDataSource.setTheme(SettingsParams(themeMode: Brightness.light)));
   });
 
   test("Should return CacheExpection when set theme is failed", () async {
-    const params = SettingsParams(themeMode: Brightness.light);
+    final params = SettingsParams(themeMode: Brightness.light);
     when(mockSettingsLocalDataSource.setTheme(params)).thenThrow(CacheException(message: Failure.cacheError));
 
     final call = settingsRepository.setTheme;

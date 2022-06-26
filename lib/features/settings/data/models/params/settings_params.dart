@@ -1,7 +1,12 @@
-import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
+import 'package:crosscheck/core/param/param.dart';
+import 'package:flutter/material.dart';
 
-class SettingsParams extends SettingsModel {
+class SettingsParams extends Param {
+
+  final Brightness themeMode;
   
-  const SettingsParams({required super.themeMode});
+  SettingsParams({required this.themeMode});
+
+  Map<String, dynamic> toJSON() => {"themeMode": themeMode.index};
 
 }
