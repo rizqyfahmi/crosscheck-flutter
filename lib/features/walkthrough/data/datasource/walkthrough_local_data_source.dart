@@ -34,7 +34,7 @@ class WalkthroughLocalDataSourceImpl implements WalkthroughLocalDataSource {
   
   @override
   Future<WalkthroughModel> getIsSkip() {
-    final response = sharedPreferences.getString("isSkip");
+    final response = sharedPreferences.getString("CACHED_WALKTHROUGH");
 
     if (response != null) {
       return Future.value(WalkthroughModel.fromJSON(json.decode(response)));
