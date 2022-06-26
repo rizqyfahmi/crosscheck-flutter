@@ -2,18 +2,19 @@
 // in crosscheck/test/features/dashboard/presentation/bloc/dashboard_bloc_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
-import 'package:crosscheck/core/error/failure.dart' as _i6;
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart'
-    as _i8;
+import 'package:crosscheck/core/error/failure.dart' as _i7;
+import 'package:crosscheck/core/param/param.dart' as _i9;
+import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
+    as _i3;
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart'
-    as _i7;
+    as _i8;
 import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repository.dart'
     as _i2;
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart'
-    as _i4;
-import 'package:dartz/dartz.dart' as _i3;
+    as _i5;
+import 'package:dartz/dartz.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -29,13 +30,16 @@ import 'package:mockito/mockito.dart' as _i1;
 class _FakeDashboardRepository_0 extends _i1.Fake
     implements _i2.DashboardRepository {}
 
-class _FakeEither_1<L, R> extends _i1.Fake implements _i3.Either<L, R> {}
+class _FakeAuthenticationRepository_1 extends _i1.Fake
+    implements _i3.AuthenticationRepository {}
+
+class _FakeEither_2<L, R> extends _i1.Fake implements _i4.Either<L, R> {}
 
 /// A class which mocks [GetDashboardUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetDashboardUsecase extends _i1.Mock
-    implements _i4.GetDashboardUsecase {
+    implements _i5.GetDashboardUsecase {
   MockGetDashboardUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -45,11 +49,16 @@ class MockGetDashboardUsecase extends _i1.Mock
       Invocation.getter(#repository),
       returnValue: _FakeDashboardRepository_0()) as _i2.DashboardRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.DashboardEntity>> call(
-          _i8.DashboardParams? params) =>
+  _i3.AuthenticationRepository get authenticationRepository =>
+      (super.noSuchMethod(Invocation.getter(#authenticationRepository),
+              returnValue: _FakeAuthenticationRepository_1())
+          as _i3.AuthenticationRepository);
+  @override
+  _i6.Future<_i4.Either<_i7.Failure, _i8.DashboardEntity>> call(
+          _i9.NoParam? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
               returnValue:
-                  Future<_i3.Either<_i6.Failure, _i7.DashboardEntity>>.value(
-                      _FakeEither_1<_i6.Failure, _i7.DashboardEntity>()))
-          as _i5.Future<_i3.Either<_i6.Failure, _i7.DashboardEntity>>);
+                  Future<_i4.Either<_i7.Failure, _i8.DashboardEntity>>.value(
+                      _FakeEither_2<_i7.Failure, _i8.DashboardEntity>()))
+          as _i6.Future<_i4.Either<_i7.Failure, _i8.DashboardEntity>>);
 }

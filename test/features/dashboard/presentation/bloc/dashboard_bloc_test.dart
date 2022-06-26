@@ -1,5 +1,4 @@
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
@@ -23,7 +22,6 @@ void main() {
   late DashboardBloc dashboardBloc;
   late DashboardModel dashboardBlocModel;
 
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   final currentDate = DateTime.now();
   final List<ActivityEntity> activities = [
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
@@ -66,9 +64,9 @@ void main() {
 
   test("Should return DashboardSuccess when get dashboard is success", () async {
 
-    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
 
-    dashboardBloc.add(DashboardGetData(token: token));
+    dashboardBloc.add(DashboardGetData());
     
     final expected = [
       DashboardLoading(model: DashboardModel()),
@@ -81,9 +79,9 @@ void main() {
 
   test("Should return DashboardInit when reset dashboard is success", () async {
 
-    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
 
-    dashboardBloc.add(DashboardGetData(token: token));
+    dashboardBloc.add(DashboardGetData());
     dashboardBloc.add(DashboardResetData());
     
     final expected = [
@@ -98,9 +96,9 @@ void main() {
 
   test("Should return DashboardGeneralError when get dashboard is failed", () async {
 
-    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
-    dashboardBloc.add(DashboardGetData(token: token));
+    dashboardBloc.add(DashboardGetData());
     
     final expected = [
       DashboardLoading(model: DashboardModel()),
@@ -113,9 +111,9 @@ void main() {
 
   test("Should return DashboardNoGeneralError when reset dashboard general", () async {
 
-    when(mockGetDashboardUsecase(DashboardParams(token: token))).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
-    dashboardBloc.add(DashboardGetData(token: token));
+    dashboardBloc.add(DashboardGetData());
     dashboardBloc.add(DashboardResetGeneralError());
     
     final expected = [

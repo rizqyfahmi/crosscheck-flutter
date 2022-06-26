@@ -38,7 +38,6 @@ void main() {
   late MainBloc mainBloc;
   late Widget testWidget;
 
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   final currentDate = DateTime.now();
   final List<ActivityEntity> activities = [
     ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
@@ -67,7 +66,7 @@ void main() {
   });
 
   testWidgets("Should display initial dashboard page properly", (WidgetTester tester) async {
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
@@ -88,7 +87,7 @@ void main() {
   });
 
   testWidgets("Should display loading modal properly", (WidgetTester tester) async {
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
@@ -110,7 +109,7 @@ void main() {
   });
 
   testWidgets("Should properly load data on dashboard page", (WidgetTester tester) async {
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
@@ -135,7 +134,7 @@ void main() {
   });
 
   testWidgets("Should display error modal when get dashboard is failed", (WidgetTester tester) async {
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
@@ -159,7 +158,7 @@ void main() {
   });
 
   testWidgets("Should display error modal when get dashboard is failed", (WidgetTester tester) async {
-    when(mockAuthenticationBloc.state).thenReturn(const Authenticated(token: token));
+    when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {

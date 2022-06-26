@@ -3,7 +3,6 @@ import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/fonts/fonts.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart';
@@ -40,9 +39,6 @@ void main() {
   late AuthenticationBloc authenticationBloc;
   late LoginBloc loginBloc;
   late Widget testWidget;
-
-  // Mock Result
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
   group("Display login page, loading dialog, and error dialog that are triggered by iterable stream", () {
     setUp(() {
@@ -119,19 +115,19 @@ void main() {
     testWidgets("Should set token into authenticaton block when state is LoginSuccess", (WidgetTester tester) async {
       when(mockLoginBloc.state).thenReturn(const LoginInitial());
       when(mockLoginBloc.stream).thenAnswer((_) => Stream.fromIterable([
-        const LoginSuccess(token: token)
+        const LoginSuccess()
       ]));
       when(mockMainBloc.state).thenReturn(const MainInit());
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       when(mockDashboardBloc.state).thenReturn(DashboardInit());
       when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       
-      expect(authenticationBloc.state, const Unauthenticated());
+      expect(authenticationBloc.state, Unauthenticated());
       
       await tester.pumpWidget(testWidget);
       await tester.pump();
 
-      expect(authenticationBloc.state, const Authenticated(token: token));
+      expect(authenticationBloc.state, Authenticated());
     });
   });
 
@@ -164,7 +160,7 @@ void main() {
     });
 
     testWidgets("Should display loading dialog on submit login form", (WidgetTester tester) async {
-      when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+      when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(null));
 
       await tester.pumpWidget(testWidget);
       await tester.pump();
@@ -178,7 +174,7 @@ void main() {
     });
 
     testWidgets("Should set token into authentication BLoC when submit login form is success", (WidgetTester tester) async {
-      when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+      when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(null));
       when(mockMainBloc.state).thenReturn(const MainInit());
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       when(mockDashboardBloc.state).thenReturn(DashboardInit());
@@ -187,7 +183,7 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
 
-      expect(authenticationBloc.state, const Unauthenticated());
+      expect(authenticationBloc.state, Unauthenticated());
 
       await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
       await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
@@ -201,8 +197,8 @@ void main() {
         await Future.delayed(const Duration(seconds: 1));
         await tester.pump();
         
-        expect(loginBloc.state, const LoginSuccess(token: token));
-        expect(authenticationBloc.state, const Authenticated(token: token));
+        expect(loginBloc.state, const LoginSuccess());
+        expect(authenticationBloc.state, Authenticated());
       });
       
     });
@@ -216,7 +212,7 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
 
-      expect(authenticationBloc.state, const Unauthenticated());
+      expect(authenticationBloc.state, Unauthenticated());
 
       await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
       await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
@@ -255,7 +251,7 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
 
-      expect(authenticationBloc.state, const Unauthenticated());
+      expect(authenticationBloc.state, Unauthenticated());
 
       await tester.runAsync(() async {
         await tester.tap(find.byKey(const Key("submitButton")));
@@ -291,7 +287,7 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
 
-      expect(authenticationBloc.state, const Unauthenticated());
+      expect(authenticationBloc.state, Unauthenticated());
       await tester.enterText(find.byKey(const Key("usernameField")), "fulan@email.com");
       await tester.enterText(find.byKey(const Key("passwordField")), "Password123");
       await tester.pump();

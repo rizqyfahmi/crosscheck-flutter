@@ -1,5 +1,8 @@
 
 import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/core/param/param.dart';
+import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
+import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
@@ -13,10 +16,12 @@ import 'package:mockito/mockito.dart';
 import 'get_dashboard_usecase_test.mocks.dart';
 
 @GenerateMocks([
-  DashboardRepository
+  DashboardRepository,
+  AuthenticationRepository
 ])
 void main() {
   late MockDashboardRepository mockDashboardRepository;
+  late MockAuthenticationRepository mockAuthenticationRepository;
   late GetDashboardUsecase getDashboardUsecase;
 
   // Mock Result
@@ -37,24 +42,43 @@ void main() {
   
   setUp(() {
     mockDashboardRepository = MockDashboardRepository();
-    getDashboardUsecase = GetDashboardUsecase(repository: mockDashboardRepository);
+    mockAuthenticationRepository = MockAuthenticationRepository();
+    getDashboardUsecase = GetDashboardUsecase(
+      repository: mockDashboardRepository,
+      authenticationRepository: mockAuthenticationRepository
+    );
   });
 
-  test("Should return DashboardEntity when get dashboard is success", () async {
+  test("Should get DashboardEntity properly", () async {
+    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
     when(mockDashboardRepository.getDashboard(DashboardParams(token: token))).thenAnswer((_) async => Right(entity));
 
-    final result = await getDashboardUsecase(DashboardParams(token: token));
+    final result = await getDashboardUsecase(NoParam());
 
     expect(result, Right(entity));
+    verify(mockAuthenticationRepository.getToken());
     verify(mockDashboardRepository.getDashboard(DashboardParams(token: token)));
   });
 
-  test("Should return ServerFailure when get dashboard is failed", () async {
+  test("Should returns CacheFailure when get token is failed", () async {
+    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
     when(mockDashboardRepository.getDashboard(DashboardParams(token: token))).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
-    final result = await getDashboardUsecase(DashboardParams(token: token));
+    final result = await getDashboardUsecase(NoParam());
+
+    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    verify(mockAuthenticationRepository.getToken());
+    verifyNever(mockDashboardRepository.getDashboard(DashboardParams(token: token)));
+  });
+
+  test("Should returns CacheFailure when get dashboard is failed", () async {
+    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+    when(mockDashboardRepository.getDashboard(DashboardParams(token: token))).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+
+    final result = await getDashboardUsecase(NoParam());
 
     expect(result, Left(ServerFailure(message: Failure.generalError)));
+    verify(mockAuthenticationRepository.getToken());
     verify(mockDashboardRepository.getDashboard(DashboardParams(token: token)));
   });
 

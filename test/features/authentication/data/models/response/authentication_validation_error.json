@@ -4,19 +4,19 @@
         "errors": [
             {
                 "field": "name",
-                "error": "Your name should contain at least 8 characters"
+                "message": "Your name should contain at least 8 characters"
             },
             {
                 "field": "email",
-                "error": "Please enter a valid email address"
+                "message": "Please enter a valid email address"
             },
             {
                 "field": "password",
-                "error": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
+                "message": "A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required."
             },
             {
                 "field": "confirmPassword",
-                "error": "Your password and confirmation password do not match"
+                "message": "Your password and confirmation password do not match"
             }
         ]
     }

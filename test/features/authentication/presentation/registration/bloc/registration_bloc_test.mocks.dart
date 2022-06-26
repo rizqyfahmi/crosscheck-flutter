@@ -6,8 +6,6 @@ import 'dart:async' as _i5;
 
 import 'package:crosscheck/core/error/failure.dart' as _i6;
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
-    as _i8;
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
     as _i7;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i2;
@@ -46,11 +44,15 @@ class MockRegistrationUsecase extends _i1.Mock
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.AuthenticationEntity>> call(
-          _i8.RegistrationParams? params) =>
+  _i5.Future<_i3.Either<_i6.Failure, void>> call(
+          _i7.RegistrationParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<
-                      _i3.Either<_i6.Failure, _i7.AuthenticationEntity>>.value(
-                  _FakeEither_1<_i6.Failure, _i7.AuthenticationEntity>()))
-          as _i5.Future<_i3.Either<_i6.Failure, _i7.AuthenticationEntity>>);
+              returnValue: Future<_i3.Either<_i6.Failure, void>>.value(
+                  _FakeEither_1<_i6.Failure, void>()))
+          as _i5.Future<_i3.Either<_i6.Failure, void>>);
+  @override
+  List<Map<String, dynamic>> getFieldValidation(
+          _i7.RegistrationParams? params) =>
+      (super.noSuchMethod(Invocation.method(#getFieldValidation, [params]),
+          returnValue: <Map<String, dynamic>>[]) as List<Map<String, dynamic>>);
 }

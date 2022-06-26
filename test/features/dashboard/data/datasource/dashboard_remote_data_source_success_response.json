@@ -1,5 +1,5 @@
 {
-    "message": "The request has succeeded",
+    "message":  "The request has succeeded",
     "data": {
         "upcoming": 20,
         "completed": 5,

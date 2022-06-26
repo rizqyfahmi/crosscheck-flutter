@@ -7,22 +7,21 @@ void main() {
   late AuthenticationBloc bloc;
   
   // Mock Result
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-
+  
   setUp(() {
     bloc = AuthenticationBloc();
   });
 
   test("Should return Unauthenticated() at first time ", () {
-    expect(bloc.state, const Unauthenticated());
+    expect(bloc.state, Unauthenticated());
   });
 
   test("Should return Authenticated() when token is set", () {
     final expected = [
-      const Authenticated(token: token)
+      Authenticated()
     ];
 
-    bloc.add(const AuthenticationSetToken(token: token));
+    bloc.add(AuthenticationSetAuthenticated());
 
     // expect stream value
     expectLater(bloc.stream, emitsInOrder(expected));
@@ -30,10 +29,10 @@ void main() {
 
   test("Should return UnAuthenticated() when token is reset", () {
     final expected = [
-      const Unauthenticated()
+      Unauthenticated()
     ];
 
-    bloc.add(AuthenticationResetToken());
+    bloc.add(AuthenticationSetUnauthenticated());
 
     // expect stream value
     expectLater(bloc.stream, emitsInOrder(expected));

@@ -1,7 +1,6 @@
 
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
-import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/login/bloc/login_event.dart';
@@ -19,9 +18,6 @@ void main() {
   late MockLoginUsecase mockLoginUsecase;
   late LoginBloc bloc;
   late LoginParams loginParams;
-
-  // Mock Result
-  const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
   setUp(() {
     mockLoginUsecase = MockLoginUsecase();
@@ -94,7 +90,7 @@ void main() {
   });
 
   test("Should return LoginLoading on submit login form", () {
-    when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+    when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(null));
 
     final expected = [
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
@@ -110,13 +106,13 @@ void main() {
   });
 
   test("Should return LoginSuccess when submit login form is success", () async {
-    when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
+    when(mockLoginUsecase(any)).thenAnswer((_) async => const Right(null));
 
     final expected = [
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
       const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")),
-      const LoginSuccess(token: token)
+      const LoginSuccess()
     ];
 
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
