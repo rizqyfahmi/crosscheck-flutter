@@ -26,18 +26,20 @@ void main() {
   test("Should set theme properly", () async {
     when(mockSettingsRepository.setTheme(any)).thenAnswer((_) async => Future.value());
 
-    final result = await setThemeUsecase(SettingsParams(themeMode: Brightness.light));
+    final params = SettingsParams(themeMode: Brightness.light);
+    final result = await setThemeUsecase(params);
 
-    verify(mockSettingsRepository.setTheme(SettingsParams(themeMode: Brightness.light)));
+    verify(mockSettingsRepository.setTheme(params.themeMode));
     expect(result, const Right(null));
   });
 
   test("Should return CachedFailure when set theme is failed", () async {
     when(mockSettingsRepository.setTheme(any)).thenThrow(CacheException(message: Failure.cacheError));
 
-    final result = await setThemeUsecase(SettingsParams(themeMode: Brightness.light));
+    final params = SettingsParams(themeMode: Brightness.light);
+    final result = await setThemeUsecase(params);
 
-    verify(mockSettingsRepository.setTheme(SettingsParams(themeMode: Brightness.light)));
+    verify(mockSettingsRepository.setTheme(params.themeMode));
     expect(result, Left(CachedFailure(message: Failure.cacheError)));
   });
 }

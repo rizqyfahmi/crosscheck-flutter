@@ -3,7 +3,6 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart';
-import 'package:crosscheck/features/settings/data/models/params/settings_params.dart';
 import 'package:crosscheck/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -29,18 +28,19 @@ void main() {
   test("Should set theme properly", () async {
     when(mockSettingsLocalDataSource.setTheme(any)).thenAnswer((_) async => Future.value());
 
-    await settingsRepository.setTheme(SettingsParams(themeMode: Brightness.light));
+    const params = SettingsModel(themeMode: Brightness.light);
+    await settingsRepository.setTheme(params.themeMode);
 
-    verify(mockSettingsLocalDataSource.setTheme(SettingsParams(themeMode: Brightness.light)));
+    verify(mockSettingsLocalDataSource.setTheme(params));
   });
 
   test("Should return CacheExpection when set theme is failed", () async {
-    final params = SettingsParams(themeMode: Brightness.light);
-    when(mockSettingsLocalDataSource.setTheme(params)).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockSettingsLocalDataSource.setTheme(any)).thenThrow(CacheException(message: Failure.cacheError));
 
+    const params = SettingsModel(themeMode: Brightness.light);
     final call = settingsRepository.setTheme;
 
-    expect(call(params), throwsA(
+    expect(call(params.themeMode), throwsA(
       predicate((error) => error is CacheException
     )));
 

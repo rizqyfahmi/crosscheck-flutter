@@ -8,8 +8,6 @@ import 'package:crosscheck/features/settings/data/datasource/settings_local_data
     as _i3;
 import 'package:crosscheck/features/settings/data/models/data/settings_model.dart'
     as _i2;
-import 'package:crosscheck/features/settings/data/models/params/settings_params.dart'
-    as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -34,7 +32,7 @@ class MockSettingsLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> setTheme(_i5.SettingsParams? params) =>
+  _i4.Future<void> setTheme(_i2.SettingsModel? params) =>
       (super.noSuchMethod(Invocation.method(#setTheme, [params]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
