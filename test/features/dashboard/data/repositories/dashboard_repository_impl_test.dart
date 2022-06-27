@@ -56,7 +56,7 @@ void main() {
   test("Should return NetworkFailure when get dashboard is failed because of connection lost", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
-    final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+    final result = await dashboardRepository.getDashboard(token: token);
 
     expect(result, Left(NetworkFailure()));
 
@@ -68,7 +68,7 @@ void main() {
     when(mockDashboardRemoteDataSource.getDashboard(token)).thenThrow(ServerException(message: Failure.generalError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
-    final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+    final result = await dashboardRepository.getDashboard(token: token);
 
     expect(result, Left(ServerFailure(message: Failure.generalError)));
 
@@ -80,7 +80,7 @@ void main() {
     when(mockDashboardRemoteDataSource.getDashboard(token)).thenAnswer((_) async => mockModel);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
-    final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+    final result = await dashboardRepository.getDashboard(token: token);
 
     final List<ActivityEntity> expectedActivities = [
       ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
