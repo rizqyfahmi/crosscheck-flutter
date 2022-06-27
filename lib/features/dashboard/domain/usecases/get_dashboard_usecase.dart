@@ -24,7 +24,7 @@ class GetDashboardUsecase implements Usecase<DashboardEntity, NoParam> {
 
     return response.fold(
       (error) => Left(error), 
-      (result) async => await repository.getDashboard(DashboardParams(token: result.token))
+      (result) async => await repository.getDashboard(token: result.token)
     );
   }
   
