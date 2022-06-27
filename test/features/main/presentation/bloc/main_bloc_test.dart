@@ -1,6 +1,7 @@
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/param/param.dart';
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/data/model/data/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
@@ -68,7 +69,7 @@ void main() {
   });
 
   test("Should return MainChanged when set active bottom navigation is success", () async {
-    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
 
     mainBloc.add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.event));
 
@@ -78,12 +79,12 @@ void main() {
 
     expectLater(mainBloc.stream, emitsInOrder(expected));
 
-    await untilCalled(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event)));
-    verify(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event)));
+    await untilCalled(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event)));
+    verify(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event)));
   });
 
   test("Should current state when set active bottom navigation is failed", () async {
-    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
 
     mainBloc.add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.event));
 
@@ -93,7 +94,7 @@ void main() {
 
     expectLater(mainBloc.stream, emitsInOrder(expected));
     
-    await untilCalled(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event)));
-    verify(mockSetActiveBottomNavigationUsecase(const BottomNavigationModel(currentPage: BottomNavigation.event)));
+    await untilCalled(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event)));
+    verify(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event)));
   });
 }

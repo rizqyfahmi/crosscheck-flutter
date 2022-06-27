@@ -1,7 +1,8 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/data/model/data/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart';
 import 'package:crosscheck/features/main/data/repositories/main_repository_impl.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/domain/repositories/main_repository.dart';
@@ -50,7 +51,7 @@ void main() {
     const param = BottomNavigationModel(currentPage: BottomNavigation.event);
     when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenAnswer((_) async => Future.value());
 
-    await mainRepository.setActiveBottomNavigation(param);
+    await mainRepository.setActiveBottomNavigation(param.currentPage);
 
     verify(mockMainLocalDataSource.setActiveBottomNavigation(param));
     
@@ -62,7 +63,7 @@ void main() {
 
     final call = mainRepository.setActiveBottomNavigation;
 
-    expect(call(param), throwsA(
+    expect(call(param.currentPage), throwsA(
       predicate((e) => e is CacheException)
     ));
 

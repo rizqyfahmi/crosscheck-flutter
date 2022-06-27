@@ -5,8 +5,6 @@
 import 'dart:async' as _i4;
 
 import 'package:crosscheck/core/error/failure.dart' as _i5;
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart'
-    as _i7;
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart'
     as _i6;
 import 'package:crosscheck/features/main/domain/repositories/main_repository.dart'
@@ -44,9 +42,9 @@ class MockMainRepository extends _i1.Mock implements _i3.MainRepository {
           .Future<_i2.Either<_i5.Failure, _i6.BottomNavigationEntity>>);
   @override
   _i4.Future<void> setActiveBottomNavigation(
-          _i7.BottomNavigationModel? param) =>
+          _i6.BottomNavigation? currentPage) =>
       (super.noSuchMethod(
-          Invocation.method(#setActiveBottomNavigation, [param]),
+          Invocation.method(#setActiveBottomNavigation, [currentPage]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
 }
