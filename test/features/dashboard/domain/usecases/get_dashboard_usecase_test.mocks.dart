@@ -5,12 +5,8 @@
 import 'dart:async' as _i4;
 
 import 'package:crosscheck/core/error/failure.dart' as _i5;
-import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
-    as _i10;
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
-    as _i9;
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
-    as _i11;
+    as _i9;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i8;
 import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart'
@@ -64,22 +60,34 @@ class MockAuthenticationRepository extends _i1.Mock
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, void>> registration(
-          _i9.RegistrationParams? params) =>
-      (super.noSuchMethod(Invocation.method(#registration, [params]),
+          {String? name,
+          String? email,
+          String? password,
+          String? confirmPassword}) =>
+      (super.noSuchMethod(
+              Invocation.method(#registration, [], {
+                #name: name,
+                #email: email,
+                #password: password,
+                #confirmPassword: confirmPassword
+              }),
               returnValue: Future<_i2.Either<_i5.Failure, void>>.value(
                   _FakeEither_0<_i5.Failure, void>()))
           as _i4.Future<_i2.Either<_i5.Failure, void>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> login(_i10.LoginParams? params) =>
-      (super.noSuchMethod(Invocation.method(#login, [params]),
+  _i4.Future<_i2.Either<_i5.Failure, void>> login(
+          {String? username, String? password}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #login, [], {#username: username, #password: password}),
               returnValue: Future<_i2.Either<_i5.Failure, void>>.value(
                   _FakeEither_0<_i5.Failure, void>()))
           as _i4.Future<_i2.Either<_i5.Failure, void>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i11.AuthenticationEntity>> getToken() =>
+  _i4.Future<_i2.Either<_i5.Failure, _i9.AuthenticationEntity>> getToken() =>
       (super.noSuchMethod(Invocation.method(#getToken, []),
               returnValue: Future<
-                      _i2.Either<_i5.Failure, _i11.AuthenticationEntity>>.value(
-                  _FakeEither_0<_i5.Failure, _i11.AuthenticationEntity>()))
-          as _i4.Future<_i2.Either<_i5.Failure, _i11.AuthenticationEntity>>);
+                      _i2.Either<_i5.Failure, _i9.AuthenticationEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i9.AuthenticationEntity>()))
+          as _i4.Future<_i2.Either<_i5.Failure, _i9.AuthenticationEntity>>);
 }

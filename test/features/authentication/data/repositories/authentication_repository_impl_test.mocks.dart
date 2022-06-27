@@ -4,17 +4,13 @@
 
 import 'dart:async' as _i5;
 
-import 'package:crosscheck/core/network/network_info.dart' as _i9;
+import 'package:crosscheck/core/network/network_info.dart' as _i7;
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart'
-    as _i8;
+    as _i6;
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart'
     as _i4;
 import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart'
     as _i3;
-import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
-    as _i7;
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
-    as _i6;
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -46,14 +42,26 @@ class MockAuthenticationRemoteDataSource extends _i1.Mock
 
   @override
   _i5.Future<_i2.AuthenticationResponseModel> registration(
-          _i6.RegistrationParams? params) =>
-      (super.noSuchMethod(Invocation.method(#registration, [params]),
+          {String? name,
+          String? email,
+          String? password,
+          String? confirmPassword}) =>
+      (super.noSuchMethod(
+              Invocation.method(#registration, [], {
+                #name: name,
+                #email: email,
+                #password: password,
+                #confirmPassword: confirmPassword
+              }),
               returnValue: Future<_i2.AuthenticationResponseModel>.value(
                   _FakeAuthenticationResponseModel_0()))
           as _i5.Future<_i2.AuthenticationResponseModel>);
   @override
-  _i5.Future<_i2.AuthenticationResponseModel> login(_i7.LoginParams? params) =>
-      (super.noSuchMethod(Invocation.method(#login, [params]),
+  _i5.Future<_i2.AuthenticationResponseModel> login(
+          {String? username, String? password}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #login, [], {#username: username, #password: password}),
               returnValue: Future<_i2.AuthenticationResponseModel>.value(
                   _FakeAuthenticationResponseModel_0()))
           as _i5.Future<_i2.AuthenticationResponseModel>);
@@ -63,7 +71,7 @@ class MockAuthenticationRemoteDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationLocalDataSource extends _i1.Mock
-    implements _i8.AuthenticationLocalDataSource {
+    implements _i6.AuthenticationLocalDataSource {
   MockAuthenticationLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -84,7 +92,7 @@ class MockAuthenticationLocalDataSource extends _i1.Mock
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i9.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
