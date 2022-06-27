@@ -13,7 +13,7 @@ class SetIsSkipUsecase implements Usecase<void, WalkthroughParams> {
   @override
   Future<Either<Failure, void>> call(WalkthroughParams params) async {
     
-    final response = await repository.setIsSkip(params);
+    final response = await repository.setIsSkip(params.isSkip);
 
     return response;
   }

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class WalkthroughLocalDataSource {
   
-  Future<void> setIsSkip(WalkthroughParams params);
+  Future<void> setIsSkip(WalkthroughModel model);
 
   Future<WalkthroughModel> getIsSkip();
 
@@ -24,8 +24,8 @@ class WalkthroughLocalDataSourceImpl implements WalkthroughLocalDataSource {
   });
   
   @override
-  Future<void> setIsSkip(WalkthroughParams params) async {
-    final response = await sharedPreferences.setString("CACHED_WALKTHROUGH", jsonEncode(params.toJSON()));
+  Future<void> setIsSkip(WalkthroughModel model) async {
+    final response = await sharedPreferences.setString("CACHED_WALKTHROUGH", jsonEncode(model.toJSON()));
 
     if (!response) {
       throw CacheException(message: Failure.cacheError);
