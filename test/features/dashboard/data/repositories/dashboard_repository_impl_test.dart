@@ -4,7 +4,6 @@ import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/dashboard/data/datasource/dashboard_remote_data_source.dart';
 import 'package:crosscheck/features/dashboard/data/models/data/activity_model.dart';
 import 'package:crosscheck/features/dashboard/data/models/data/dashboard_model.dart';
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/data/repositories/dashboard_repository_impl.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';

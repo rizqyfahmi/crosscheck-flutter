@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/walkthrough/data/models/data/walkthrough_model.dart';
-import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class WalkthroughLocalDataSource {

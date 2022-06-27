@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
 import 'package:crosscheck/features/walkthrough/data/models/data/walkthrough_model.dart';
-import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

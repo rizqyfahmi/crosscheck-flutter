@@ -2,7 +2,6 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
 import 'package:crosscheck/features/walkthrough/data/models/data/walkthrough_model.dart';
-import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:crosscheck/features/walkthrough/data/repositories/walkthrough_repository_impl.dart';
 import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart';
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart';

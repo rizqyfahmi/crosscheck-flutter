@@ -1,7 +1,6 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/usecase/usecase.dart';
-import 'package:crosscheck/features/main/data/model/data/bottom_navigation_model.dart';
 import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/domain/repositories/main_repository.dart';
