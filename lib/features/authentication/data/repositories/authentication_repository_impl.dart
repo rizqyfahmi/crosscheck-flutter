@@ -3,9 +3,7 @@ import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart';
-import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -23,14 +21,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   });
 
   @override
-  Future<Either<Failure, void>> registration(RegistrationParams params) async {
+  Future<Either<Failure, void>> registration({
+    required String name, required String email, required String password, required String confirmPassword
+  }) async {
     bool isConnected = await networkInfo.isConnected;
     if (!isConnected) {
       return Left(NetworkFailure());
     }
     
     try {
-      final result = await remote.registration(params);
+      final result = await remote.registration(
+        name: name, email: email, password: password, confirmPassword: confirmPassword
+      );
       local.setToken(AuthenticationModel(token: result.token));
       return const Right(null);
     } on ServerException catch(e) {
@@ -41,7 +43,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> login(LoginParams params) async {
+  Future<Either<Failure, void>> login({
+    required String username,
+    required String password
+  }) async {
     
     bool isConnected = await networkInfo.isConnected;
     if (!isConnected) {
@@ -49,7 +54,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
     
     try {
-      final result = await remote.login(params);
+      final result = await remote.login(
+        username: username,
+        password: password
+      );
       local.setToken(AuthenticationModel(token: result.token));
       return const Right(null);
     } on ServerException catch (e) {

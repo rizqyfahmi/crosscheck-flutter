@@ -1,15 +1,21 @@
 import 'dart:convert';
 import 'package:crosscheck/core/error/exception.dart';
-import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AuthenticationRemoteDataSource {
   
-  Future<AuthenticationResponseModel> registration(RegistrationParams params);
+  Future<AuthenticationResponseModel> registration({
+    required String name,
+    required String email,
+    required String password,
+    required String confirmPassword
+  });
 
-  Future<AuthenticationResponseModel> login(LoginParams params);
+  Future<AuthenticationResponseModel> login({
+    required String username,
+    required String password
+  });
   
 }
 
@@ -22,11 +28,22 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
   });
   
   @override
-  Future<AuthenticationResponseModel> registration(RegistrationParams params) async {
-    final response = await client.get(
+  Future<AuthenticationResponseModel> registration({
+    required String name,
+    required String email,
+    required String password,
+    required String confirmPassword
+  }) async {
+    final response = await client.post(
       Uri.parse("http://localhost:8080"),
       headers: {
         "Content-Type": "application/json"
+      }, 
+      body: {
+        "name": name,
+        "email": email,
+        "password": password,
+        "confirmPassword": confirmPassword
       }
     );
 
@@ -50,11 +67,18 @@ class AuthenticationRemoteDataSourceImpl implements AuthenticationRemoteDataSour
   }
   
   @override
-  Future<AuthenticationResponseModel> login(LoginParams params) async {
-    final response = await client.get(
+  Future<AuthenticationResponseModel> login({
+    required String username,
+    required String password
+  }) async {
+    final response = await client.post(
       Uri.parse("http://localhost:8080/auth/login"),
       headers: {
         "Content-Type": "application/json"
+      },
+      body: {
+        "username": username,
+        "password": password,
       }
     );
 
