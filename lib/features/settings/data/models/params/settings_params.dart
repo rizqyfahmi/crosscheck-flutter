@@ -7,6 +7,7 @@ class SettingsParams extends Param {
   
   SettingsParams({required this.themeMode});
 
-  Map<String, dynamic> toJSON() => {"themeMode": themeMode.index};
+  @override
+  List<Object?> get props => [themeMode];
 
 }

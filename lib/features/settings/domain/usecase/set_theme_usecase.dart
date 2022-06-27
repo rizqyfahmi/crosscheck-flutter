@@ -15,7 +15,7 @@ class SetThemeUsecase implements Usecase<void, SettingsParams> {
   Future<Either<Failure, void>> call(SettingsParams params) async {
 
     try {
-      await repository.setTheme(params);
+      await repository.setTheme(params.themeMode);
       return const Right(null);
     } on CacheException catch (e) {
       return Left(CachedFailure(message: e.message));
