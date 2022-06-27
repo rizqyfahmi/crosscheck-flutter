@@ -5,10 +5,8 @@
 import 'dart:async' as _i4;
 
 import 'package:crosscheck/core/error/failure.dart' as _i5;
-import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart'
-    as _i6;
 import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart'
-    as _i7;
+    as _i6;
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart'
     as _i3;
 import 'package:dartz/dartz.dart' as _i2;
@@ -36,17 +34,16 @@ class MockWalkthroughRepository extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, dynamic>> setIsSkip(
-          _i6.WalkthroughParams? params) =>
-      (super.noSuchMethod(Invocation.method(#setIsSkip, [params]),
+  _i4.Future<_i2.Either<_i5.Failure, dynamic>> setIsSkip(bool? isSkip) =>
+      (super.noSuchMethod(Invocation.method(#setIsSkip, [isSkip]),
               returnValue: Future<_i2.Either<_i5.Failure, dynamic>>.value(
                   _FakeEither_0<_i5.Failure, dynamic>()))
           as _i4.Future<_i2.Either<_i5.Failure, dynamic>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i7.WalkthroughEntity>> getIsSkip() =>
+  _i4.Future<_i2.Either<_i5.Failure, _i6.WalkthroughEntity>> getIsSkip() =>
       (super.noSuchMethod(Invocation.method(#getIsSkip, []),
               returnValue:
-                  Future<_i2.Either<_i5.Failure, _i7.WalkthroughEntity>>.value(
-                      _FakeEither_0<_i5.Failure, _i7.WalkthroughEntity>()))
-          as _i4.Future<_i2.Either<_i5.Failure, _i7.WalkthroughEntity>>);
+                  Future<_i2.Either<_i5.Failure, _i6.WalkthroughEntity>>.value(
+                      _FakeEither_0<_i5.Failure, _i6.WalkthroughEntity>()))
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.WalkthroughEntity>>);
 }

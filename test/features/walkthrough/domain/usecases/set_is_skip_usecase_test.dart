@@ -23,7 +23,7 @@ void main() {
   });
 
   test("Should set \"is skip\" status", () async {
-    when(mockWalkthroughRepository.setIsSkip(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
+    when(mockWalkthroughRepository.setIsSkip(true)).thenAnswer((_) async => const Right(null));
 
     final result = await setIsSkipUsecase(WalkthroughParams(isSkip: true));
 
@@ -32,7 +32,7 @@ void main() {
   });
 
   test("Should not set \"is skip\" status and return CachedFailure when error is happened", () async {
-    when(mockWalkthroughRepository.setIsSkip(WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockWalkthroughRepository.setIsSkip(true)).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
 
     final result = await setIsSkipUsecase(WalkthroughParams(isSkip: true));
 
