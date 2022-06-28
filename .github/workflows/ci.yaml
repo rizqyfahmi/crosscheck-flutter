@@ -8,9 +8,9 @@ on:
       - master
 
 jobs:
-  analyze:
-    name: Run flutter analyze
-    runs-on: macos-latest
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
@@ -18,6 +18,50 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
       - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Get All Dependencies
+        run: flutter pub get
+      - name: Run Lint
+        run: flutter analyze
+    
+  unit-test:
+    name: Unit Test
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Get All Dependencies
+        run: flutter pub get
+      - name: Run Test
+        run: |
+          flutter test test/features/*/data
+          flutter test test/features/*/domain
+          flutter test test/features/*/presentation/bloc
+          flutter test test/features/*/presentation/*/bloc
+
+  android-widget-test:
+    name: Android Widget Test
+    needs: [unit-test]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
       - name: Create Android Emulator
@@ -30,44 +74,74 @@ jobs:
           echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update --channel=0
           echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-29;default;x86"
           echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86" --tag "default" --abi "x86"
-          echo "skin.name=768x1280" >> ~/.android/avd/generic_10.avd/config.ini
-          echo "hw.lcd.density=480" >> ~/.android/avd/generic_10.avd/config.ini
+          echo "skin.name=720x1520" >> ~/.android/avd/generic_10.avd/config.ini
+          echo "hw.lcd.density=271" >> ~/.android/avd/generic_10.avd/config.ini
           echo "hw.keyboard=yes" >> ~/.android/avd/generic_10.avd/config.ini
           $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list avd
           echo "Starting emulator"
-          $ANDROID_HOME/emulator/emulator -avd generic_10 -no-window -no-audio -debug-init > /dev/null 2>&1 &
+          $ANDROID_HOME/emulator/emulator -avd generic_10 -port 5037 -no-window -no-audio -debug-init > /dev/null 2>&1 &
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           $ANDROID_HOME/platform-tools/adb devices
           echo "Android Emulator started"
+      - name: Flutter List devices
+        run: | 
+          flutter devices
+      - name: Get All Dependencies
+        run: flutter pub get
+      - name: Run Wakthrough Test
+        run: flutter test test/features/walkthrough/presentation/view -d "emulator-5037"
+      - name: Run Register Test
+        run: flutter test test/features/authentication/presentation/register/view -d "emulator-5037"
+      - name: Run Login Test
+        run: flutter test test/features/authentication/presentation/login/view -d "emulator-5037"
+      - name: Run Main Test
+        run: flutter test test/features/main/presentation/view -d "emulator-5037"
+      - name: Run Dashboard Test
+        run: flutter test test/features/dashboard/presentation/view -d "emulator-5037"
+      - name: Run Settings Test
+        run: flutter test test/features/settings/presentation/view -d "emulator-5037"
+
+  ios-widget-test:
+    name: IOS Widget Test
+    needs: [unit-test]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
       - name: Create iOS Simulator
         run: |
           sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
           sudo ln -s /Applications/Xcode_12.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 15.2.simruntime
           xcrun simctl list runtimes
-          UDID=$(xcrun simctl create "iPhone X" "com.apple.CoreSimulator.SimDeviceType.iPhone-X" "com.apple.CoreSimulator.SimRuntime.iOS-15-2")
+          UDID=$(xcrun simctl create "iPhone 11 Pro" "com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-15-2")
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
           echo "IOS Simulator Started"
           # xcrun simctl list devices
       - name: Flutter List devices
         run: | 
           flutter devices
-          
-          
-  # test:
-  #   name: Run flutter test
-  #   needs: [analyze]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'zulu'
-  #         java-version: '11'
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: "stable"
-  #     - run: flutter pub get
-  #     - run: flutter test
+      - name: Get All Dependencies
+        run: flutter pub get
+      - name: Run Wakthrough Test
+        run: flutter test test/features/walkthrough/presentation/view -d "iPhone 11 Pro"
+      - name: Run Register Test
+        run: flutter test test/features/authentication/presentation/register/view -d "iPhone 11 Pro"
+      - name: Run Login Test
+        run: flutter test test/features/authentication/presentation/login/view -d "iPhone 11 Pro"
+      - name: Run Main Test
+        run: flutter test test/features/main/presentation/view -d "iPhone 11 Pro"
+      - name: Run Dashboard Test
+        run: flutter test test/features/dashboard/presentation/view -d "iPhone 11 Pro"
+      - name: Run Settings Test
+        run: flutter test test/features/settings/presentation/view -d "iPhone 11 Pro"
 
   # build_ios:
   #   name: Build iOS
