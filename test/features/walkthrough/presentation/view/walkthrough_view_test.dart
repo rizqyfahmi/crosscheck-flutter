@@ -127,30 +127,32 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byKey(const Key("getStartedButton")), findsOneWidget);
 
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 2));
         await tester.pumpAndSettle();
 
         await tester.ensureVisible(find.byKey(const Key("logo")));
         await tester.pumpAndSettle();
         expect(find.byKey(const Key("logo")), findsOneWidget);
 
-        // await tester.ensureVisible(find.byKey(const Key("usernameField")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("usernameField")), findsOneWidget);
+        await tester.ensureVisible(find.byKey(const Key("usernameField")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("usernameField")), findsOneWidget);
 
-        // await tester.ensureVisible(find.byKey(const Key("passwordField")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("passwordField")), findsOneWidget);
+        await tester.ensureVisible(find.byKey(const Key("passwordField")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("passwordField")), findsOneWidget);
 
-        // await tester.ensureVisible(find.byKey(const Key("submitButton")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("submitButton")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("forgotPasswordTextButton")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("forgotPasswordTextButton")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("signUpTextButton")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("signUpTextButton")), findsOneWidget);
+        await tester.ensureVisible(find.byKey(const Key("submitButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("submitButton")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("forgotPasswordTextButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("forgotPasswordTextButton")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("signUpTextButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("signUpTextButton")), findsOneWidget);
 
       });
     });
@@ -174,31 +176,36 @@ void main() {
         expect(find.byKey(const Key("illustration")), findsOneWidget);
         expect(find.text("Welcome"), findsOneWidget);
         expect(find.text("Focus on your short and long-term habit to improve productivity and achieve your goals. Enjoy your way to better time management"), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("illustration")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("getStartedButton")), findsOneWidget);
+        await tester.ensureVisible(find.byKey(const Key("getStartedButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("getStartedButton")), findsOneWidget);
 
-        // await Future.delayed(const Duration(seconds: 1));
-        // await tester.pumpAndSettle();
+        await Future.delayed(const Duration(seconds: 2));
+        await tester.pumpAndSettle();
 
-        // await tester.ensureVisible(find.byKey(const Key("logo")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("logo")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("usernameField")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("usernameField")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("passwordField")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("passwordField")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("submitButton")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("submitButton")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("forgotPasswordTextButton")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("forgotPasswordTextButton")), findsOneWidget);
-        // await tester.ensureVisible(find.byKey(const Key("signUpTextButton")));
-        // await tester.pumpAndSettle();
-        // expect(find.byKey(const Key("signUpTextButton")), findsOneWidget);
+        await tester.ensureVisible(find.byKey(const Key("logo")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("logo")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("usernameField")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("usernameField")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("passwordField")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("passwordField")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("submitButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("submitButton")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("forgotPasswordTextButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("forgotPasswordTextButton")), findsOneWidget);
+
+        await tester.ensureVisible(find.byKey(const Key("signUpTextButton")));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key("signUpTextButton")), findsOneWidget);
 
       });
 
