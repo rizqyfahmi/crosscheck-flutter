@@ -99,47 +99,46 @@ jobs:
       - name: Run Settings Test
         run: flutter test test/features/settings/presentation/view -d "emulator-5037"
 
-  # ios-widget-test:
-  #   name: IOS Widget Test
-  #   needs: [unit-test]
-  #   runs-on: macos-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Set Up Java
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'zulu'
-  #         java-version: '11'
-  #     - name: Set Up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         channel: "stable"
-  #     - name: Create iOS Simulator
-  #       run: |
-  #         sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
-  #         sudo ln -s /Applications/Xcode_12.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 15.2.simruntime
-  #         xcrun simctl list runtimes
-  #         UDID=$(xcrun simctl create "iPhone 11 Pro" "com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-15-2")
-  #         xcrun simctl boot "${UDID:?No Simulator with this name found}"
-  #         echo "IOS Simulator Started"
-  #         # xcrun simctl list devices
-  #     - name: Flutter List devices
-  #       run: | 
-  #         flutter devices
-  #     - name: Get All Dependencies
-  #       run: flutter pub get
-  #     - name: Run Wakthrough Test
-  #       run: flutter test test/features/walkthrough/presentation/view -d "iPhone 11 Pro"
-  #     - name: Run Register Test
-  #       run: flutter test test/features/authentication/presentation/registration/view -d "iPhone 11 Pro"
-  #     - name: Run Login Test
-  #       run: flutter test test/features/authentication/presentation/login/view -d "iPhone 11 Pro"
-  #     - name: Run Main Test
-  #       run: flutter test test/features/main/presentation/view -d "iPhone 11 Pro"
-  #     - name: Run Dashboard Test
-  #       run: flutter test test/features/dashboard/presentation/view -d "iPhone 11 Pro"
-  #     - name: Run Settings Test
-  #       run: flutter test test/features/settings/presentation/view -d "iPhone 11 Pro"
+  ios-widget-test:
+    name: IOS Widget Test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      - name: Create iOS Simulator
+        run: |
+          sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
+          sudo ln -s /Applications/Xcode_12.4.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 15.2.simruntime
+          xcrun simctl list runtimes
+          UDID=$(xcrun simctl create "iPhone 11 Pro" "com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-15-2")
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+          echo "IOS Simulator Started"
+          # xcrun simctl list devices
+      - name: Flutter List devices
+        run: | 
+          flutter devices
+      - name: Get All Dependencies
+        run: flutter pub get
+      - name: Run Wakthrough Test
+        run: flutter test test/features/walkthrough/presentation/view -d "iPhone 11 Pro"
+      - name: Run Register Test
+        run: flutter test test/features/authentication/presentation/registration/view -d "iPhone 11 Pro"
+      - name: Run Login Test
+        run: flutter test test/features/authentication/presentation/login/view -d "iPhone 11 Pro"
+      - name: Run Main Test
+        run: flutter test test/features/main/presentation/view -d "iPhone 11 Pro"
+      - name: Run Dashboard Test
+        run: flutter test test/features/dashboard/presentation/view -d "iPhone 11 Pro"
+      - name: Run Settings Test
+        run: flutter test test/features/settings/presentation/view -d "iPhone 11 Pro"
 
   # build_ios:
   #   name: Build iOS
