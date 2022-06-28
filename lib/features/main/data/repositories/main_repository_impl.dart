@@ -1,6 +1,6 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart';
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/data/model/data/bottom_navigation_model.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/main/domain/repositories/main_repository.dart';
@@ -25,8 +25,8 @@ class MainRepositoryImpl implements MainRepository {
   }
 
   @override
-  Future<void> setActiveBottomNavigation(BottomNavigationModel param) async {
-    await mainLocalDataSource.setActiveBottomNavigation(param);
+  Future<void> setActiveBottomNavigation(BottomNavigation currentPage) async {
+    await mainLocalDataSource.setActiveBottomNavigation(BottomNavigationModel(currentPage: currentPage));
   }
   
 }

@@ -18,7 +18,10 @@ class LoginUsecase implements Usecase<void, LoginParams> {
       return Left(ServerFailure(message: Failure.loginRequiredFieldError));
     }
     
-    final response = await repository.login(params);
+    final response = await repository.login(
+      username: params.username,
+      password: params.password
+    );
 
     return response.fold(
       (error) => Left(error), 

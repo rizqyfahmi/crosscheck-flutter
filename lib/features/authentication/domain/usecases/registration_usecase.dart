@@ -19,7 +19,12 @@ class RegistrationUsecase implements Usecase<void, RegistrationParams> {
       return Left(ServerFailure(message: Failure.validationError, errors: errors));
     }
 
-    final result = await repository.registration(params);
+    final result = await repository.registration(
+      name: params.name,
+      email: params.email,
+      password: params.password,
+      confirmPassword: params.confirmPassword
+    );
 
     return result.fold(
       (error) => Left(error), 

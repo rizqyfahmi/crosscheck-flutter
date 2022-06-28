@@ -3,7 +3,6 @@ import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/core/usecase/usecase.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:crosscheck/features/authentication/domain/usecases/authentication_usecase.dart';
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -24,7 +23,7 @@ class GetDashboardUsecase implements Usecase<DashboardEntity, NoParam> {
 
     return response.fold(
       (error) => Left(error), 
-      (result) async => await repository.getDashboard(DashboardParams(token: result.token))
+      (result) async => await repository.getDashboard(token: result.token)
     );
   }
   

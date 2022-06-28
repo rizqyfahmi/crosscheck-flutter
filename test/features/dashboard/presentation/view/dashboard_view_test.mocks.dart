@@ -20,7 +20,7 @@ import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repo
     as _i5;
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart'
     as _i17;
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart'
+import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart'
     as _i14;
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart'
     as _i13;
@@ -137,12 +137,13 @@ class MockSetActiveBottomNavigationUsecase extends _i1.Mock
           returnValue: _FakeMainRepository_1()) as _i3.MainRepository);
   @override
   _i8.Future<_i4.Either<_i12.Failure, _i13.BottomNavigationEntity>> call(
-          _i14.BottomNavigationModel? param) =>
-      (super.noSuchMethod(Invocation.method(#call, [param]),
-          returnValue: Future<
-                  _i4.Either<_i12.Failure, _i13.BottomNavigationEntity>>.value(
-              _FakeEither_2<_i12.Failure, _i13.BottomNavigationEntity>())) as _i8
-          .Future<_i4.Either<_i12.Failure, _i13.BottomNavigationEntity>>);
+          _i14.BottomNavigationParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
+              returnValue: Future<
+                      _i4.Either<_i12.Failure,
+                          _i13.BottomNavigationEntity>>.value(
+                  _FakeEither_2<_i12.Failure, _i13.BottomNavigationEntity>()))
+          as _i8.Future<_i4.Either<_i12.Failure, _i13.BottomNavigationEntity>>);
 }
 
 /// A class which mocks [GetActiveBottomNavigationUsecase].

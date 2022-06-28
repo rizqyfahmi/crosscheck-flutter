@@ -4,8 +4,6 @@ import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_local_data_source.dart';
 import 'package:crosscheck/features/authentication/data/datasources/authentication_remote_data_source.dart';
 import 'package:crosscheck/features/authentication/data/models/data/authentication_model.dart';
-import 'package:crosscheck/features/authentication/data/models/request/login_params.dart';
-import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart';
 import 'package:crosscheck/features/authentication/data/models/response/authentication_response_model.dart';
 import 'package:crosscheck/features/authentication/data/repositories/authentication_repository_impl.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
@@ -27,11 +25,9 @@ void main() {
   late MockAuthenticationLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
   late AuthenticationRepository repository;
-  late RegistrationParams registrationParams;
-  late LoginParams loginParams;
   
   // Mock Result
- String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+  String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
   AuthenticationResponseModel responseModel = AuthenticationResponseModel(message: "The request has succeeded", data: AuthenticationModel(token: token));
   AuthenticationEntity authenticationEntity = responseModel.data;
 
@@ -44,13 +40,6 @@ void main() {
       local: mockLocalDataSource,
       networkInfo: mockNetworkInfo
     );
-    registrationParams = RegistrationParams(
-      name: "Fulan",
-      email: "fulan@email.com",
-      password: "fulan123",
-      confirmPassword: "fulan123"
-    );
-    loginParams = LoginParams(username: "fulan@email.com", password: "Password123");
   });
 
   group("Registration", () {
@@ -58,49 +47,71 @@ void main() {
       test("Should not register a new account and return NetworkFailure", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
         
-        final result = await repository.registration(registrationParams);
+        final result = await repository.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        );
 
         expect(result, Left(NetworkFailure()));
         verify(mockNetworkInfo.isConnected);
-        verifyNever(mockRemoteDataSource.registration(registrationParams));
+        verifyNever(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        ));
         verifyNever(mockLocalDataSource.setToken(any));
       });
     });
     group("Online device", () {
       test("Should register a new account and set authentication token properly", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.registration(any)).thenAnswer((_) async => responseModel);
+        when(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        )).thenAnswer((_) async => responseModel);
 
-        final result = await repository.registration(registrationParams);
+        final result = await repository.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        );
 
         expect(result, const Right(null));
         verify(mockNetworkInfo.isConnected);
-        verify(mockRemoteDataSource.registration(registrationParams));
+        verify(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        ));
         verify(mockLocalDataSource.setToken(any));
       });
 
       test("Should not register a new account and return ServerFailure when registration returns ServerException", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.registration(any)).thenThrow(ServerException(message: Failure.generalError));
+        when(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        )).thenThrow(ServerException(message: Failure.generalError));
         
-        final result = await repository.registration(registrationParams);
+        final result = await repository.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        );
 
         expect(result, Left(ServerFailure(message: Failure.generalError)));
         verify(mockNetworkInfo.isConnected);
-        verify(mockRemoteDataSource.registration(registrationParams));
+        verify(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        ));
         verifyNever(mockLocalDataSource.setToken(any));
       });
 
       test("Should not register a new account and return CachedFailure when registration returns CacheException", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.registration(any)).thenAnswer((_) async => responseModel);
+        when(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        )).thenAnswer((_) async => responseModel);
         when(mockLocalDataSource.setToken(any)).thenThrow(CacheException(message: Failure.cacheError));
         
-        final result = await repository.registration(registrationParams);
+        final result = await repository.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        );
 
         expect(result, Left(CachedFailure(message: Failure.cacheError)));
         verify(mockNetworkInfo.isConnected);
-        verify(mockRemoteDataSource.registration(registrationParams));
+        verify(mockRemoteDataSource.registration(
+          name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+        ));
         verify(mockLocalDataSource.setToken(any));
       });
     });
@@ -111,49 +122,71 @@ void main() {
       test("Should not logged in and return NetworkFailure", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
         
-        final result = await repository.login(loginParams);
+        final result = await repository.login(
+          username: "fulan@email.com", password: "fulan123"
+        );
 
         expect(result, Left(NetworkFailure()));
         verify(mockNetworkInfo.isConnected);
-        verifyNever(mockRemoteDataSource.login(loginParams));
+        verifyNever(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        ));
         verifyNever(mockLocalDataSource.setToken(any));
       });
     });
     group("Online device", () {
       test("Should logged in and set authentication token properly", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.login(any)).thenAnswer((_) async => responseModel);
+        when(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        )).thenAnswer((_) async => responseModel);
 
-        final result = await repository.login(loginParams);
+        final result = await repository.login(
+          username: "fulan@email.com", password: "fulan123"
+        );
 
         expect(result, const Right(null));
         verify(mockNetworkInfo.isConnected);
-        verify(mockRemoteDataSource.login(loginParams));
+        verify(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        ));
         verify(mockLocalDataSource.setToken(any));
       });
 
       test("Should not logged in and return ServerFailure when registration returns ServerException", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.login(any)).thenThrow(ServerException(message: Failure.generalError));
+        when(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        )).thenThrow(ServerException(message: Failure.generalError));
         
-        final result = await repository.login(loginParams);
+        final result = await repository.login(
+          username: "fulan@email.com", password: "fulan123"
+        );
 
         expect(result, Left(ServerFailure(message: Failure.generalError)));
         verify(mockNetworkInfo.isConnected);
-        verify(mockRemoteDataSource.login(loginParams));
+        verify(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        ));
         verifyNever(mockLocalDataSource.setToken(any));
       });
 
       test("Should not logged in and return CachedFailure when registration returns CacheException", () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(mockRemoteDataSource.login(any)).thenAnswer((_) async => responseModel);
+        when(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        )).thenAnswer((_) async => responseModel);
         when(mockLocalDataSource.setToken(any)).thenThrow(CacheException(message: Failure.cacheError));
         
-        final result = await repository.login(loginParams);
+        final result = await repository.login(
+          username: "fulan@email.com", password: "fulan123"
+        );
 
         expect(result, Left(CachedFailure(message: Failure.cacheError)));
         verify(mockNetworkInfo.isConnected);
-        verify(mockRemoteDataSource.login(loginParams));
+        verify(mockRemoteDataSource.login(
+          username: "fulan@email.com", password: "fulan123"
+        ));
         verify(mockLocalDataSource.setToken(any));
       });
     });

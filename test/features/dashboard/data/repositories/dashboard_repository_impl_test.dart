@@ -4,7 +4,6 @@ import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/dashboard/data/datasource/dashboard_remote_data_source.dart';
 import 'package:crosscheck/features/dashboard/data/models/data/activity_model.dart';
 import 'package:crosscheck/features/dashboard/data/models/data/dashboard_model.dart';
-import 'package:crosscheck/features/dashboard/data/models/params/dashboard_params.dart';
 import 'package:crosscheck/features/dashboard/data/repositories/dashboard_repository_impl.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
@@ -56,7 +55,7 @@ void main() {
   test("Should return NetworkFailure when get dashboard is failed because of connection lost", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
-    final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+    final result = await dashboardRepository.getDashboard(token: token);
 
     expect(result, Left(NetworkFailure()));
 
@@ -68,7 +67,7 @@ void main() {
     when(mockDashboardRemoteDataSource.getDashboard(token)).thenThrow(ServerException(message: Failure.generalError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
-    final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+    final result = await dashboardRepository.getDashboard(token: token);
 
     expect(result, Left(ServerFailure(message: Failure.generalError)));
 
@@ -80,7 +79,7 @@ void main() {
     when(mockDashboardRemoteDataSource.getDashboard(token)).thenAnswer((_) async => mockModel);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
-    final result = await dashboardRepository.getDashboard(DashboardParams(token: token));
+    final result = await dashboardRepository.getDashboard(token: token);
 
     final List<ActivityEntity> expectedActivities = [
       ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   

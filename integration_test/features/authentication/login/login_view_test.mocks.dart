@@ -18,7 +18,7 @@ import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repo
     as _i5;
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart'
     as _i15;
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart'
+import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart'
     as _i12;
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart'
     as _i11;
@@ -87,8 +87,8 @@ class MockSetActiveBottomNavigationUsecase extends _i1.Mock
           returnValue: _FakeMainRepository_2()) as _i4.MainRepository);
   @override
   _i7.Future<_i3.Either<_i8.Failure, _i11.BottomNavigationEntity>> call(
-          _i12.BottomNavigationModel? param) =>
-      (super.noSuchMethod(Invocation.method(#call, [param]),
+          _i12.BottomNavigationParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
           returnValue: Future<
                   _i3.Either<_i8.Failure, _i11.BottomNavigationEntity>>.value(
               _FakeEither_1<_i8.Failure, _i11.BottomNavigationEntity>())) as _i7

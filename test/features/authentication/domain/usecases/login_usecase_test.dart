@@ -22,39 +22,55 @@ void main() {
   });
 
   test("Should logged in properly", () async {
-    when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => const Right(null));
+    when(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    )).thenAnswer((_) async => const Right(null));
 
     final result = await usecase(loginParams);
 
     expect(result, const Right(null));
-    verify(mockAuthenticationRepository.login(loginParams));
+    verify(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    ));
   });
 
   test("Should returns ServerFailure when login returns ServerFailure", () async {
-    when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    )).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
     final result = await usecase(loginParams);
     
     expect(result, Left(ServerFailure(message: Failure.generalError)));
-    verify(mockAuthenticationRepository.login(loginParams));
+    verify(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    ));
   });
 
   test("Should returns CacheFailure when login returns CacheFailure", () async {
-    when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
+    when(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    )).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
 
     final result = await usecase(loginParams);
     
     expect(result, Left(CachedFailure(message: Failure.generalError)));
-    verify(mockAuthenticationRepository.login(loginParams));
+    verify(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    ));
   });
 
   test("Should returns ServerFailure when login with username or password that is still empty", () async {
-    when(mockAuthenticationRepository.login(loginParams)).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
+    when(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    )).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
 
     final result = await usecase(LoginParams(username: "", password: ""));
     
     expect(result, Left(ServerFailure(message: Failure.loginRequiredFieldError)));
-    verifyNever(mockAuthenticationRepository.login(loginParams));
+    verifyNever(mockAuthenticationRepository.login(
+      username: "fulan@email.com", password: "Password123"
+    ));
   });
 
 }

@@ -6,7 +6,7 @@ import 'dart:async' as _i5;
 
 import 'package:crosscheck/core/error/failure.dart' as _i6;
 import 'package:crosscheck/core/param/param.dart' as _i8;
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart'
+import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart'
     as _i10;
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart'
     as _i7;
@@ -71,8 +71,8 @@ class MockSetActiveBottomNavigationUsecase extends _i1.Mock
           returnValue: _FakeMainRepository_0()) as _i2.MainRepository);
   @override
   _i5.Future<_i3.Either<_i6.Failure, _i7.BottomNavigationEntity>> call(
-          _i10.BottomNavigationModel? param) =>
-      (super.noSuchMethod(Invocation.method(#call, [param]),
+          _i10.BottomNavigationParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
           returnValue: Future<
                   _i3.Either<_i6.Failure, _i7.BottomNavigationEntity>>.value(
               _FakeEither_1<_i6.Failure, _i7.BottomNavigationEntity>())) as _i5

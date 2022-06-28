@@ -224,7 +224,7 @@ void main() {
         expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")));
         expect(find.text("Loading..."), findsOneWidget);
 
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         
         expect(find.text("Loading..."), findsNothing);
@@ -260,7 +260,7 @@ void main() {
         expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "", password: "")));
         expect(find.text("Loading..."), findsOneWidget);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         
         expect(find.text("Loading..."), findsNothing);
@@ -298,7 +298,7 @@ void main() {
         expect(loginBloc.state, const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")));
         expect(find.text("Loading..."), findsOneWidget);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         
         expect(find.text("Loading..."), findsNothing);

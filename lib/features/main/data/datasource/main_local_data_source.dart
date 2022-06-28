@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart';
+import 'package:crosscheck/features/main/data/model/data/bottom_navigation_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class MainLocalDataSource {

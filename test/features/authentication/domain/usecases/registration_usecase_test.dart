@@ -22,34 +22,48 @@ void main() {
   });
 
   test('Should register a new account properly', () async {
-    when(mockAuthenticationRepository.registration(any)).thenAnswer((_) async => const Right(null));
+    when(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    )).thenAnswer((_) async => const Right(null));
 
     final result = await usecase(registrationParams);
 
     expect(result, const Right(null));
-    verify(mockAuthenticationRepository.registration(any));
+    verify(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    ));
   });
 
   test("Should returns ServerFailure when registration returns ServerFailure", () async {
-    when(mockAuthenticationRepository.registration(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    )).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
     final result = await usecase(registrationParams);
     
     expect(result, Left(ServerFailure(message: Failure.generalError)));
-    verify(mockAuthenticationRepository.registration(any));
+    verify(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    ));
   });
 
   test("Should returns CacheFailure when registration returns CacheFailure", () async {
-    when(mockAuthenticationRepository.registration(any)).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
+    when(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    )).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
 
     final result = await usecase(registrationParams);
     
     expect(result, Left(CachedFailure(message: Failure.generalError)));
-    verify(mockAuthenticationRepository.registration(any));
+    verify(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    ));
   });
 
   test("Should returns ServerFailure when register without filling all fields", () async {
-    when(mockAuthenticationRepository.registration(any)).thenAnswer((_) async => const Right(null));
+    when(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    )).thenAnswer((_) async => const Right(null));
 
     final result = await usecase(RegistrationParams(name: "", email: "", password: "", confirmPassword: ""));
     
@@ -72,11 +86,15 @@ void main() {
       },
     ];
     expect(result, Left(ServerFailure(message: Failure.validationError, errors: expected)));
-    verifyNever(mockAuthenticationRepository.registration(any));
+    verifyNever(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    ));
   });
 
   test("Should returns ServerFailure when register without filling at least one field", () async {
-    when(mockAuthenticationRepository.registration(any)).thenAnswer((_) async => const Right(null));
+    when(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    )).thenAnswer((_) async => const Right(null));
 
     final result = await usecase(RegistrationParams(name: "fulan", email: "", password: "Password123", confirmPassword: "Password123"));
     
@@ -87,11 +105,15 @@ void main() {
       }
     ];
     expect(result, Left(ServerFailure(message: Failure.validationError, errors: expected)));
-    verifyNever(mockAuthenticationRepository.registration(any));
+    verifyNever(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    ));
   });
 
   test("Should returns ServerFailure when register with password and confirmation password do not match", () async {
-    when(mockAuthenticationRepository.registration(any)).thenAnswer((_) async => const Right(null));
+    when(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    )).thenAnswer((_) async => const Right(null));
 
     final result = await usecase(RegistrationParams(name: "fulan", email: "fulan@email.com", password: "Password123", confirmPassword: "Password1234"));
     
@@ -102,6 +124,8 @@ void main() {
       }
     ];
     expect(result, Left(ServerFailure(message: Failure.validationError, errors: expected)));
-    verifyNever(mockAuthenticationRepository.registration(any));
+    verifyNever(mockAuthenticationRepository.registration(
+      name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
+    ));
   });
 }

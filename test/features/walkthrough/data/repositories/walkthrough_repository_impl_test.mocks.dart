@@ -8,8 +8,6 @@ import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_loca
     as _i3;
 import 'package:crosscheck/features/walkthrough/data/models/data/walkthrough_model.dart'
     as _i2;
-import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart'
-    as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -35,8 +33,8 @@ class MockWalkthroughLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> setIsSkip(_i5.WalkthroughParams? params) =>
-      (super.noSuchMethod(Invocation.method(#setIsSkip, [params]),
+  _i4.Future<void> setIsSkip(_i2.WalkthroughModel? model) =>
+      (super.noSuchMethod(Invocation.method(#setIsSkip, [model]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
   @override

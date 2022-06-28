@@ -6,7 +6,7 @@ import 'dart:async' as _i4;
 
 import 'package:crosscheck/features/main/data/datasource/main_local_data_source.dart'
     as _i3;
-import 'package:crosscheck/features/main/data/model/bottom_navigation_model.dart'
+import 'package:crosscheck/features/main/data/model/data/bottom_navigation_model.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
