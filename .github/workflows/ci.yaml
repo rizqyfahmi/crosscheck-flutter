@@ -89,7 +89,7 @@ jobs:
       - name: Run Wakthrough Test
         run: flutter test test/features/walkthrough/presentation/view -d "emulator-5037"
       - name: Run Register Test
-        run: flutter test test/features/authentication/presentation/register/view -d "emulator-5037"
+        run: flutter test test/features/authentication/presentation/registration/view -d "emulator-5037"
       - name: Run Login Test
         run: flutter test test/features/authentication/presentation/login/view -d "emulator-5037"
       - name: Run Main Test
@@ -131,7 +131,7 @@ jobs:
   #     - name: Run Wakthrough Test
   #       run: flutter test test/features/walkthrough/presentation/view -d "iPhone 11 Pro"
   #     - name: Run Register Test
-  #       run: flutter test test/features/authentication/presentation/register/view -d "iPhone 11 Pro"
+  #       run: flutter test test/features/authentication/presentation/registration/view -d "iPhone 11 Pro"
   #     - name: Run Login Test
   #       run: flutter test test/features/authentication/presentation/login/view -d "iPhone 11 Pro"
   #     - name: Run Main Test
