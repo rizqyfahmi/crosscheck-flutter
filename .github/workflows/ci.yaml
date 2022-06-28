@@ -20,23 +20,64 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-      - run: flutter pub get
-      - run: flutter analyze
-  test:
-    name: Run flutter test
-    needs: [analyze]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-      - run: flutter pub get
-      - run: flutter test
+      - name: Download Android Command Line Tools
+        env: 
+          ANDROID_HOME: /opt/android-sdk-linux
+        run: |
+          cd /opt 
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O android-commandline-tools.zip
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          unzip -q android-commandline-tools.zip -d /tmp/
+          mv /tmp/cmdline-tools/ $ANDROID_HOME/cmdline-tools/latest
+          rm android-commandline-tools.zip && ls -la $ANDROID_HOME/cmdline-tools/latest/
+      - name: Install Android SDKs and Other Build Packages
+        env: 
+          ANDROID_HOME: /opt/android-sdk-linux
+          ANDROID_SDK_ROOT: /opt/android-sdk-linux
+          ANDROID_AVD_HOME: /opt/android-sdk-linux/.android/avd
+        run: |
+          # sudo apt-get install cpu-checker
+          # sudo /usr/sbin/kvm-ok
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          chmod o+w ~/.android
+          touch ~/.android/repositories.cfg
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "emulator"
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update --channel=0
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-29;default;x86"
+          echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86" --tag "default" --abi "x86"
+          echo "skin.name=768x1280" >> ~/.android/avd/generic_10.avd/config.ini
+          echo "hw.lcd.density=480" >> ~/.android/avd/generic_10.avd/config.ini
+          echo "hw.keyboard=yes" >> ~/.android/avd/generic_10.avd/config.ini
+          cat ~/.android/avd/generic_10.avd/config.ini
+          $ANDROID_HOME/emulator/emulator -list-avds
+          $ANDROID_HOME/emulator/emulator @generic_10 &
+          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list devices
+          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list avd
+          
+          echo "Starting emulator"
+          nohup $ANDROID_HOME/emulator/emulator -avd generic_10 -port 5037 -no-snapshot >/dev/null 2>&1 &
+          $ANDROID_HOME/platform-tools/adb kill-server
+          $ANDROID_HOME/platform-tools/adb start-server
+          $ANDROID_HOME/platform-tools/adb reconnect
+          $ANDROID_HOME/platform-tools/adb devices
+          echo "Emulator started"
+          
+  # test:
+  #   name: Run flutter test
+  #   needs: [analyze]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-java@v2
+  #       with:
+  #         distribution: 'zulu'
+  #         java-version: '11'
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: "stable"
+  #     - run: flutter pub get
+  #     - run: flutter test
 
   # build_ios:
   #   name: Build iOS
