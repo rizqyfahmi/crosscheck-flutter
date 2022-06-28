@@ -242,6 +242,8 @@ void main() {
       await tester.tap(find.byKey(const Key("getStartedButton")));
       await tester.pumpAndSettle();
 
+      await tester.ensureVisible(find.byKey(const Key("signUpTextButton")));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key("signUpTextButton")));
       await tester.pumpAndSettle();
 
