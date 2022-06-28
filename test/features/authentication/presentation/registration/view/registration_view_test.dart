@@ -193,7 +193,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
       });
@@ -222,7 +222,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
@@ -266,7 +266,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
@@ -309,7 +309,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
@@ -352,7 +352,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
 
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
@@ -409,7 +409,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
 
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
@@ -442,7 +442,7 @@ void main() async {
         expect(registrationBloc.state, expected);
         expect(find.text("Loading..."), findsOneWidget);
 
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 4));
         await tester.pump();
         expect(find.text("Loading..."), findsNothing);
 
