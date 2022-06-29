@@ -17,7 +17,7 @@ class AuthenticationResponseModel extends Response {
 
   Map<String, dynamic> toJSON() {
     return {
-      "message":  message,
+      "message": message,
       "data": data
     };
   }
