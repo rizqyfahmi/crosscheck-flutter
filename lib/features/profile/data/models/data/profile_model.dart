@@ -5,12 +5,16 @@ class ProfileModel extends ProfileEntity {
   const ProfileModel({required super.fullname, required super.email, super.dob, super.address, super.photoUrl});
 
   factory ProfileModel.fromJSON(Map<String, dynamic> response) {
+    final isDobNull = response["dob"] == "" || response["dob"] == null;
+    final isAddressNull = response["address"] == "" || response["address"] == null;
+    final isPhotoUrlNull = response["photoUrl"] == "" || response["photoUrl"] == null;
+
     return ProfileModel(
       fullname: response["fullname"],
       email: response["email"],
-      dob: response["dob"],
-      address: response["address"],
-      photoUrl: response["photoUrl"]
+      dob: !isDobNull ? DateTime.parse(response["dob"]) : null,
+      address: !isAddressNull ? response["address"] : null,
+      photoUrl: !isPhotoUrlNull ? response["photoUrl"] : null
     );
   }
 

@@ -1,0 +1,10 @@
+{
+    "message": "The request has succeeded",
+    "data": {
+        "fullname": "fulan",
+        "email": "fulan@email.com",
+        "dob": "",
+        "address": "",
+        "photoUrl": ""
+    }
+}
