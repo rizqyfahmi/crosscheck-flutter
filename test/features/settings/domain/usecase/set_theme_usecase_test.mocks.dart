@@ -35,8 +35,8 @@ class MockSettingsRepository extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> setTheme(_i5.Brightness? mode) =>
-      (super.noSuchMethod(Invocation.method(#setTheme, [mode]),
+  _i4.Future<void> setTheme(_i5.Brightness? themeMode) =>
+      (super.noSuchMethod(Invocation.method(#setTheme, [themeMode]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
   @override

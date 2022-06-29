@@ -43,11 +43,11 @@ void main() {
 
   test("Should returns ProfileEntity from remote data source and set it on local data source when device is online", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockProfileRemoteDataSource.getProfile(token: token)).thenAnswer((_) async => const ProfileResponseModel(message: "Response OK", data: ProfileModel(fullname: "fulan", email: "fulan@email.com")));
+    when(mockProfileRemoteDataSource.getProfile(token: token)).thenAnswer((_) async => const ProfileResponseModel(message: "Response OK", data: ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
     final result = await profileRepository.getProfile(token: token);
 
-    ProfileEntity expected = const ProfileModel(fullname: "fulan", email: "fulan@email.com");
+    ProfileEntity expected = const ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com");
     expect(result, Right(expected));
     verify(mockNetworkInfo.isConnected);
     verify(mockProfileRemoteDataSource.getProfile(token: token));
@@ -57,11 +57,11 @@ void main() {
 
   test("Should returns ProfileEntity from local data source when device is offline", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-    when(mockProfileLocalDataSource.getProfile()).thenAnswer((_) async => const ProfileModel(fullname: "fulan", email: "fulan@email.com"));
+    when(mockProfileLocalDataSource.getProfile()).thenAnswer((_) async => const ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com"));
 
     final result = await profileRepository.getProfile(token: token);
 
-    ProfileEntity expected = const ProfileModel(fullname: "fulan", email: "fulan@email.com");
+    ProfileEntity expected = const ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com");
     expect(result, Right(expected));
     verify(mockNetworkInfo.isConnected);
     verifyNever(mockProfileRemoteDataSource.getProfile(token: token));
@@ -84,7 +84,7 @@ void main() {
 
   test('Should returns CachedFailure when set profile into local data source throws CacheException', () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockProfileRemoteDataSource.getProfile(token: token)).thenAnswer((_) async => const ProfileResponseModel(message: "Response OK", data: ProfileModel(fullname: "fulan", email: "fulan@email.com")));
+    when(mockProfileRemoteDataSource.getProfile(token: token)).thenAnswer((_) async => const ProfileResponseModel(message: "Response OK", data: ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com")));
     when(mockProfileLocalDataSource.setProfile(any)).thenThrow(CacheException(message: Failure.cacheError));
 
     final result = await profileRepository.getProfile(token: token);

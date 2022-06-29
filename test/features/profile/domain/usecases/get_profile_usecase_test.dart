@@ -34,7 +34,7 @@ void main() {
 
   test("Should call profile and authentication repository", () async {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
-    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(fullname: "fulan", email: "fulan@email.com")));
+    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
     await usecase(ProfileParams(token: token));
 
@@ -44,11 +44,11 @@ void main() {
 
   test("Should returns ProfileEntity properly", () async {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
-    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(fullname: "fulan", email: "fulan@email.com")));
+    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
     final result = await usecase(ProfileParams(token: token));
 
-    expect(result, const Right(ProfileEntity(fullname: "fulan", email: "fulan@email.com")));
+    expect(result, const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
   });
 
   test('Should returns ServerFailure when get profile returns ServerFailure', () async {
@@ -62,7 +62,7 @@ void main() {
 
   test('Should returns ServerFailure when get token returns ServerFailure', () async {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
-    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(fullname: "fulan", email: "fulan@email.com")));
+    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
     final result = await usecase(ProfileParams(token: token));
 

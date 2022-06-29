@@ -32,8 +32,8 @@ class MockSettingsLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> setTheme(_i2.SettingsModel? params) =>
-      (super.noSuchMethod(Invocation.method(#setTheme, [params]),
+  _i4.Future<void> setTheme(_i2.SettingsModel? model) =>
+      (super.noSuchMethod(Invocation.method(#setTheme, [model]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
   @override

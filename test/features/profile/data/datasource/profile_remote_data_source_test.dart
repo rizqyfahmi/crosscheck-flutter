@@ -33,7 +33,7 @@ void main() {
 
     final result = await profileRemoteDataSource.getProfile(token: Utils.token);
 
-    expect(result, ProfileResponseModel(message: Utils.successMessage, data: ProfileModel(fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
+    expect(result, ProfileResponseModel(message: Utils.successMessage, data: ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
     verify(mockClient.post(any, headers: headers));
   });
 
@@ -43,7 +43,7 @@ void main() {
 
     final result = await profileRemoteDataSource.getProfile(token: Utils.token);
 
-    expect(result, const ProfileResponseModel(message: Utils.successMessage, data: ProfileModel(fullname: "fulan", email: "fulan@email.com", dob: null, address: null, photoUrl: null)));
+    expect(result, const ProfileResponseModel(message: Utils.successMessage, data: ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com", dob: null, address: null, photoUrl: null)));
     verify(mockClient.post(any, headers: headers));
   });
 
@@ -53,7 +53,7 @@ void main() {
 
     final result = await profileRemoteDataSource.getProfile(token: Utils.token);
 
-    expect(result, const ProfileResponseModel(message: Utils.successMessage, data: ProfileModel(fullname: "fulan", email: "fulan@email.com", dob: null, address: null, photoUrl: null)));
+    expect(result, const ProfileResponseModel(message: Utils.successMessage, data: ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com", dob: null, address: null, photoUrl: null)));
     verify(mockClient.post(any, headers: headers));
   });
 
