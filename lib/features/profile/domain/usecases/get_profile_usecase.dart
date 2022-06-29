@@ -17,8 +17,12 @@ class GetProfileUsecase implements Usecase<ProfileEntity, ProfileParams> {
   });
 
   @override
-  Future<Either<Failure, ProfileEntity>> call(ProfileParams param) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, ProfileEntity>> call(ProfileParams param) async {
+    final response = await authenticationRepository.getToken();
+    
+    return response.fold(
+      (error) => Left(error), 
+      (result) async => await repository.getProfile(token: result.token)
+    );
   }
 }

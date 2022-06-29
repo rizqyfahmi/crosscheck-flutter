@@ -4,16 +4,16 @@ class ProfileEntity extends Equatable {
   
   final String fullname;
   final String email;
-  final String? photoUrl;
   final DateTime? dob;
   final String? address;
+  final String? photoUrl;
 
   const ProfileEntity({
     required this.fullname,
     required this.email,
-    this.photoUrl,
     this.dob,
-    this.address
+    this.address,
+    this.photoUrl,
   });
 
   @override
