@@ -7,6 +7,7 @@ import 'package:crosscheck/features/authentication/presentation/registration/vie
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
+import 'package:crosscheck/features/profile/data/models/data/profile_model.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
@@ -16,10 +17,18 @@ import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_ev
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final path = (await getApplicationDocumentsDirectory()).path;
+  
+  Hive.init(path);
+  Hive.registerAdapter(ProfileModelAdapter());
+  
   await di.init();
+
   List<BlocProvider<StateStreamableSource<Object?>>> providers = [
     BlocProvider<AuthenticationBloc>(
       create: (_) => di.locator<AuthenticationBloc>()
