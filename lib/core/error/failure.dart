@@ -8,6 +8,7 @@ abstract class Failure extends Equatable {
   static const loginRequiredFieldError = "Username and password are required";
   static const validationError = "Error Validation";
   static const cacheError = "Cache data error";
+  static const localDatabase = "Database error";
 
   @override
   List<Object?> get props => [];

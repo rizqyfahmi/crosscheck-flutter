@@ -19,6 +19,7 @@ import 'package:crosscheck/features/main/domain/repositories/main_repository.dar
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/profile/data/models/data/profile_model.dart';
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
 import 'package:crosscheck/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
@@ -32,6 +33,7 @@ import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usec
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -70,8 +72,13 @@ Future<void> init() async  {
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(sharedPreferences: locator()));
 
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
+  
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerLazySingleton(() => sharedPreferences);
+  
+  final Box<ProfileModel> boxProfileModel = await Hive.openBox("profile");
+  locator.registerLazySingleton(() => boxProfileModel);
+  
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => InternetConnectionChecker());
 }

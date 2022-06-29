@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/profile/data/models/response/profile_response_model.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 abstract class ProfileRemoteDataSource {
