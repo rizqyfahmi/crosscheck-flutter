@@ -60,23 +60,23 @@ void main() {
   });
 
   test("Should returns CacheFailure when get token is failed", () async {
-    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
-    when(mockDashboardRepository.getDashboard(token: token)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
+    when(mockDashboardRepository.getDashboard(token: token)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final result = await getDashboardUsecase(NoParam());
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockAuthenticationRepository.getToken());
     verifyNever(mockDashboardRepository.getDashboard(token: token));
   });
 
   test("Should returns CacheFailure when get dashboard is failed", () async {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
-    when(mockDashboardRepository.getDashboard(token: token)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockDashboardRepository.getDashboard(token: token)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final result = await getDashboardUsecase(NoParam());
 
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
     verify(mockAuthenticationRepository.getToken());
     verify(mockDashboardRepository.getDashboard(token: token));
   });

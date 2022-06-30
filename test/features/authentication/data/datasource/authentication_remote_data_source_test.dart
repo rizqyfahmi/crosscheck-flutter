@@ -64,7 +64,7 @@ void main() {
 
   test("Should throw a ServerException with error fields when registration is faild because of validation error", () async {
     final String filepath = stringify("test/features/authentication/data/models/response/authentication_validation_error.json");
-    final ServerException expected = ServerException(message: "Bad request", errors: const [
+    const ServerException expected = ServerException(message: "Bad request", errors: [
         {
           "field": "name",
           "message":  "Your name should contain at least 8 characters"

@@ -36,7 +36,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
     
   }

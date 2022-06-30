@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets("Should not change the theme when get theme is failed", (WidgetTester tester) async {
-    when(mockGetThemeUsecase(any)).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
@@ -99,7 +99,7 @@ void main() {
 
   testWidgets("Should not change the theme when set theme is failed", (WidgetTester tester) async {
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
-    when(mockSetThemeUsecase(any)).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetThemeUsecase(any)).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);

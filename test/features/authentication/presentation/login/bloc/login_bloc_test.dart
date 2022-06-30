@@ -127,7 +127,7 @@ void main() {
   });
 
   test("Should return LoginGeneralError when submit login form is failed", () async {
-    when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockLoginUsecase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final expected = [
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
@@ -148,13 +148,13 @@ void main() {
   });
 
   test("Should return LoginGeneralError when submit login form is failed because of NetworkFailure()", () async {
-    when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: NetworkFailure.message)));
+    when(mockLoginUsecase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.networkError)));
 
     final expected = [
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "Password123")),
       const LoginLoading(model: LoginModel(username: "fulan@email.com", password: "Password123")),
-      const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(username: "fulan@email.com", password: "Password123"))
+      const LoginGeneralError(message: Failure.networkError, model: LoginModel(username: "fulan@email.com", password: "Password123"))
     ];
 
     bloc.add(const LoginSetUsername(username: "fulan@email.com"));
@@ -169,7 +169,7 @@ void main() {
   });
 
   test("Should return LoginGeneralError when submit login form is failed because of username or password still empty", () async {
-    when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
+    when(mockLoginUsecase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.loginRequiredFieldError)));
 
     final expected = [
       const LoginLoading(model: LoginModel( username: "", password: "")),
@@ -186,7 +186,7 @@ void main() {
   });
 
   test("Should return LoginNoGeneralError when button dismissed is clicked after sumbit login form is failed", () async {
-    when(mockLoginUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockLoginUsecase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final expected = [
       const LoginEnterField(model: LoginModel(username: "fulan@email.com", password: "")),

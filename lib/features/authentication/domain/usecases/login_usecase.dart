@@ -15,7 +15,7 @@ class LoginUsecase implements Usecase<void, LoginParams> {
   Future<Either<Failure, void>> call(params) async {
 
     if (params.username == "" || params.password == "") {
-      return Left(ServerFailure(message: Failure.loginRequiredFieldError));
+      return const Left(ServerFailure(message: Failure.loginRequiredFieldError));
     }
     
     final response = await repository.login(

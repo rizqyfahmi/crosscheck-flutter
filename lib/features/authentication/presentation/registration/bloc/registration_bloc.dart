@@ -83,8 +83,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       final response =  await registrationUsecase(params);
 
       response.fold((error) {
-        if (error is NullFailure) return emit(RegistrationGeneralError(message: NullFailure.message, model: model));
-        if (error is NetworkFailure) return emit(RegistrationGeneralError(message: NetworkFailure.message, model: model));
+        if (error is NullFailure) return emit(RegistrationGeneralError(message: Failure.nullError, model: model));
+        if (error is NetworkFailure) return emit(RegistrationGeneralError(message: Failure.networkError, model: model));
         if (error is! ServerFailure) return; // prevent other failures, except ServerFailure
         if (error.errors != null) return add(RegistrationSetValidationError(errors: error.errors!));
 

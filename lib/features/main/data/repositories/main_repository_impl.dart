@@ -20,7 +20,7 @@ class MainRepositoryImpl implements MainRepository {
       final response = await mainLocalDataSource.getActiveBottomNavigation();
       return Right(response);
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
   }
 

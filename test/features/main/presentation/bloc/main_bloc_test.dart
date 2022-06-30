@@ -53,7 +53,7 @@ void main() {
   });
 
   test("Should current state when get active bottom navigation is failed", () async {
-    when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     mainBloc.add(MainGetActiveBottomNavigation());
 
@@ -83,7 +83,7 @@ void main() {
   });
 
   test("Should current state when set active bottom navigation is failed", () async {
-    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event))).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     mainBloc.add(MainSetActiveBottomNavigation(currentPage: BottomNavigation.event));
 

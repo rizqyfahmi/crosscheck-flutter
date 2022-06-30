@@ -24,7 +24,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     final response = await sharedPreferences.setString("CACHED_SETTINGS", json.encode(model.toJSON()));
 
     if (!response) {
-      throw CacheException(message: Failure.cacheError);
+      throw const CacheException(message: Failure.cacheError);
     }
   }
   
@@ -36,7 +36,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       return Future.value(SettingsModel.fromJSON(json.decode(response)));
     }
 
-    throw CacheException(message: Failure.cacheError);
+    throw const CacheException(message: Failure.cacheError);
   }
   
 }

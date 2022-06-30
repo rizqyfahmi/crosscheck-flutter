@@ -96,7 +96,7 @@ void main() {
 
   test("Should return DashboardGeneralError when get dashboard is failed", () async {
 
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     dashboardBloc.add(DashboardGetData());
     
@@ -111,7 +111,7 @@ void main() {
 
   test("Should return DashboardNoGeneralError when reset dashboard general", () async {
 
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     dashboardBloc.add(DashboardGetData());
     dashboardBloc.add(DashboardResetGeneralError());

@@ -27,7 +27,7 @@ class MainLocalDataSourceImpl implements MainLocalDataSource {
 
     if (response != null) return Future.value(BottomNavigationModel.fromJSON(json.decode(response)));
 
-    throw CacheException(message: Failure.cacheError);
+    throw const CacheException(message: Failure.cacheError);
   }
   
   @override
@@ -35,7 +35,7 @@ class MainLocalDataSourceImpl implements MainLocalDataSource {
     final response = await sharedPreferences.setString("CACHED_BOTTOM_NAVIGATION", json.encode(param.toJSON()));
 
     if (!response) {
-      throw CacheException(message: Failure.cacheError);
+      throw const CacheException(message: Failure.cacheError);
     }
   }
   

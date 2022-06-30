@@ -26,7 +26,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }) async {
     bool isConnected = await networkInfo.isConnected;
     if (!isConnected) {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: Failure.networkError));
     }
     
     try {
@@ -38,7 +38,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     } on ServerException catch(e) {
       return Left(ServerFailure(message: e.message, errors: e.errors));
     } on CacheException catch(e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
   }
 
@@ -50,7 +50,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     
     bool isConnected = await networkInfo.isConnected;
     if (!isConnected) {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: Failure.networkError));
     }
     
     try {
@@ -63,7 +63,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message, errors: e.errors));
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
     
   }
@@ -74,7 +74,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       final response = await local.getToken();
       return Right(response);
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
   }
   

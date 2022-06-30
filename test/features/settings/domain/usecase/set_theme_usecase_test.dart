@@ -34,12 +34,12 @@ void main() {
   });
 
   test("Should return CachedFailure when set theme is failed", () async {
-    when(mockSettingsRepository.setTheme(any)).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockSettingsRepository.setTheme(any)).thenThrow(const CacheException(message: Failure.cacheError));
 
     final params = SettingsParams(themeMode: Brightness.light);
     final result = await setThemeUsecase(params);
 
     verify(mockSettingsRepository.setTheme(params.themeMode));
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
   });
 }

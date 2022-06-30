@@ -206,7 +206,7 @@ void main() {
     testWidgets("Should return LoginGeneralError when submit login form is failed because of NetworkFailure()", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: NetworkFailure.message));
+        return const Left(ServerFailure(message: Failure.networkError));
       });
 
       await tester.pumpWidget(testWidget);
@@ -228,8 +228,8 @@ void main() {
         await tester.pump();
         
         expect(find.text("Loading..."), findsNothing);
-        expect(loginBloc.state, const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(username: "fulan@email.com", password: "Password123")));
-        expect(find.text(NetworkFailure.message), findsOneWidget);
+        expect(loginBloc.state, const LoginGeneralError(message: Failure.networkError, model: LoginModel(username: "fulan@email.com", password: "Password123")));
+        expect(find.text(Failure.networkError), findsOneWidget);
 
         await tester.ensureVisible(find.byKey(const Key("dismissButton")));
         await tester.pumpAndSettle();
@@ -237,7 +237,7 @@ void main() {
         await tester.pump();
 
         expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(username: "fulan@email.com", password: "Password123")));
-        expect(find.text(NetworkFailure.message), findsNothing);
+        expect(find.text(Failure.networkError), findsNothing);
       });
 
     });
@@ -245,7 +245,7 @@ void main() {
     testWidgets("Should return LoginGeneralError when submit login form is failed because of username or password still empty", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: Failure.loginRequiredFieldError));
+        return const Left(ServerFailure(message: Failure.loginRequiredFieldError));
       });
 
       await tester.pumpWidget(testWidget);
@@ -281,7 +281,7 @@ void main() {
     testWidgets("Should return LoginNoGeneralError when button dismissed is clicked after submit login form is failed", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: Failure.generalError));
+        return const Left(ServerFailure(message: Failure.generalError));
       });
 
       await tester.pumpWidget(testWidget);

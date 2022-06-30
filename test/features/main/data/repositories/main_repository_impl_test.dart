@@ -37,11 +37,11 @@ void main() {
   });
 
   test("Should return CachedFailure when get active botom navigation is failed", () async {
-    when(mockMainLocalDataSource.getActiveBottomNavigation()).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockMainLocalDataSource.getActiveBottomNavigation()).thenThrow(const CacheException(message: Failure.cacheError));
 
     final result = await mainRepository.getActiveBottomNavigation();
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockMainLocalDataSource.getActiveBottomNavigation());
 
   });
@@ -58,7 +58,7 @@ void main() {
 
   test("Should throw CacheException when set active bottom navigation is failed", () async {
     const param = BottomNavigationModel(currentPage: BottomNavigation.event);
-    when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockMainLocalDataSource.setActiveBottomNavigation(param)).thenThrow(const CacheException(message: Failure.cacheError));
 
     final call = mainRepository.setActiveBottomNavigation;
 

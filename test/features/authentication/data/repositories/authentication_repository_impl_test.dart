@@ -51,7 +51,7 @@ void main() {
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
         );
 
-        expect(result, Left(NetworkFailure()));
+        expect(result, const Left(NetworkFailure(message: Failure.networkError)));
         verify(mockNetworkInfo.isConnected);
         verifyNever(mockRemoteDataSource.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
@@ -82,13 +82,13 @@ void main() {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
         when(mockRemoteDataSource.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
-        )).thenThrow(ServerException(message: Failure.generalError));
+        )).thenThrow(const ServerException(message: Failure.generalError));
         
         final result = await repository.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
         );
 
-        expect(result, Left(ServerFailure(message: Failure.generalError)));
+        expect(result, const Left(ServerFailure(message: Failure.generalError)));
         verify(mockNetworkInfo.isConnected);
         verify(mockRemoteDataSource.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
@@ -101,13 +101,13 @@ void main() {
         when(mockRemoteDataSource.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
         )).thenAnswer((_) async => responseModel);
-        when(mockLocalDataSource.setToken(any)).thenThrow(CacheException(message: Failure.cacheError));
+        when(mockLocalDataSource.setToken(any)).thenThrow(const CacheException(message: Failure.cacheError));
         
         final result = await repository.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
         );
 
-        expect(result, Left(CachedFailure(message: Failure.cacheError)));
+        expect(result, const Left(CacheFailure(message: Failure.cacheError)));
         verify(mockNetworkInfo.isConnected);
         verify(mockRemoteDataSource.registration(
           name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
@@ -126,7 +126,7 @@ void main() {
           username: "fulan@email.com", password: "fulan123"
         );
 
-        expect(result, Left(NetworkFailure()));
+        expect(result, const Left(NetworkFailure(message: Failure.networkError)));
         verify(mockNetworkInfo.isConnected);
         verifyNever(mockRemoteDataSource.login(
           username: "fulan@email.com", password: "fulan123"
@@ -157,13 +157,13 @@ void main() {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
         when(mockRemoteDataSource.login(
           username: "fulan@email.com", password: "fulan123"
-        )).thenThrow(ServerException(message: Failure.generalError));
+        )).thenThrow(const ServerException(message: Failure.generalError));
         
         final result = await repository.login(
           username: "fulan@email.com", password: "fulan123"
         );
 
-        expect(result, Left(ServerFailure(message: Failure.generalError)));
+        expect(result, const Left(ServerFailure(message: Failure.generalError)));
         verify(mockNetworkInfo.isConnected);
         verify(mockRemoteDataSource.login(
           username: "fulan@email.com", password: "fulan123"
@@ -176,13 +176,13 @@ void main() {
         when(mockRemoteDataSource.login(
           username: "fulan@email.com", password: "fulan123"
         )).thenAnswer((_) async => responseModel);
-        when(mockLocalDataSource.setToken(any)).thenThrow(CacheException(message: Failure.cacheError));
+        when(mockLocalDataSource.setToken(any)).thenThrow(const CacheException(message: Failure.cacheError));
         
         final result = await repository.login(
           username: "fulan@email.com", password: "fulan123"
         );
 
-        expect(result, Left(CachedFailure(message: Failure.cacheError)));
+        expect(result, const Left(CacheFailure(message: Failure.cacheError)));
         verify(mockNetworkInfo.isConnected);
         verify(mockRemoteDataSource.login(
           username: "fulan@email.com", password: "fulan123"
@@ -202,11 +202,11 @@ void main() {
   });
 
   test("Should returns CachedFailure when get token returns CacheException ", () async {
-    when(mockLocalDataSource.getToken()).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockLocalDataSource.getToken()).thenThrow(const CacheException(message: Failure.cacheError));
 
     final result = await repository.getToken();
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockLocalDataSource.getToken());
   });
 }

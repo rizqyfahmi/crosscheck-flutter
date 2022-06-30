@@ -174,8 +174,8 @@ void main() {
       registrationParams = RegistrationParams(name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123");
     });
 
-    test("Should return RegistrationGeneralError(message: NullFailure.message) when registration is failed because of NullFailure()", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => Left(NullFailure()));
+    test("Should return RegistrationGeneralError(message: Failure.nullError) when registration is failed because of NullFailure()", () async {
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Left(NullFailure(message: Failure.nullError)));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
@@ -183,7 +183,7 @@ void main() {
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "")),
         const RegistrationLoading(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "")),
-        const RegistrationGeneralError(message: NullFailure.message, model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: ""))
+        const RegistrationGeneralError(message: Failure.nullError, model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: ""))
       ];
       
       bloc.add(const RegistrationSetName("Fulan"));
@@ -203,13 +203,13 @@ void main() {
       
       final result = await mockRegistrationUseCase(registrationParams);
       
-      expect(result, Left(NullFailure()));
+      expect(result, const Left(NullFailure(message: Failure.nullError)));
       verify(mockRegistrationUseCase(registrationParams));
 
     });
 
-    test("Should return RegistrationGeneralError(message: NetworkFailure.message) when registration is failed because of NetworkFailure()", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => Left(NetworkFailure()));
+    test("Should return RegistrationGeneralError(message: Failure.networkError) when registration is failed because of NetworkFailure()", () async {
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Left(NetworkFailure(message: Failure.networkError)));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
@@ -217,7 +217,7 @@ void main() {
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "")),
         const RegistrationLoading(model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: "")),
-        const RegistrationGeneralError(message: NetworkFailure.message, model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: ""))
+        const RegistrationGeneralError(message: Failure.networkError, model: RegistrationModel(name: "Fulan", errorName: "", email: "fulan@email", errorEmail: "", password: "Password", errorPassword: "", confirmPassword: "Password123", errorConfirmPassword: ""))
       ];
       
       bloc.add(const RegistrationSetName("Fulan"));
@@ -237,13 +237,13 @@ void main() {
       
       final result = await mockRegistrationUseCase(registrationParams);
       
-      expect(result, Left(NetworkFailure()));
+      expect(result, const Left(NetworkFailure(message: Failure.networkError)));
       verify(mockRegistrationUseCase(registrationParams));
 
     });
 
     test("Should return RegistrationGeneralError(message: 'Something went wrong') when registration is failed because of other reasons", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => Left(ServerFailure(message: "Something went wrong")));
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
@@ -271,13 +271,13 @@ void main() {
       
       final result = await mockRegistrationUseCase(registrationParams);
       
-      expect(result, Left(ServerFailure(message: "Something went wrong")));
+      expect(result, const Left(ServerFailure(message: Failure.generalError)));
       verify(mockRegistrationUseCase(registrationParams));
 
     });
 
     test("Should return error fields when registration is failed because of validation error", () async {
-      when(mockRegistrationUseCase(any)).thenAnswer((_) async => Left(ServerFailure(message: "Something went wrong", errors: errors)));
+      when(mockRegistrationUseCase(any)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError, errors: errors)));
 
       final expected = [
         const RegistrationEnterField(model: RegistrationModel(name: "Fulan", errorName: "", email: "", errorEmail: "", password: "", errorPassword: "", confirmPassword: "", errorConfirmPassword: "")),
@@ -302,7 +302,7 @@ void main() {
       
       final result = await mockRegistrationUseCase(registrationParams);
 
-      expect(result, Left(ServerFailure(message: "Something went wrong", errors: errors)));
+      expect(result, const Left(ServerFailure(message: Failure.generalError, errors: errors)));
       verify(mockRegistrationUseCase(registrationParams));
 
     });

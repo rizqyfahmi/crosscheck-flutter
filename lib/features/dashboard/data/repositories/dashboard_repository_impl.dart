@@ -21,7 +21,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
   Future<Either<Failure, DashboardEntity>> getDashboard({required String token}) async {
     bool isConnected = await networkInfo.isConnected;
     if (!isConnected) {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: Failure.networkError));
     }
 
     try {

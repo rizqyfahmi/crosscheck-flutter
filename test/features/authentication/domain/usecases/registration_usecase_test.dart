@@ -37,11 +37,11 @@ void main() {
   test("Should returns ServerFailure when registration returns ServerFailure", () async {
     when(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
-    )).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    )).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final result = await usecase(registrationParams);
     
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
     verify(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
     ));
@@ -50,11 +50,11 @@ void main() {
   test("Should returns CacheFailure when registration returns CacheFailure", () async {
     when(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
-    )).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
+    )).thenAnswer((_) async => const Left(CacheFailure(message: Failure.generalError)));
 
     final result = await usecase(registrationParams);
     
-    expect(result, Left(CachedFailure(message: Failure.generalError)));
+    expect(result, const Left(CacheFailure(message: Failure.generalError)));
     verify(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
     ));
@@ -85,7 +85,7 @@ void main() {
         "message":  "The confirmation password field is required"
       },
     ];
-    expect(result, Left(ServerFailure(message: Failure.validationError, errors: expected)));
+    expect(result, const Left(ServerFailure(message: Failure.validationError, errors: expected)));
     verifyNever(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
     ));
@@ -104,7 +104,7 @@ void main() {
         "message":  "The email field is required"
       }
     ];
-    expect(result, Left(ServerFailure(message: Failure.validationError, errors: expected)));
+    expect(result, const Left(ServerFailure(message: Failure.validationError, errors: expected)));
     verifyNever(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
     ));
@@ -123,7 +123,7 @@ void main() {
         "message":  "The password and confirmation password do not match"
       }
     ];
-    expect(result, Left(ServerFailure(message: Failure.validationError, errors: expected)));
+    expect(result, const Left(ServerFailure(message: Failure.validationError, errors: expected)));
     verifyNever(mockAuthenticationRepository.registration(
       name: "Fulan", email: "fulan@email.com", password: "fulan123", confirmPassword: "fulan123"
     ));

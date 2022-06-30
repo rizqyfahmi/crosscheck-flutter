@@ -33,11 +33,11 @@ void main() {
   });
 
   test("Should return CachedFailure when get active bottom navigation is failed", () async {
-    when(mockMainRepository.getActiveBottomNavigation()).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockMainRepository.getActiveBottomNavigation()).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     final result = await getActiveBottomNavigationUsesace(NoParam());
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockMainRepository.getActiveBottomNavigation());
   });
 }

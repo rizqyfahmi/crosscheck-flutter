@@ -50,7 +50,7 @@ void main() {
   });
 
   test("Should return SettingsNoChange when get theme is failed", () async {
-    when(mockGetThemeUsecase(any)).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetThemeUsecase(any)).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     settingsBloc.add(SettingsLoad());
 
@@ -78,7 +78,7 @@ void main() {
 
   test("Should set theme properly", () async {
     final params = SettingsParams(themeMode: Brightness.dark);
-    when(mockSetThemeUsecase(any)).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetThemeUsecase(any)).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     settingsBloc.add(SettingsChangeTheme(themeMode: Brightness.dark));
 

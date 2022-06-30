@@ -54,7 +54,7 @@ void main() {
   });
 
   test("Should return WalkthroughSkipFailed when add WalkthroughSetSkip event is error", () async {
-    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     bloc.add(const WalkthroughSetSkip(isSkip: true));
 
@@ -87,7 +87,7 @@ void main() {
   });
 
   test("Should return WalkthroughSkipFailed when add WalkthroughSetSkip event is error", () async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     bloc.add(WalkthroughGetSkip());
 

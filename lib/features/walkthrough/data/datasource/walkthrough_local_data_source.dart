@@ -27,7 +27,7 @@ class WalkthroughLocalDataSourceImpl implements WalkthroughLocalDataSource {
     final response = await sharedPreferences.setString("CACHED_WALKTHROUGH", jsonEncode(model.toJSON()));
 
     if (!response) {
-      throw CacheException(message: Failure.cacheError);
+      throw const CacheException(message: Failure.cacheError);
     }
   }
   
@@ -39,7 +39,7 @@ class WalkthroughLocalDataSourceImpl implements WalkthroughLocalDataSource {
       return Future.value(WalkthroughModel.fromJSON(json.decode(response)));
     }
 
-    throw CacheException(message: Failure.cacheError);
+    throw const CacheException(message: Failure.cacheError);
 
   }
   

@@ -18,8 +18,8 @@ class WalkthroughRepositoryImpl implements WalkthroughRepository {
     try {
       final response = await walkthroughLocalDataSource.getIsSkip();
       return Right(response);
-    } on CachedFailure catch (e) {
-      return Left(CachedFailure(message: e.message));
+    } on CacheFailure catch (e) {
+      return Left(CacheFailure(message: e.message));
     }
   }
 
@@ -29,8 +29,8 @@ class WalkthroughRepositoryImpl implements WalkthroughRepository {
     try {
       await walkthroughLocalDataSource.setIsSkip(WalkthroughModel(isSkip: isSkip));
       return const Right(null);
-    } on CachedFailure catch (e) {
-      return Left(CachedFailure(message: e.message));
+    } on CacheFailure catch (e) {
+      return Left(CacheFailure(message: e.message));
     }
 
   }

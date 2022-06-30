@@ -53,20 +53,20 @@ void main() {
 
   test('Should returns ServerFailure when get profile returns ServerFailure', () async {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
-    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final result = await usecase(NoParam());
 
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
   });
 
   test('Should returns ServerFailure when get token returns ServerFailure', () async {
-    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
     when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
     final result = await usecase(NoParam());
 
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
     verifyNever(mockProfileRepository.getProfile(token: token));
   });
 }

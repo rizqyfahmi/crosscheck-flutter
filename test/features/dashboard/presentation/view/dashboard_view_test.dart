@@ -139,7 +139,7 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(ServerFailure(message: Failure.generalError));
+      return const Left(ServerFailure(message: Failure.generalError));
     });
 
     await tester.runAsync(() async {
@@ -163,7 +163,7 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(ServerFailure(message: Failure.generalError));
+      return const Left(ServerFailure(message: Failure.generalError));
     });
 
     await tester.runAsync(() async {

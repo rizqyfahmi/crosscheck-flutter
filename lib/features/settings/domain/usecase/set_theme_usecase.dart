@@ -18,7 +18,7 @@ class SetThemeUsecase implements Usecase<void, SettingsParams> {
       await repository.setTheme(params.themeMode);
       return const Right(null);
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
   }
   

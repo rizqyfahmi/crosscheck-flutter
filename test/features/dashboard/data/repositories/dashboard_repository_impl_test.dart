@@ -57,19 +57,19 @@ void main() {
 
     final result = await dashboardRepository.getDashboard(token: token);
 
-    expect(result, Left(NetworkFailure()));
+    expect(result, const Left(NetworkFailure(message: Failure.networkError)));
 
     verifyNever(mockDashboardRemoteDataSource.getDashboard(token));
     verify(mockNetworkInfo.isConnected);
   });
 
   test("Should return ServerFailure when get dashboard is failed because of error response from API", () async {
-    when(mockDashboardRemoteDataSource.getDashboard(token)).thenThrow(ServerException(message: Failure.generalError));
+    when(mockDashboardRemoteDataSource.getDashboard(token)).thenThrow(const ServerException(message: Failure.generalError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
     final result = await dashboardRepository.getDashboard(token: token);
 
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
 
     verify(mockDashboardRemoteDataSource.getDashboard(token));
     verify(mockNetworkInfo.isConnected);
