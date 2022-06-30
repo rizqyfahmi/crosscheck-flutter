@@ -1,7 +1,7 @@
 import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:crosscheck/features/profile/data/models/params/profile_params.dart';
 import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart';
 import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart';
 import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart';
@@ -36,7 +36,7 @@ void main() {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
     when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
-    await usecase(ProfileParams(token: token));
+    await usecase(NoParam());
 
     verify(mockAuthenticationRepository.getToken());
     verify(mockProfileRepository.getProfile(token: token));
@@ -46,7 +46,7 @@ void main() {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
     when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
-    final result = await usecase(ProfileParams(token: token));
+    final result = await usecase(NoParam());
 
     expect(result, const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
   });
@@ -55,7 +55,7 @@ void main() {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: token)));
     when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
 
-    final result = await usecase(ProfileParams(token: token));
+    final result = await usecase(NoParam());
 
     expect(result, Left(ServerFailure(message: Failure.generalError)));
   });
@@ -64,7 +64,7 @@ void main() {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
     when(mockProfileRepository.getProfile(token: token)).thenAnswer((_) async => const Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com")));
 
-    final result = await usecase(ProfileParams(token: token));
+    final result = await usecase(NoParam());
 
     expect(result, Left(ServerFailure(message: Failure.generalError)));
     verifyNever(mockProfileRepository.getProfile(token: token));
