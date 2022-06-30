@@ -37,7 +37,6 @@ dependencies:
   get_it: ^7.2.0
   hive: ^2.2.2
   hive_flutter: ^1.1.0
-  hive_generator: ^1.1.3
   http: ^0.13.4
   internet_connection_checker: ^0.0.1+4
   loading_indicator: ^3.1.0
@@ -53,7 +52,9 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
+  hive_generator: ^1.1.3
   mockito: ^5.2.0
+  network_image_mock: ^2.0.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
