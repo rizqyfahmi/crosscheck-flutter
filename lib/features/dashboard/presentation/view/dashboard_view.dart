@@ -1,11 +1,10 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
 import 'package:crosscheck/assets/icons/custom_icons.dart';
 import 'package:crosscheck/core/widgets/cloudy_card/cloudy_card.dart';
+import 'package:crosscheck/core/widgets/dialog/dialog.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
-import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
-import 'package:crosscheck/features/main/presentation/bloc/main_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,16 +20,24 @@ class DashboardView extends StatelessWidget {
         listener: (context, state) {
 
           if (state is DashboardLoading) {
-            context.read<MainBloc>().add(MainShowLoading());
+            showLoadingDialog(context: context);
             return;
           }
 
           if (state is DashboardGeneralError) {
-            context.read<MainBloc>().add(MainSetGeneralError(message: state.message));
+            Navigator.of(context, rootNavigator: true).pop();
+            showResponseDialog(
+              context: context,
+              status: ResponseDialogStatus.error,
+              message: state.message
+            );
             return;
           }
 
-          context.read<MainBloc>().add(MainHideLoading());
+          if (state is DashboardSuccess) {
+            Navigator.of(context, rootNavigator: true).pop();
+          }
+
         },
         builder: (context, state) {
           

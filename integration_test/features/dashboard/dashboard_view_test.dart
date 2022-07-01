@@ -175,10 +175,10 @@ void main() {
       expect(find.text("Settings"), findsWidgets);
       
       await tester.pump();
+      await Future.delayed(const Duration(seconds: 1));
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
-
+      await tester.pumpAndSettle();
+      
       expect(find.text("Loading..."), findsNothing);
       expect(find.text("You have 20 tasks right now"), findsOneWidget);
       expect(find.text("20%"), findsOneWidget);
@@ -247,9 +247,9 @@ void main() {
       expect(find.text("Settings"), findsWidgets);
       
       await tester.pump();
+      await Future.delayed(const Duration(seconds: 1));
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 2));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text("Loading..."), findsNothing);
       await tester.ensureVisible(find.byKey(const Key("dismissButton")));
