@@ -111,7 +111,7 @@ class WalkthroughView extends StatelessWidget {
                                   Expanded(
                                     child: ElevatedButton(
                                       key: const Key("getStartedButton"),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         context.read<WalkthroughBloc>().add(const WalkthroughSetSkip(isSkip: true));
                                       }, 
                                       style: ElevatedButton.styleFrom(

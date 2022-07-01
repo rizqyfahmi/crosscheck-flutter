@@ -2,56 +2,62 @@
 // in crosscheck/integration_test/features/settings/settings_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i9;
+import 'dart:async' as _i10;
 
-import 'package:crosscheck/core/error/failure.dart' as _i10;
-import 'package:crosscheck/core/param/param.dart' as _i18;
+import 'package:crosscheck/core/error/failure.dart' as _i11;
+import 'package:crosscheck/core/param/param.dart' as _i19;
 import 'package:crosscheck/features/authentication/data/models/request/login_params.dart'
-    as _i13;
+    as _i14;
 import 'package:crosscheck/features/authentication/data/models/request/registration_params.dart'
-    as _i11;
+    as _i12;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i2;
 import 'package:crosscheck/features/authentication/domain/usecases/login_usecase.dart'
-    as _i12;
+    as _i13;
 import 'package:crosscheck/features/authentication/domain/usecases/registration_usecase.dart'
-    as _i8;
+    as _i9;
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart'
-    as _i24;
+    as _i25;
 import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repository.dart'
     as _i6;
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart'
-    as _i23;
+    as _i24;
 import 'package:crosscheck/features/main/data/model/params/bottom_navigation_params.dart'
-    as _i21;
+    as _i22;
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart'
-    as _i20;
+    as _i21;
 import 'package:crosscheck/features/main/domain/repositories/main_repository.dart'
     as _i5;
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart'
-    as _i22;
+    as _i23;
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart'
-    as _i19;
+    as _i20;
+import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart'
+    as _i31;
+import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart'
+    as _i8;
+import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart'
+    as _i30;
 import 'package:crosscheck/features/settings/data/models/params/settings_params.dart'
-    as _i26;
+    as _i27;
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart'
-    as _i28;
+    as _i29;
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart'
     as _i7;
 import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart'
-    as _i27;
+    as _i28;
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart'
-    as _i25;
+    as _i26;
 import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart'
-    as _i15;
+    as _i16;
 import 'package:crosscheck/features/walkthrough/domain/entities/walkthrough_entitiy.dart'
-    as _i17;
+    as _i18;
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart'
     as _i4;
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart'
-    as _i16;
+    as _i17;
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart'
-    as _i14;
+    as _i15;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -81,11 +87,14 @@ class _FakeDashboardRepository_4 extends _i1.Fake
 class _FakeSettingsRepository_5 extends _i1.Fake
     implements _i7.SettingsRepository {}
 
+class _FakeProfileRepository_6 extends _i1.Fake
+    implements _i8.ProfileRepository {}
+
 /// A class which mocks [RegistrationUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRegistrationUsecase extends _i1.Mock
-    implements _i8.RegistrationUsecase {
+    implements _i9.RegistrationUsecase {
   MockRegistrationUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -96,15 +105,15 @@ class MockRegistrationUsecase extends _i1.Mock
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, void>> call(
-          _i11.RegistrationParams? params) =>
+  _i10.Future<_i3.Either<_i11.Failure, void>> call(
+          _i12.RegistrationParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<_i3.Either<_i10.Failure, void>>.value(
-                  _FakeEither_1<_i10.Failure, void>()))
-          as _i9.Future<_i3.Either<_i10.Failure, void>>);
+              returnValue: Future<_i3.Either<_i11.Failure, void>>.value(
+                  _FakeEither_1<_i11.Failure, void>()))
+          as _i10.Future<_i3.Either<_i11.Failure, void>>);
   @override
   List<Map<String, dynamic>> getFieldValidation(
-          _i11.RegistrationParams? params) =>
+          _i12.RegistrationParams? params) =>
       (super.noSuchMethod(Invocation.method(#getFieldValidation, [params]),
           returnValue: <Map<String, dynamic>>[]) as List<Map<String, dynamic>>);
 }
@@ -112,7 +121,7 @@ class MockRegistrationUsecase extends _i1.Mock
 /// A class which mocks [LoginUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLoginUsecase extends _i1.Mock implements _i12.LoginUsecase {
+class MockLoginUsecase extends _i1.Mock implements _i13.LoginUsecase {
   MockLoginUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -123,17 +132,17 @@ class MockLoginUsecase extends _i1.Mock implements _i12.LoginUsecase {
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, void>> call(_i13.LoginParams? params) =>
+  _i10.Future<_i3.Either<_i11.Failure, void>> call(_i14.LoginParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<_i3.Either<_i10.Failure, void>>.value(
-                  _FakeEither_1<_i10.Failure, void>()))
-          as _i9.Future<_i3.Either<_i10.Failure, void>>);
+              returnValue: Future<_i3.Either<_i11.Failure, void>>.value(
+                  _FakeEither_1<_i11.Failure, void>()))
+          as _i10.Future<_i3.Either<_i11.Failure, void>>);
 }
 
 /// A class which mocks [SetIsSkipUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSetIsSkipUsecase extends _i1.Mock implements _i14.SetIsSkipUsecase {
+class MockSetIsSkipUsecase extends _i1.Mock implements _i15.SetIsSkipUsecase {
   MockSetIsSkipUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -144,18 +153,18 @@ class MockSetIsSkipUsecase extends _i1.Mock implements _i14.SetIsSkipUsecase {
               returnValue: _FakeWalkthroughRepository_2())
           as _i4.WalkthroughRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, void>> call(
-          _i15.WalkthroughParams? params) =>
+  _i10.Future<_i3.Either<_i11.Failure, void>> call(
+          _i16.WalkthroughParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<_i3.Either<_i10.Failure, void>>.value(
-                  _FakeEither_1<_i10.Failure, void>()))
-          as _i9.Future<_i3.Either<_i10.Failure, void>>);
+              returnValue: Future<_i3.Either<_i11.Failure, void>>.value(
+                  _FakeEither_1<_i11.Failure, void>()))
+          as _i10.Future<_i3.Either<_i11.Failure, void>>);
 }
 
 /// A class which mocks [GetIsSkipUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetIsSkipUsecase extends _i1.Mock implements _i16.GetIsSkipUsecase {
+class MockGetIsSkipUsecase extends _i1.Mock implements _i17.GetIsSkipUsecase {
   MockGetIsSkipUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -166,20 +175,20 @@ class MockGetIsSkipUsecase extends _i1.Mock implements _i16.GetIsSkipUsecase {
               returnValue: _FakeWalkthroughRepository_2())
           as _i4.WalkthroughRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, _i17.WalkthroughEntity>> call(
-          _i18.NoParam? param) =>
+  _i10.Future<_i3.Either<_i11.Failure, _i18.WalkthroughEntity>> call(
+          _i19.NoParam? param) =>
       (super.noSuchMethod(Invocation.method(#call, [param]),
-          returnValue:
-              Future<_i3.Either<_i10.Failure, _i17.WalkthroughEntity>>.value(
-                  _FakeEither_1<_i10.Failure, _i17.WalkthroughEntity>())) as _i9
-          .Future<_i3.Either<_i10.Failure, _i17.WalkthroughEntity>>);
+              returnValue: Future<
+                      _i3.Either<_i11.Failure, _i18.WalkthroughEntity>>.value(
+                  _FakeEither_1<_i11.Failure, _i18.WalkthroughEntity>()))
+          as _i10.Future<_i3.Either<_i11.Failure, _i18.WalkthroughEntity>>);
 }
 
 /// A class which mocks [SetActiveBottomNavigationUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSetActiveBottomNavigationUsecase extends _i1.Mock
-    implements _i19.SetActiveBottomNavigationUsecase {
+    implements _i20.SetActiveBottomNavigationUsecase {
   MockSetActiveBottomNavigationUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -189,21 +198,20 @@ class MockSetActiveBottomNavigationUsecase extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#repository),
           returnValue: _FakeMainRepository_3()) as _i5.MainRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, _i20.BottomNavigationEntity>> call(
-          _i21.BottomNavigationParams? params) =>
+  _i10.Future<_i3.Either<_i11.Failure, _i21.BottomNavigationEntity>> call(
+          _i22.BottomNavigationParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<
-                      _i3.Either<_i10.Failure,
-                          _i20.BottomNavigationEntity>>.value(
-                  _FakeEither_1<_i10.Failure, _i20.BottomNavigationEntity>()))
-          as _i9.Future<_i3.Either<_i10.Failure, _i20.BottomNavigationEntity>>);
+          returnValue: Future<
+                  _i3.Either<_i11.Failure, _i21.BottomNavigationEntity>>.value(
+              _FakeEither_1<_i11.Failure, _i21.BottomNavigationEntity>())) as _i10
+          .Future<_i3.Either<_i11.Failure, _i21.BottomNavigationEntity>>);
 }
 
 /// A class which mocks [GetActiveBottomNavigationUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetActiveBottomNavigationUsecase extends _i1.Mock
-    implements _i22.GetActiveBottomNavigationUsecase {
+    implements _i23.GetActiveBottomNavigationUsecase {
   MockGetActiveBottomNavigationUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -213,21 +221,20 @@ class MockGetActiveBottomNavigationUsecase extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#repository),
           returnValue: _FakeMainRepository_3()) as _i5.MainRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, _i20.BottomNavigationEntity>> call(
-          _i18.NoParam? param) =>
+  _i10.Future<_i3.Either<_i11.Failure, _i21.BottomNavigationEntity>> call(
+          _i19.NoParam? param) =>
       (super.noSuchMethod(Invocation.method(#call, [param]),
-              returnValue: Future<
-                      _i3.Either<_i10.Failure,
-                          _i20.BottomNavigationEntity>>.value(
-                  _FakeEither_1<_i10.Failure, _i20.BottomNavigationEntity>()))
-          as _i9.Future<_i3.Either<_i10.Failure, _i20.BottomNavigationEntity>>);
+          returnValue: Future<
+                  _i3.Either<_i11.Failure, _i21.BottomNavigationEntity>>.value(
+              _FakeEither_1<_i11.Failure, _i21.BottomNavigationEntity>())) as _i10
+          .Future<_i3.Either<_i11.Failure, _i21.BottomNavigationEntity>>);
 }
 
 /// A class which mocks [GetDashboardUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetDashboardUsecase extends _i1.Mock
-    implements _i23.GetDashboardUsecase {
+    implements _i24.GetDashboardUsecase {
   MockGetDashboardUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -242,19 +249,19 @@ class MockGetDashboardUsecase extends _i1.Mock
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, _i24.DashboardEntity>> call(
-          _i18.NoParam? params) =>
+  _i10.Future<_i3.Either<_i11.Failure, _i25.DashboardEntity>> call(
+          _i19.NoParam? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
               returnValue:
-                  Future<_i3.Either<_i10.Failure, _i24.DashboardEntity>>.value(
-                      _FakeEither_1<_i10.Failure, _i24.DashboardEntity>()))
-          as _i9.Future<_i3.Either<_i10.Failure, _i24.DashboardEntity>>);
+                  Future<_i3.Either<_i11.Failure, _i25.DashboardEntity>>.value(
+                      _FakeEither_1<_i11.Failure, _i25.DashboardEntity>()))
+          as _i10.Future<_i3.Either<_i11.Failure, _i25.DashboardEntity>>);
 }
 
 /// A class which mocks [SetThemeUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSetThemeUsecase extends _i1.Mock implements _i25.SetThemeUsecase {
+class MockSetThemeUsecase extends _i1.Mock implements _i26.SetThemeUsecase {
   MockSetThemeUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -264,18 +271,18 @@ class MockSetThemeUsecase extends _i1.Mock implements _i25.SetThemeUsecase {
       (super.noSuchMethod(Invocation.getter(#repository),
           returnValue: _FakeSettingsRepository_5()) as _i7.SettingsRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, void>> call(
-          _i26.SettingsParams? params) =>
+  _i10.Future<_i3.Either<_i11.Failure, void>> call(
+          _i27.SettingsParams? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
-              returnValue: Future<_i3.Either<_i10.Failure, void>>.value(
-                  _FakeEither_1<_i10.Failure, void>()))
-          as _i9.Future<_i3.Either<_i10.Failure, void>>);
+              returnValue: Future<_i3.Either<_i11.Failure, void>>.value(
+                  _FakeEither_1<_i11.Failure, void>()))
+          as _i10.Future<_i3.Either<_i11.Failure, void>>);
 }
 
 /// A class which mocks [GetThemeUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetThemeUsecase extends _i1.Mock implements _i27.GetThemeUsecase {
+class MockGetThemeUsecase extends _i1.Mock implements _i28.GetThemeUsecase {
   MockGetThemeUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -285,11 +292,38 @@ class MockGetThemeUsecase extends _i1.Mock implements _i27.GetThemeUsecase {
       (super.noSuchMethod(Invocation.getter(#repository),
           returnValue: _FakeSettingsRepository_5()) as _i7.SettingsRepository);
   @override
-  _i9.Future<_i3.Either<_i10.Failure, _i28.SettingsEntity>> call(
-          _i18.NoParam? param) =>
+  _i10.Future<_i3.Either<_i11.Failure, _i29.SettingsEntity>> call(
+          _i19.NoParam? param) =>
       (super.noSuchMethod(Invocation.method(#call, [param]),
               returnValue:
-                  Future<_i3.Either<_i10.Failure, _i28.SettingsEntity>>.value(
-                      _FakeEither_1<_i10.Failure, _i28.SettingsEntity>()))
-          as _i9.Future<_i3.Either<_i10.Failure, _i28.SettingsEntity>>);
+                  Future<_i3.Either<_i11.Failure, _i29.SettingsEntity>>.value(
+                      _FakeEither_1<_i11.Failure, _i29.SettingsEntity>()))
+          as _i10.Future<_i3.Either<_i11.Failure, _i29.SettingsEntity>>);
+}
+
+/// A class which mocks [GetProfileUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetProfileUsecase extends _i1.Mock implements _i30.GetProfileUsecase {
+  MockGetProfileUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i8.ProfileRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeProfileRepository_6()) as _i8.ProfileRepository);
+  @override
+  _i2.AuthenticationRepository get authenticationRepository =>
+      (super.noSuchMethod(Invocation.getter(#authenticationRepository),
+              returnValue: _FakeAuthenticationRepository_0())
+          as _i2.AuthenticationRepository);
+  @override
+  _i10.Future<_i3.Either<_i11.Failure, _i31.ProfileEntity>> call(
+          _i19.NoParam? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+              returnValue:
+                  Future<_i3.Either<_i11.Failure, _i31.ProfileEntity>>.value(
+                      _FakeEither_1<_i11.Failure, _i31.ProfileEntity>()))
+          as _i10.Future<_i3.Either<_i11.Failure, _i31.ProfileEntity>>);
 }

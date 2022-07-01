@@ -14,6 +14,8 @@ import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.d
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +30,8 @@ import 'login_view_test.mocks.dart';
   LoginBloc,
   MainBloc,
   DashboardBloc,
-  LoginUsecase
+  ProfileBloc,
+  LoginUsecase,
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
@@ -36,6 +39,7 @@ void main() {
   late MockMainBloc mockMainBloc;
   late MockDashboardBloc mockDashboardBloc;
   late MockLoginUsecase mockLoginUsecase;
+  late MockProfileBloc mockProfileBloc;
   late AuthenticationBloc authenticationBloc;
   late LoginBloc loginBloc;
   late Widget testWidget;
@@ -47,11 +51,13 @@ void main() {
       mockMainBloc = MockMainBloc();
       mockDashboardBloc = MockDashboardBloc();
       mockLoginUsecase = MockLoginUsecase();
+      mockProfileBloc = MockProfileBloc();
       testWidget = buildWidget(
         authenticationBloc: mockAuthenticationBloc,
         loginBloc: mockLoginBloc,
         mainBloc: mockMainBloc,
-        dashboardBloc: mockDashboardBloc
+        dashboardBloc: mockDashboardBloc,
+        profileBloc: mockProfileBloc
       );
     });
 
@@ -104,11 +110,13 @@ void main() {
       mockMainBloc = MockMainBloc();
       mockDashboardBloc = MockDashboardBloc();
       mockLoginUsecase = MockLoginUsecase();
+      mockProfileBloc = MockProfileBloc();
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc, 
         loginBloc: mockLoginBloc,
         mainBloc: mockMainBloc,
-        dashboardBloc: mockDashboardBloc
+        dashboardBloc: mockDashboardBloc,
+        profileBloc: mockProfileBloc
       );
     });
 
@@ -121,6 +129,8 @@ void main() {
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       when(mockDashboardBloc.state).thenReturn(DashboardInit());
       when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+      when(mockProfileBloc.state).thenReturn(const ProfileInit());
+      when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       
       expect(authenticationBloc.state, Unauthenticated());
       
@@ -138,11 +148,13 @@ void main() {
       loginBloc = LoginBloc(loginUsecase: mockLoginUsecase);
       mockDashboardBloc = MockDashboardBloc();
       mockMainBloc = MockMainBloc();
+      mockProfileBloc = MockProfileBloc();
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc, 
         loginBloc: loginBloc,
         mainBloc: mockMainBloc,
-        dashboardBloc: mockDashboardBloc
+        dashboardBloc: mockDashboardBloc,
+        profileBloc: mockProfileBloc
       );
     });
 
@@ -179,6 +191,8 @@ void main() {
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       when(mockDashboardBloc.state).thenReturn(DashboardInit());
       when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+      when(mockProfileBloc.state).thenReturn(const ProfileInit());
+      when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
 
       await tester.pumpWidget(testWidget);
       await tester.pump();
@@ -322,7 +336,8 @@ Widget buildWidget({
   required AuthenticationBloc authenticationBloc,
   required LoginBloc loginBloc,
   required MainBloc mainBloc,
-  required DashboardBloc dashboardBloc
+  required DashboardBloc dashboardBloc,
+  required ProfileBloc profileBloc
 }) {
   return MultiBlocProvider(
     providers: [
@@ -337,6 +352,9 @@ Widget buildWidget({
       ),
       BlocProvider<DashboardBloc>(
         create: (_) => dashboardBloc
+      ),
+      BlocProvider<ProfileBloc>(
+        create: (_) => profileBloc
       )
     ], 
     child:  MaterialApp(

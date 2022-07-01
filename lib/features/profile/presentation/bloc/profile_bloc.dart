@@ -14,6 +14,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }) : super(const ProfileInit()) {
     on<ProfileGetData>((event, emit) async {
       emit(ProfileLoading(model: state.model));
+
+      // await Future.delayed(const Duration(seconds: 5));
+      // emit(ProfileGeneralError(model: state.model, message: "Hello"));
       final response = await getProfileUsecase(NoParam());
       response.fold(
         (error) {

@@ -11,6 +11,8 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_event.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_event.dart';
 import 'package:crosscheck/features/settings/presentation/view/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,6 +69,7 @@ class MainView extends StatelessWidget {
   Widget buildContent(BuildContext context, MainState state) {
     switch (state.model.currentPage) {
       case BottomNavigation.setting:
+        context.read<ProfileBloc>().add(ProfileGetData());
         return const Center(
           child: SettingsView(),
         );
@@ -79,6 +82,7 @@ class MainView extends StatelessWidget {
           child: Text("Event"),
         );
       default:
+        context.read<ProfileBloc>().add(ProfileGetData());
         return const DashboardView();
     }
   }
@@ -161,7 +165,7 @@ class MainView extends StatelessWidget {
         listener: (context, state) {
 
           if (state is! MainResetGeneralError) return;
-           
+ 
           final dashboardBloc = context.watch<DashboardBloc>();
           if (dashboardBloc.state is DashboardGeneralError) {
             context.read<DashboardBloc>().add(DashboardResetGeneralError());

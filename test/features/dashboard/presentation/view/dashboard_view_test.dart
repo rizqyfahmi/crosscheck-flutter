@@ -14,6 +14,8 @@ import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_naviga
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,10 +29,12 @@ import 'dashboard_view_test.mocks.dart';
   AuthenticationBloc,
   SetActiveBottomNavigationUsecase,
   GetActiveBottomNavigationUsecase,
-  GetDashboardUsecase
+  GetDashboardUsecase,
+  ProfileBloc
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
+  late MockProfileBloc mockProfileBloc;
   late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
   late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
   late MockGetDashboardUsecase mockGetDashboardUsecase;
@@ -50,6 +54,7 @@ void main() {
   ];
   setUp(() {
     mockAuthenticationBloc = MockAuthenticationBloc();
+    mockProfileBloc = MockProfileBloc();
     mockSetActiveBottomNavigationUsecase = MockSetActiveBottomNavigationUsecase();
     mockGetActiveBottomNavigationUsecase = MockGetActiveBottomNavigationUsecase();
     mainBloc = MainBloc(
@@ -59,7 +64,8 @@ void main() {
     mockGetDashboardUsecase = MockGetDashboardUsecase();
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
     testWidget = buildWidget(
-      authenticationBloc: mockAuthenticationBloc, 
+      authenticationBloc: mockAuthenticationBloc,
+      profileBloc: mockProfileBloc,
       dashboardBloc: dashboardBloc, 
       mainBloc: mainBloc
     );
@@ -68,6 +74,8 @@ void main() {
   testWidgets("Should display initial dashboard page properly", (WidgetTester tester) async {
     when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockProfileBloc.state).thenReturn(const ProfileInit());
+    when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -89,6 +97,8 @@ void main() {
   testWidgets("Should display loading modal properly", (WidgetTester tester) async {
     when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockProfileBloc.state).thenReturn(const ProfileInit());
+    when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -111,6 +121,8 @@ void main() {
   testWidgets("Should properly load data on dashboard page", (WidgetTester tester) async {
     when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockProfileBloc.state).thenReturn(const ProfileInit());
+    when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -136,6 +148,8 @@ void main() {
   testWidgets("Should display error modal when get dashboard is failed", (WidgetTester tester) async {
     when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockProfileBloc.state).thenReturn(const ProfileInit());
+    when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -160,6 +174,8 @@ void main() {
   testWidgets("Should display error modal when get dashboard is failed", (WidgetTester tester) async {
     when(mockAuthenticationBloc.state).thenReturn(Authenticated());
     when(mockAuthenticationBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockProfileBloc.state).thenReturn(const ProfileInit());
+    when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -189,6 +205,7 @@ void main() {
 
 Widget buildWidget({
   required AuthenticationBloc authenticationBloc,
+  required ProfileBloc profileBloc,
   required DashboardBloc dashboardBloc,
   required MainBloc mainBloc
 }) {
@@ -202,6 +219,9 @@ Widget buildWidget({
       ),
       BlocProvider<MainBloc>(
         create: (_) => mainBloc
+      ),
+      BlocProvider<ProfileBloc>(
+        create: (_) => profileBloc
       )
     ], 
     child: MaterialApp(

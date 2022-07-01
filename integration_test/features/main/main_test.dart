@@ -13,6 +13,9 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart';
+import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart';
 import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
@@ -41,7 +44,8 @@ import 'main_test.mocks.dart';
   GetActiveBottomNavigationUsecase,
   GetDashboardUsecase,
   SetThemeUsecase,
-  GetThemeUsecase
+  GetThemeUsecase,
+  GetProfileUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -50,6 +54,7 @@ void main() {
   late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
   late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
   late MockGetDashboardUsecase mockGetDashboardUsecase;
+  late MockGetProfileUsecase mockGetProfileUsecase;
   late MockSetThemeUsecase mockSetThemeUsecase;
   late MockGetThemeUsecase mockGetThemeUsecase;
   late AuthenticationBloc authenticationBloc;
@@ -58,6 +63,7 @@ void main() {
   late MainBloc mainBloc;
   late DashboardBloc dashboardBloc;
   late SettingsBloc settingsBloc;
+  late ProfileBloc profileBloc;
   late Widget main;
 
   final currentDate = DateTime.now();
@@ -83,6 +89,7 @@ void main() {
     mockGetDashboardUsecase = MockGetDashboardUsecase();
     mockSetThemeUsecase = MockSetThemeUsecase();
     mockGetThemeUsecase = MockGetThemeUsecase();
+    mockGetProfileUsecase = MockGetProfileUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -93,6 +100,7 @@ void main() {
     );
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
     settingsBloc = SettingsBloc(setThemeUsecase: mockSetThemeUsecase, getThemeUsecase: mockGetThemeUsecase);
+    profileBloc = ProfileBloc(getProfileUsecase: mockGetProfileUsecase);
 
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(
@@ -112,7 +120,10 @@ void main() {
       ),
       BlocProvider<SettingsBloc>(
         create: (_) => settingsBloc..add(SettingsLoad())
-      )
+      ),
+      BlocProvider<ProfileBloc>(
+        create: (_) => profileBloc
+      ),
     ]);
   });
 
@@ -127,6 +138,7 @@ void main() {
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -179,6 +191,7 @@ void main() {
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.event))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.event)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -243,6 +256,7 @@ void main() {
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.history))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.history)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -307,6 +321,7 @@ void main() {
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);

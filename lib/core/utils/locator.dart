@@ -19,7 +19,13 @@ import 'package:crosscheck/features/main/domain/repositories/main_repository.dar
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/profile/data/datasource/profile_local_data_source.dart';
+import 'package:crosscheck/features/profile/data/datasource/profile_remote_data_source.dart';
 import 'package:crosscheck/features/profile/data/models/data/profile_model.dart';
+import 'package:crosscheck/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart';
+import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/settings/data/datasource/settings_local_data_source.dart';
 import 'package:crosscheck/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart';
@@ -48,6 +54,7 @@ Future<void> init() async  {
   locator.registerFactory(() => MainBloc(getActiveBottomNavigationUsecase: locator(), setActiveBottomNavigationUsecase: locator()));
   locator.registerFactory(() => DashboardBloc(getDashboardUsecase: locator()));
   locator.registerFactory(() => SettingsBloc(setThemeUsecase: locator(), getThemeUsecase: locator()));
+  locator.registerFactory(() => ProfileBloc(getProfileUsecase: locator()));
 
   locator.registerLazySingleton(() => RegistrationUsecase(repository: locator()));
   locator.registerLazySingleton(() => LoginUsecase(repository: locator()));
@@ -58,11 +65,13 @@ Future<void> init() async  {
   locator.registerLazySingleton(() => GetDashboardUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton(() => SetThemeUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetThemeUsecase(repository: locator()));
+  locator.registerLazySingleton(() => GetProfileUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton<WalkthroughRepository>(() => WalkthroughRepositoryImpl(walkthroughLocalDataSource: locator()));
   locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
   locator.registerLazySingleton<MainRepository>(() => MainRepositoryImpl(mainLocalDataSource: locator()));
   locator.registerLazySingleton<DashboardRepository>(() => DashboardRepositoryImpl(remote: locator(), networkInfo: locator()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(settingsLocalDataSource: locator()));
+  locator.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
 
   locator.registerLazySingleton<AuthenticationRemoteDataSource>(() => AuthenticationRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<AuthenticationLocalDataSource>(() => AuthenticationLocalDataSourceImpl(sharedPreferences: locator()));
@@ -70,6 +79,8 @@ Future<void> init() async  {
   locator.registerLazySingleton<MainLocalDataSource>(() => MainLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<DashboardRemoteDataSource>(() => DashboardRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(sharedPreferences: locator()));
+  locator.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(client: locator()));
+  locator.registerLazySingleton<ProfileLocalDataSource>(() => ProfileLocalDdataSourceImpl(box: locator()));
 
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
   
@@ -77,7 +88,7 @@ Future<void> init() async  {
   locator.registerLazySingleton(() => sharedPreferences);
   
   final Box<ProfileModel> boxProfileModel = await Hive.openBox("profile");
-  locator.registerLazySingleton(() => boxProfileModel);
+  locator.registerLazySingleton<Box<ProfileModel>>(() => boxProfileModel);
   
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => InternetConnectionChecker());
