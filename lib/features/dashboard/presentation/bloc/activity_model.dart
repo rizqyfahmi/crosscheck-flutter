@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 
 class ActivityModel extends Equatable {
 
+  final String fullname;
+  final String photoUrl;
   final String progress;
   final bool isActive;
   final double heightBar;
@@ -9,6 +11,8 @@ class ActivityModel extends Equatable {
   final int total;
 
   const ActivityModel({
+    this.fullname = "-",
+    this.photoUrl = "",
     this.progress = "0%", 
     this.isActive = false,
     this.heightBar = 0,

@@ -1,5 +1,4 @@
 import 'package:crosscheck/assets/colors/custom_colors.dart';
-import 'package:crosscheck/assets/icons/custom_icons.dart';
 import 'package:crosscheck/core/widgets/cloudy_card/cloudy_card.dart';
 import 'package:crosscheck/core/widgets/dialog/dialog.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({ Key? key }) : super(key: key);
@@ -69,7 +67,7 @@ class DashboardView extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    state.model.username,
+                                    state.model.fullname,
                                     key: const Key("usernameText"),
                                     style: Theme.of(context).textTheme.subtitle2?.copyWith(
                                       color: Theme.of(context).colorScheme.primary,
@@ -90,7 +88,19 @@ class DashboardView extends StatelessWidget {
                           )
                         ),
                         const SizedBox(width: 16),
-                        SvgPicture.asset(CustomIcons.avatar)
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(32)
+                          ),
+                          height: 64,
+                          width: 64,
+                          clipBehavior: Clip.antiAlias,
+                          child: Image.network(
+                            state.model.photoUrl,
+                            key: const Key("imageProfile"),
+                            fit: BoxFit.contain,
+                          ),
+                        )
                       ],
                     ),
                     const SizedBox(height: 32),

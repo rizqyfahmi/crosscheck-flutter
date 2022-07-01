@@ -146,6 +146,10 @@ class MockGetDashboardUsecase extends _i1.Mock
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
+  _i6.ProfileRepository get profileRepository =>
+      (super.noSuchMethod(Invocation.getter(#profileRepository),
+          returnValue: _FakeProfileRepository_4()) as _i6.ProfileRepository);
+  @override
   _i8.Future<_i3.Either<_i9.Failure, _i17.DashboardEntity>> call(
           _i15.NoParam? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),

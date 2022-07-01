@@ -44,7 +44,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           }
 
           final model = state.model.copyWith(
-            username: "N/A",
+            fullname: result.fullname ?? "-",
+            photoUrl: result.photoUrl ?? "https://via.placeholder.com/60x60/F24B59/F24B59?text=.",
             taskText: taskText,
             activities: activities,
             upcoming: result.upcoming,

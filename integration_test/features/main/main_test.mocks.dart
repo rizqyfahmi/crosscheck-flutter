@@ -31,7 +31,7 @@ import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_naviga
 import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart'
     as _i29;
 import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart'
-    as _i8;
+    as _i7;
 import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart'
     as _i28;
 import 'package:crosscheck/features/settings/data/models/params/settings_params.dart'
@@ -39,7 +39,7 @@ import 'package:crosscheck/features/settings/data/models/params/settings_params.
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart'
     as _i27;
 import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart'
-    as _i7;
+    as _i8;
 import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart'
     as _i26;
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart'
@@ -80,11 +80,11 @@ class _FakeMainRepository_3 extends _i1.Fake implements _i5.MainRepository {}
 class _FakeDashboardRepository_4 extends _i1.Fake
     implements _i6.DashboardRepository {}
 
-class _FakeSettingsRepository_5 extends _i1.Fake
-    implements _i7.SettingsRepository {}
+class _FakeProfileRepository_5 extends _i1.Fake
+    implements _i7.ProfileRepository {}
 
-class _FakeProfileRepository_6 extends _i1.Fake
-    implements _i8.ProfileRepository {}
+class _FakeSettingsRepository_6 extends _i1.Fake
+    implements _i8.SettingsRepository {}
 
 /// A class which mocks [LoginUsecase].
 ///
@@ -217,6 +217,10 @@ class MockGetDashboardUsecase extends _i1.Mock
               returnValue: _FakeAuthenticationRepository_0())
           as _i2.AuthenticationRepository);
   @override
+  _i7.ProfileRepository get profileRepository =>
+      (super.noSuchMethod(Invocation.getter(#profileRepository),
+          returnValue: _FakeProfileRepository_5()) as _i7.ProfileRepository);
+  @override
   _i10.Future<_i3.Either<_i11.Failure, _i23.DashboardEntity>> call(
           _i17.NoParam? params) =>
       (super.noSuchMethod(Invocation.method(#call, [params]),
@@ -235,9 +239,9 @@ class MockSetThemeUsecase extends _i1.Mock implements _i24.SetThemeUsecase {
   }
 
   @override
-  _i7.SettingsRepository get repository =>
+  _i8.SettingsRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeSettingsRepository_5()) as _i7.SettingsRepository);
+          returnValue: _FakeSettingsRepository_6()) as _i8.SettingsRepository);
   @override
   _i10.Future<_i3.Either<_i11.Failure, void>> call(
           _i25.SettingsParams? params) =>
@@ -256,9 +260,9 @@ class MockGetThemeUsecase extends _i1.Mock implements _i26.GetThemeUsecase {
   }
 
   @override
-  _i7.SettingsRepository get repository =>
+  _i8.SettingsRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeSettingsRepository_5()) as _i7.SettingsRepository);
+          returnValue: _FakeSettingsRepository_6()) as _i8.SettingsRepository);
   @override
   _i10.Future<_i3.Either<_i11.Failure, _i27.SettingsEntity>> call(
           _i17.NoParam? param) =>
@@ -278,9 +282,9 @@ class MockGetProfileUsecase extends _i1.Mock implements _i28.GetProfileUsecase {
   }
 
   @override
-  _i8.ProfileRepository get repository =>
+  _i7.ProfileRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeProfileRepository_6()) as _i8.ProfileRepository);
+          returnValue: _FakeProfileRepository_5()) as _i7.ProfileRepository);
   @override
   _i2.AuthenticationRepository get authenticationRepository =>
       (super.noSuchMethod(Invocation.getter(#authenticationRepository),

@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 
 class DashboardModel extends Equatable {
   
-  final String username;
-  final String photoPath;
+  final String fullname;
+  final String photoUrl;
   final String taskText;
   final int upcoming;
   final int completed;
@@ -12,8 +12,8 @@ class DashboardModel extends Equatable {
   late final List<ActivityModel> activities;
 
   DashboardModel({
-    this.username = "N/A",
-    this.photoPath = "",  
+    this.fullname = "-",
+    this.photoUrl = "https://via.placeholder.com/60x60/F24B59/F24B59?text=.",  
     this.taskText = "You have no task right now",
     this.upcoming = 0,
     this.completed = 0,
@@ -34,8 +34,8 @@ class DashboardModel extends Equatable {
   }
 
   DashboardModel copyWith({
-    String? username,
-    String? photoPath,
+    String? fullname,
+    String? photoUrl,
     String? taskText,
     int? upcoming,
     int? completed,
@@ -43,8 +43,8 @@ class DashboardModel extends Equatable {
     List<ActivityModel>? activities
   }) {
     return DashboardModel(
-      username: username ?? this.username, 
-      photoPath: photoPath ?? this.photoPath, 
+      fullname: fullname ?? this.fullname, 
+      photoUrl: photoUrl ?? this.photoUrl, 
       taskText: taskText ?? this.taskText, 
       upcoming: upcoming ?? this.upcoming, 
       completed: completed ?? this.completed, 
@@ -55,7 +55,7 @@ class DashboardModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    username, photoPath, taskText, upcoming, completed, progress, activities
+    fullname, photoUrl, taskText, upcoming, completed, progress, activities
   ];
   
 }

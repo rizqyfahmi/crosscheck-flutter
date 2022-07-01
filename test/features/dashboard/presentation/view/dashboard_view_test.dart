@@ -5,7 +5,6 @@ import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart';
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart';
-import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
@@ -22,7 +21,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
+import '../../../../utils/utils.dart';
 import 'dashboard_view_test.mocks.dart';
 
 @GenerateMocks([
@@ -42,16 +43,6 @@ void main() {
   late MainBloc mainBloc;
   late Widget testWidget;
 
-  final currentDate = DateTime.now();
-  final List<ActivityEntity> activities = [
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
-  ];
   setUp(() {
     mockAuthenticationBloc = MockAuthenticationBloc();
     mockProfileBloc = MockProfileBloc();
@@ -79,14 +70,14 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Right(DashboardEntity(progress: 8, upcoming: 23, completed: 2, activities: activities));
+      return Right(DashboardEntity(fullname: "fulan", photoUrl: "https://via.placeholder.com/60x60/F24B59/F24B59?text=.", progress: 8, upcoming: 23, completed: 2, activities: Utils().activityEntity));
     });
 
     await tester.runAsync(() async {
-      await tester.pumpWidget(testWidget);
+      await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
       await tester.pump();
 
-      expect(find.text("N/A"), findsOneWidget);
+      expect(find.text("-"), findsOneWidget);
       expect(find.text("You have no task right now"), findsOneWidget);
       expect(tester.widgetList<Text>(find.text("0")).length, 2);
       expect(tester.widgetList<Text>(find.text("0%")).length, 1);
@@ -102,11 +93,11 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Right(DashboardEntity(progress: 8, upcoming: 23, completed: 2, activities: activities));
+      return Right(DashboardEntity(fullname: "fulan", photoUrl: "https://via.placeholder.com/60x60/F24B59/F24B59?text=.", progress: 8, upcoming: 23, completed: 2, activities: Utils().activityEntity));
     });
 
     await tester.runAsync(() async {
-      await tester.pumpWidget(testWidget);
+      await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
       await tester.pump();
       await tester.pump();
 
@@ -126,11 +117,11 @@ void main() {
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Right(DashboardEntity(progress: 8, upcoming: 23, completed: 2, activities: activities));
+      return Right(DashboardEntity(fullname: "fulan", photoUrl: "https://via.placeholder.com/60x60/F24B59/F24B59?text=.", progress: 8, upcoming: 23, completed: 2, activities: Utils().activityEntity));
     });
 
     await tester.runAsync(() async {
-      await tester.pumpWidget(testWidget);
+      await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
       await tester.pump();
       await tester.pump();
 
@@ -157,7 +148,7 @@ void main() {
     });
 
     await tester.runAsync(() async {
-      await tester.pumpWidget(testWidget);
+      await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
       await tester.pump();
       await tester.pump();
 
@@ -183,7 +174,7 @@ void main() {
     });
 
     await tester.runAsync(() async {
-      await tester.pumpWidget(testWidget);
+      await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
       await tester.pump();
       await tester.pump();
 

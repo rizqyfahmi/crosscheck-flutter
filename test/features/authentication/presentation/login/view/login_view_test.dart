@@ -22,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 import 'login_view_test.mocks.dart';
 
@@ -135,8 +136,8 @@ void main() {
       expect(authenticationBloc.state, Unauthenticated());
       
       await tester.pumpWidget(testWidget);
-      await tester.pump();
-
+      await mockNetworkImagesFor(() => tester.pump());
+      
       expect(authenticationBloc.state, Authenticated());
     });
   });
@@ -209,7 +210,7 @@ void main() {
       
       await tester.runAsync(() async {
         await Future.delayed(const Duration(seconds: 1));
-        await tester.pump();
+        await mockNetworkImagesFor(() => tester.pump());
         
         expect(loginBloc.state, const LoginSuccess());
         expect(authenticationBloc.state, Authenticated());

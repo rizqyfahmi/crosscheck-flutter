@@ -13,6 +13,10 @@ import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.d
     as _i6;
 import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repository.dart'
     as _i3;
+import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart'
+    as _i10;
+import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart'
+    as _i9;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -88,4 +92,22 @@ class MockAuthenticationRepository extends _i1.Mock
                       _i2.Either<_i5.Failure, _i8.AuthenticationEntity>>.value(
                   _FakeEither_0<_i5.Failure, _i8.AuthenticationEntity>()))
           as _i4.Future<_i2.Either<_i5.Failure, _i8.AuthenticationEntity>>);
+}
+
+/// A class which mocks [ProfileRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProfileRepository extends _i1.Mock implements _i9.ProfileRepository {
+  MockProfileRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i10.ProfileEntity>> getProfile(
+          {String? token}) =>
+      (super.noSuchMethod(Invocation.method(#getProfile, [], {#token: token}),
+              returnValue:
+                  Future<_i2.Either<_i5.Failure, _i10.ProfileEntity>>.value(
+                      _FakeEither_0<_i5.Failure, _i10.ProfileEntity>()))
+          as _i4.Future<_i2.Either<_i5.Failure, _i10.ProfileEntity>>);
 }

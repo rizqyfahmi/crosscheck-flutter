@@ -1,6 +1,4 @@
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
-import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/activity_model.dart';
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
@@ -12,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../utils/utils.dart';
 import 'dashboard_bloc_test.mocks.dart';
 
 @GenerateMocks([
@@ -23,27 +22,17 @@ void main() {
   late DashboardModel dashboardBlocModel;
 
   final currentDate = DateTime.now();
-  final List<ActivityEntity> activities = [
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.monday)), total: 5),   
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.tuesday)), total: 7),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.wednesday)), total: 3),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.thursday)), total: 2),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.friday)), total: 7),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.saturday)), total: 1),
-    ActivityEntity(date: currentDate.subtract(Duration(days: currentDate.weekday - DateTime.sunday)), total: 5),
-  ];
-  const int upcoming = 20;
-  const int completed = 5;
-  final double weeklyTotal = activities.map((e) => double.parse(e.total.toString())).reduce((value, result) => value + result);
-  final DashboardEntity entity = DashboardEntity(progress: (completed / (upcoming + completed)) * 100, upcoming: upcoming, completed: completed, activities: activities);
+  final double weeklyTotal = Utils().activityEntity.map((e) => double.parse(e.total.toString())).reduce((value, result) => value + result);
+  
   setUp(() {
     dashboardBlocModel = DashboardModel(
-      username: "N/A",
+      fullname: "fulan",
+      photoUrl: "https://via.placeholder.com/60x60",
       upcoming: 20,
       completed: 5,
       progress: "20%",
       taskText: "You have 20 tasks right now",
-      activities: activities.map((activity) {
+      activities: Utils().activityEntity.map((activity) {
         final calculatedProgress = (activity.total / weeklyTotal) * 100;
         return ActivityModel(
           progress: (calculatedProgress).toStringAsFixed(0), 
@@ -64,7 +53,11 @@ void main() {
 
   test("Should return DashboardSuccess when get dashboard is success", () async {
 
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    final mockedEntity = Utils().dashboardEntity.copyWith(
+      fullname: "fulan",
+      photoUrl: "https://via.placeholder.com/60x60"
+    );
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(mockedEntity));
 
     dashboardBloc.add(DashboardGetData());
     
@@ -79,7 +72,12 @@ void main() {
 
   test("Should return DashboardInit when reset dashboard is success", () async {
 
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    final mockedEntity = Utils().dashboardEntity.copyWith(
+      fullname: "fulan",
+      photoUrl: "https://via.placeholder.com/60x60"
+    );
+
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(mockedEntity));
 
     dashboardBloc.add(DashboardGetData());
     dashboardBloc.add(DashboardResetData());
