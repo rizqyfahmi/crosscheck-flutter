@@ -8,6 +8,7 @@ import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.d
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/view/main_view.dart';
 import 'package:crosscheck/features/profile/data/models/data/profile_model.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
@@ -19,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,6 +53,9 @@ void main() async {
     ),
     BlocProvider<SettingsBloc>(
       create: (_) => di.locator<SettingsBloc>()..add(SettingsLoad())
+    ),
+    BlocProvider<ProfileBloc>(
+      create: (_) => di.locator<ProfileBloc>(),
     )
   ];
   runApp(MyApp(providers: providers));
@@ -77,9 +83,10 @@ class MyApp extends StatelessWidget {
               LoginView.routeName: (context) => const LoginView(),
               MainView.routeName: (context) => const MainView()
             },
+            navigatorKey: navigatorKey,
           );
         }
-      ),
+      )
     );
   }
 }

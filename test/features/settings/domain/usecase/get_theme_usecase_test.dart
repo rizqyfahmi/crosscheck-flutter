@@ -34,11 +34,11 @@ void main() {
   });
 
   test("Should return CachedFaiure when get theme is failed", () async {
-    when(mockSettingsRepository.getTheme()).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockSettingsRepository.getTheme()).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     final result = await getThemeUsecase(NoParam());
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockSettingsRepository.getTheme());
   });
   

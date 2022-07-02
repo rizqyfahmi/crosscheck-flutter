@@ -70,11 +70,11 @@ void main() {
 
   test('Should returns ServerFailure when get profile from remote data source throws ServerException', () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockProfileRemoteDataSource.getProfile(token: token)).thenThrow(ServerException(message: Failure.generalError));
+    when(mockProfileRemoteDataSource.getProfile(token: token)).thenThrow(const ServerException(message: Failure.generalError));
 
     final result = await profileRepository.getProfile(token: token);
 
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
     verify(mockNetworkInfo.isConnected);
     verify(mockProfileRemoteDataSource.getProfile(token: token));
     verifyNever(mockProfileLocalDataSource.setProfile(any));
@@ -84,11 +84,11 @@ void main() {
   test('Should returns CachedFailure when set profile into local data source throws CacheException', () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockProfileRemoteDataSource.getProfile(token: token)).thenAnswer((_) async => const ProfileResponseModel(message: "Response OK", data: ProfileModel(id: "123", fullname: "fulan", email: "fulan@email.com")));
-    when(mockProfileLocalDataSource.setProfile(any)).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockProfileLocalDataSource.setProfile(any)).thenThrow(const CacheException(message: Failure.cacheError));
 
     final result = await profileRepository.getProfile(token: token);
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockNetworkInfo.isConnected);
     verify(mockProfileRemoteDataSource.getProfile(token: token));
     verify(mockProfileLocalDataSource.setProfile(any));
@@ -97,11 +97,11 @@ void main() {
 
   test('Should returns CachedFailure when get profile from local data source throws CacheException', () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-    when(mockProfileLocalDataSource.getProfile()).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockProfileLocalDataSource.getProfile()).thenThrow(const CacheException(message: Failure.cacheError));
     
     final result = await profileRepository.getProfile(token: token);
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockNetworkInfo.isConnected);
     verifyNever(mockProfileRemoteDataSource.getProfile(token: token));
     verifyNever(mockProfileLocalDataSource.setProfile(any));

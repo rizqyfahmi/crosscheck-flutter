@@ -17,6 +17,9 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart';
+import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +33,8 @@ import 'login_view_test.mocks.dart';
   LoginUsecase,
   SetActiveBottomNavigationUsecase,
   GetActiveBottomNavigationUsecase,
-  GetDashboardUsecase
+  GetDashboardUsecase,
+  GetProfileUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -38,9 +42,11 @@ void main() {
   late MockSetActiveBottomNavigationUsecase mockSetActiveBottomNavigationUsecase;
   late MockGetActiveBottomNavigationUsecase mockGetActiveBottomNavigationUsecase;
   late MockGetDashboardUsecase mockGetDashboardUsecase;
+  late MockGetProfileUsecase mockGetProfileUsecase;
   late LoginBloc loginBloc;
   late MainBloc mainBloc;
   late DashboardBloc dashboardBloc;
+  late ProfileBloc profileBloc;
   late Widget testWidget;
 
   final currentDate = DateTime.now();
@@ -62,6 +68,7 @@ void main() {
     mockSetActiveBottomNavigationUsecase = MockSetActiveBottomNavigationUsecase();
     mockGetActiveBottomNavigationUsecase = MockGetActiveBottomNavigationUsecase();
     mockGetDashboardUsecase = MockGetDashboardUsecase();
+    mockGetProfileUsecase = MockGetProfileUsecase();
     authenticationBloc = AuthenticationBloc();
     loginBloc = LoginBloc(loginUsecase: mockLoginUsecase);
     mainBloc = MainBloc(
@@ -69,12 +76,14 @@ void main() {
       setActiveBottomNavigationUsecase: mockSetActiveBottomNavigationUsecase
     );
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
+    profileBloc = ProfileBloc(getProfileUsecase: mockGetProfileUsecase);
 
     testWidget = buildWidget(
       authenticationBloc: authenticationBloc, 
       loginBloc: loginBloc,
       mainBloc: mainBloc,
-      dashboardBloc: dashboardBloc
+      dashboardBloc: dashboardBloc,
+      profileBloc: profileBloc
     );
   });
 
@@ -102,6 +111,7 @@ void main() {
     });
 
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    when(mockGetProfileUsecase(any)).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
@@ -135,6 +145,7 @@ void main() {
     });
 
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    when(mockGetProfileUsecase(any)).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.pumpWidget(testWidget);
     await tester.pump();
@@ -166,12 +177,14 @@ void main() {
   testWidgets("Should return LoginGeneralError when submit login form is failed because of NetworkFailure()", (WidgetTester tester) async {
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(ServerFailure(message: NetworkFailure.message));
+      return const Left(ServerFailure(message: Failure.networkError));
     });
     
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async {
       return const Right(BottomNavigationEntity(currentPage: BottomNavigation.home));
     });
+
+    when(mockGetProfileUsecase(any)).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.pumpWidget(testWidget);
     await tester.pump();
@@ -194,8 +207,8 @@ void main() {
       await tester.pump();
       
       expect(find.text("Loading..."), findsNothing);
-      expect(loginBloc.state, const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(username: "fulan@email.com", password: "Password123")));
-      expect(find.text(NetworkFailure.message), findsOneWidget);
+      expect(loginBloc.state, const LoginGeneralError(message: Failure.networkError, model: LoginModel(username: "fulan@email.com", password: "Password123")));
+      expect(find.text(Failure.networkError), findsOneWidget);
 
       await tester.ensureVisible(find.byKey(const Key("dismissButton")));
       await tester.pumpAndSettle();
@@ -203,7 +216,7 @@ void main() {
       await tester.pump();
 
       expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(username: "fulan@email.com", password: "Password123")));
-      expect(find.text(NetworkFailure.message), findsNothing);
+      expect(find.text(Failure.networkError), findsNothing);
     });
 
   });
@@ -211,12 +224,14 @@ void main() {
   testWidgets("Should return LoginGeneralError when submit login form is failed because of username or password still empty", (WidgetTester tester) async {
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(ServerFailure(message: Failure.loginRequiredFieldError));
+      return const Left(ServerFailure(message: Failure.loginRequiredFieldError));
     });
 
     when(mockGetActiveBottomNavigationUsecase(any)).thenAnswer((_) async {
       return const Right(BottomNavigationEntity(currentPage: BottomNavigation.home));
     });
+
+    when(mockGetProfileUsecase(any)).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.pumpWidget(testWidget);
     await tester.pump();
@@ -253,8 +268,10 @@ void main() {
   testWidgets("Should return LoginNoGeneralError when button dismissed is clicked after submit login form is failed", (WidgetTester tester) async {
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(ServerFailure(message: Failure.generalError));
+      return const Left(ServerFailure(message: Failure.generalError));
     });
+
+    
 
     await tester.pumpWidget(testWidget);
     await tester.pump();
@@ -296,7 +313,8 @@ Widget buildWidget({
   required AuthenticationBloc authenticationBloc,
   required LoginBloc loginBloc,
   required MainBloc mainBloc,
-  required DashboardBloc dashboardBloc
+  required DashboardBloc dashboardBloc,
+  required ProfileBloc profileBloc
 }) {
   return MultiBlocProvider(
     providers: [
@@ -311,7 +329,10 @@ Widget buildWidget({
       ),
       BlocProvider<DashboardBloc>(
         create: (_) => dashboardBloc
-      )
+      ),
+      BlocProvider<ProfileBloc>(
+        create: (_) => profileBloc
+      ),
     ], 
     child: MaterialApp(
       theme: ThemeData(

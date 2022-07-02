@@ -37,11 +37,11 @@ void main() {
   test("Should returns ServerFailure when login returns ServerFailure", () async {
     when(mockAuthenticationRepository.login(
       username: "fulan@email.com", password: "Password123"
-    )).thenAnswer((_) async => Left(ServerFailure(message: Failure.generalError)));
+    )).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
     final result = await usecase(loginParams);
     
-    expect(result, Left(ServerFailure(message: Failure.generalError)));
+    expect(result, const Left(ServerFailure(message: Failure.generalError)));
     verify(mockAuthenticationRepository.login(
       username: "fulan@email.com", password: "Password123"
     ));
@@ -50,11 +50,11 @@ void main() {
   test("Should returns CacheFailure when login returns CacheFailure", () async {
     when(mockAuthenticationRepository.login(
       username: "fulan@email.com", password: "Password123"
-    )).thenAnswer((_) async => Left(CachedFailure(message: Failure.generalError)));
+    )).thenAnswer((_) async => const Left(CacheFailure(message: Failure.generalError)));
 
     final result = await usecase(loginParams);
     
-    expect(result, Left(CachedFailure(message: Failure.generalError)));
+    expect(result, const Left(CacheFailure(message: Failure.generalError)));
     verify(mockAuthenticationRepository.login(
       username: "fulan@email.com", password: "Password123"
     ));
@@ -63,11 +63,11 @@ void main() {
   test("Should returns ServerFailure when login with username or password that is still empty", () async {
     when(mockAuthenticationRepository.login(
       username: "fulan@email.com", password: "Password123"
-    )).thenAnswer((_) async => Left(ServerFailure(message: Failure.loginRequiredFieldError)));
+    )).thenAnswer((_) async => const Left(ServerFailure(message: Failure.loginRequiredFieldError)));
 
     final result = await usecase(LoginParams(username: "", password: ""));
     
-    expect(result, Left(ServerFailure(message: Failure.loginRequiredFieldError)));
+    expect(result, const Left(ServerFailure(message: Failure.loginRequiredFieldError)));
     verifyNever(mockAuthenticationRepository.login(
       username: "fulan@email.com", password: "Password123"
     ));

@@ -35,7 +35,7 @@ void main() {
   });
 
   test("Should return CacheExpection when set theme is failed", () async {
-    when(mockSettingsLocalDataSource.setTheme(any)).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockSettingsLocalDataSource.setTheme(any)).thenThrow(const CacheException(message: Failure.cacheError));
 
     const params = SettingsModel(themeMode: Brightness.light);
     final call = settingsRepository.setTheme;
@@ -58,11 +58,11 @@ void main() {
   });
 
   test("Should return CachedFailure when get theme is failed", () async {
-    when(mockSettingsLocalDataSource.getTheme()).thenThrow(CacheException(message: Failure.cacheError));
+    when(mockSettingsLocalDataSource.getTheme()).thenThrow(const CacheException(message: Failure.cacheError));
 
     final result = await settingsRepository.getTheme();
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
 
     verify(mockSettingsLocalDataSource.getTheme());
   });

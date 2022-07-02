@@ -24,7 +24,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
       final response = await settingsLocalDataSource.getTheme();
       return Right(response);
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
   }
   

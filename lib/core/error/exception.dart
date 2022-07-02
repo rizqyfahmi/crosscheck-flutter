@@ -1,9 +1,9 @@
 import 'package:crosscheck/core/error/failure.dart';
 
 class ServerException extends ServerFailure implements Exception {
-  ServerException({required super.message, super.errors});
+  const ServerException({required super.message, super.errors});
 }
 
-class CacheException extends CachedFailure implements Exception {
-  CacheException({required super.message});
+class CacheException extends CacheFailure implements Exception {
+  const CacheException({required super.message});
 }

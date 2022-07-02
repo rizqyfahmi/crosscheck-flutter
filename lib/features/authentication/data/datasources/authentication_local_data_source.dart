@@ -26,7 +26,7 @@ class AuthenticationLocalDataSourceImpl implements AuthenticationLocalDataSource
     final result = await sharedPreferences.setString("CACHED_AUTHENTICATION", json.encode(model.toJSON()));
 
     if (!result) {
-      throw CacheException(message: Failure.cacheError);
+      throw const CacheException(message: Failure.cacheError);
     }
   }
   
@@ -38,7 +38,7 @@ class AuthenticationLocalDataSourceImpl implements AuthenticationLocalDataSource
       return Future.value(AuthenticationModel.fromJSON(json.decode(result)));
     }
 
-    throw CacheException(message: Failure.cacheError);
+    throw const CacheException(message: Failure.cacheError);
   }
 
 }

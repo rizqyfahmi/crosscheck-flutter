@@ -34,11 +34,11 @@ void main() {
 
   test('Should returns CacheFailure when get cached token returns CacheFailure', () async {
 
-    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     final result = await authenticationUsecase(NoParam());
 
-    expect(result, Left(CachedFailure(message: Failure.cacheError)));
+    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     
   });
 }

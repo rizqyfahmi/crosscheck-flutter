@@ -14,12 +14,15 @@ import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.d
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 import 'login_view_test.mocks.dart';
 
@@ -28,7 +31,8 @@ import 'login_view_test.mocks.dart';
   LoginBloc,
   MainBloc,
   DashboardBloc,
-  LoginUsecase
+  ProfileBloc,
+  LoginUsecase,
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
@@ -36,6 +40,7 @@ void main() {
   late MockMainBloc mockMainBloc;
   late MockDashboardBloc mockDashboardBloc;
   late MockLoginUsecase mockLoginUsecase;
+  late MockProfileBloc mockProfileBloc;
   late AuthenticationBloc authenticationBloc;
   late LoginBloc loginBloc;
   late Widget testWidget;
@@ -47,11 +52,13 @@ void main() {
       mockMainBloc = MockMainBloc();
       mockDashboardBloc = MockDashboardBloc();
       mockLoginUsecase = MockLoginUsecase();
+      mockProfileBloc = MockProfileBloc();
       testWidget = buildWidget(
         authenticationBloc: mockAuthenticationBloc,
         loginBloc: mockLoginBloc,
         mainBloc: mockMainBloc,
-        dashboardBloc: mockDashboardBloc
+        dashboardBloc: mockDashboardBloc,
+        profileBloc: mockProfileBloc
       );
     });
 
@@ -104,11 +111,13 @@ void main() {
       mockMainBloc = MockMainBloc();
       mockDashboardBloc = MockDashboardBloc();
       mockLoginUsecase = MockLoginUsecase();
+      mockProfileBloc = MockProfileBloc();
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc, 
         loginBloc: mockLoginBloc,
         mainBloc: mockMainBloc,
-        dashboardBloc: mockDashboardBloc
+        dashboardBloc: mockDashboardBloc,
+        profileBloc: mockProfileBloc
       );
     });
 
@@ -121,12 +130,14 @@ void main() {
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       when(mockDashboardBloc.state).thenReturn(DashboardInit());
       when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+      when(mockProfileBloc.state).thenReturn(const ProfileInit());
+      when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       
       expect(authenticationBloc.state, Unauthenticated());
       
       await tester.pumpWidget(testWidget);
-      await tester.pump();
-
+      await mockNetworkImagesFor(() => tester.pump());
+      
       expect(authenticationBloc.state, Authenticated());
     });
   });
@@ -138,11 +149,13 @@ void main() {
       loginBloc = LoginBloc(loginUsecase: mockLoginUsecase);
       mockDashboardBloc = MockDashboardBloc();
       mockMainBloc = MockMainBloc();
+      mockProfileBloc = MockProfileBloc();
       testWidget = buildWidget(
         authenticationBloc: authenticationBloc, 
         loginBloc: loginBloc,
         mainBloc: mockMainBloc,
-        dashboardBloc: mockDashboardBloc
+        dashboardBloc: mockDashboardBloc,
+        profileBloc: mockProfileBloc
       );
     });
 
@@ -179,6 +192,8 @@ void main() {
       when(mockMainBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
       when(mockDashboardBloc.state).thenReturn(DashboardInit());
       when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+      when(mockProfileBloc.state).thenReturn(const ProfileInit());
+      when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
 
       await tester.pumpWidget(testWidget);
       await tester.pump();
@@ -195,7 +210,7 @@ void main() {
       
       await tester.runAsync(() async {
         await Future.delayed(const Duration(seconds: 1));
-        await tester.pump();
+        await mockNetworkImagesFor(() => tester.pump());
         
         expect(loginBloc.state, const LoginSuccess());
         expect(authenticationBloc.state, Authenticated());
@@ -206,7 +221,7 @@ void main() {
     testWidgets("Should return LoginGeneralError when submit login form is failed because of NetworkFailure()", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: NetworkFailure.message));
+        return const Left(ServerFailure(message: Failure.networkError));
       });
 
       await tester.pumpWidget(testWidget);
@@ -228,8 +243,8 @@ void main() {
         await tester.pump();
         
         expect(find.text("Loading..."), findsNothing);
-        expect(loginBloc.state, const LoginGeneralError(message: NetworkFailure.message, model: LoginModel(username: "fulan@email.com", password: "Password123")));
-        expect(find.text(NetworkFailure.message), findsOneWidget);
+        expect(loginBloc.state, const LoginGeneralError(message: Failure.networkError, model: LoginModel(username: "fulan@email.com", password: "Password123")));
+        expect(find.text(Failure.networkError), findsOneWidget);
 
         await tester.ensureVisible(find.byKey(const Key("dismissButton")));
         await tester.pumpAndSettle();
@@ -237,7 +252,7 @@ void main() {
         await tester.pump();
 
         expect(loginBloc.state, const LoginNoGeneralError(model: LoginModel(username: "fulan@email.com", password: "Password123")));
-        expect(find.text(NetworkFailure.message), findsNothing);
+        expect(find.text(Failure.networkError), findsNothing);
       });
 
     });
@@ -245,7 +260,7 @@ void main() {
     testWidgets("Should return LoginGeneralError when submit login form is failed because of username or password still empty", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: Failure.loginRequiredFieldError));
+        return const Left(ServerFailure(message: Failure.loginRequiredFieldError));
       });
 
       await tester.pumpWidget(testWidget);
@@ -281,7 +296,7 @@ void main() {
     testWidgets("Should return LoginNoGeneralError when button dismissed is clicked after submit login form is failed", (WidgetTester tester) async {
       when(mockLoginUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: Failure.generalError));
+        return const Left(ServerFailure(message: Failure.generalError));
       });
 
       await tester.pumpWidget(testWidget);
@@ -322,7 +337,8 @@ Widget buildWidget({
   required AuthenticationBloc authenticationBloc,
   required LoginBloc loginBloc,
   required MainBloc mainBloc,
-  required DashboardBloc dashboardBloc
+  required DashboardBloc dashboardBloc,
+  required ProfileBloc profileBloc
 }) {
   return MultiBlocProvider(
     providers: [
@@ -337,6 +353,9 @@ Widget buildWidget({
       ),
       BlocProvider<DashboardBloc>(
         create: (_) => dashboardBloc
+      ),
+      BlocProvider<ProfileBloc>(
+        create: (_) => profileBloc
       )
     ], 
     child:  MaterialApp(

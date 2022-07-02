@@ -39,6 +39,17 @@ class ProfileModel extends ProfileEntity {
     super.photoUrl
   });
 
+  factory ProfileModel.fromParent(ProfileEntity entity) {
+    return ProfileModel(
+      id: entity.id,
+      fullname: entity.fullname,
+      email: entity.email,
+      address: entity.address,
+      dob: entity.dob,
+      photoUrl: entity.photoUrl
+    );
+  }
+
   factory ProfileModel.fromJSON(Map<String, dynamic> response) {
     final isDobNull = response["dob"] == "" || response["dob"] == null;
     final isAddressNull = response["address"] == "" || response["address"] == null;

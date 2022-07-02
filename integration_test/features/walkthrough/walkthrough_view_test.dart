@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets("Should display walkthrough view properly when GetIsSkipUsecase returns a failure", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
@@ -93,7 +93,7 @@ void main() {
   });
 
   testWidgets("Should redirect to login view properly when SetIsSkipUsecase returns WalkthroughSkipSuccess", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
 
     await tester.runAsync(() async {
@@ -119,8 +119,8 @@ void main() {
   });
 
   testWidgets("Should redirect to login view properly when SetIsSkipUsecase returns WalkthroughSkipFailed", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
-    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
+    when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);

@@ -33,6 +33,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           }
 
           emit(SettingsThemeChanged(model: SettingsModel(themeMode: themeData.brightness, themeData: themeData)));
+          emit(SettingsIdle(model: state.model));
         }
       );
     });
@@ -54,9 +55,20 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         }, 
         (_) {
           emit(SettingsThemeChanged(model: SettingsModel(themeMode: themeData.brightness, themeData: themeData)));
+          emit(SettingsIdle(model: state.model));
         } 
       );
     });
+    on<SettingsSetLoading>((event, emit) => emit(SettingsLoading(model: state.model)));
+    on<SettingsFinishLoading>((event, emit) {
+      emit(SettingsLoadingFinished(model: state.model));
+      emit(SettingsIdle(model: state.model));
+    });
+    on<SettingsSetGeneralError>((event, emit) {
+      debugPrint("bloc: ${event.toString()}");
+      emit(SettingsGeneralError(title: event.title, message: event.message, model: state.model));
+    });
+    on<SettingsResetGeneralError>((event, emit) => emit(SettingsIdle(model: state.model)));
   }
   
 }

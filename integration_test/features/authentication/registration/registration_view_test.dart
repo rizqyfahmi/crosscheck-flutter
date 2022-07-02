@@ -165,7 +165,7 @@ void main() {
   testWidgets("Should show and hide RegistrationGeneralError when registration returns NetworkFailure", (WidgetTester tester) async {
     when(mockRegistrationUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure(message: Failure.networkError));
     });
 
     await tester.pumpWidget(testWidget);
@@ -191,9 +191,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text("Loading..."), findsNothing);
 
-      expected = RegistrationGeneralError(message: NetworkFailure.message, model: model);
+      expected = RegistrationGeneralError(message: Failure.networkError, model: model);
       expect(registrationBloc.state, expected);
-      expect(find.text(NetworkFailure.message), findsOneWidget);
+      expect(find.text(Failure.networkError), findsOneWidget);
       expect(find.byKey(const Key("dismissButton")), findsOneWidget);
 
       await tester.ensureVisible(find.byKey(const Key("dismissButton")));
@@ -203,14 +203,14 @@ void main() {
 
       expected = RegistrationNoGeneralError(model: model);
       expect(registrationBloc.state, expected);
-      expect(find.text(NetworkFailure.message), findsNothing);
+      expect(find.text(Failure.networkError), findsNothing);
     });
   });
 
   testWidgets("Should show and hide RegistrationGeneralError when registration returns ServerFailure", (WidgetTester tester) async {
       when(mockRegistrationUsecase(any)).thenAnswer((_) async {
         await Future.delayed(const Duration(seconds: 2));
-        return Left(ServerFailure(message: errorMessage));
+        return const Left(ServerFailure(message: errorMessage));
       });
 
       await tester.pumpWidget(testWidget);
@@ -255,7 +255,7 @@ void main() {
     testWidgets("Should display and reset error fields when user retype value after registration returns validation error", (WidgetTester tester) async {
     when(mockRegistrationUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
-      return Left(ServerFailure(message: errorMessage, errors: errors));
+      return const Left(ServerFailure(message: errorMessage, errors: errors));
     });
 
     await tester.pumpWidget(testWidget);

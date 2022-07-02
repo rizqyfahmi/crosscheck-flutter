@@ -22,7 +22,7 @@ class ProfileLocalDdataSourceImpl implements ProfileLocalDataSource {
   @override
   Future<ProfileModel> getProfile() async {
     if (!box.isOpen) {
-      throw CacheException(message: Failure.localDatabase);
+      throw const CacheException(message: Failure.localDatabase);
     }
 
     ProfileModel? response = box.get("currentProfile");
@@ -31,13 +31,13 @@ class ProfileLocalDdataSourceImpl implements ProfileLocalDataSource {
       return Future.value(response);
     }
 
-    throw CacheException(message: Failure.localDatabase);
+    throw const CacheException(message: Failure.localDatabase);
   }
 
   @override
   Future<void> setProfile(ProfileModel profileModel) async {
     if (!box.isOpen) {
-      throw CacheException(message: Failure.localDatabase);
+      throw const CacheException(message: Failure.localDatabase);
     }
     
     await box.put("currentProfile", profileModel);

@@ -21,7 +21,7 @@ class WalkthroughBloc extends Bloc<WalkthroughEvent, WalkthroughState> {
       
       response.fold(
         (error) {
-          if (error is! CachedFailure) return;
+          if (error is! CacheFailure) return;
           emit(WalkthroughSkipFailed(model: state.model, message: error.message));
         }, 
         (_) {
@@ -34,7 +34,7 @@ class WalkthroughBloc extends Bloc<WalkthroughEvent, WalkthroughState> {
 
       response.fold(
         (error) {
-          if (error is! CachedFailure) return;
+          if (error is! CacheFailure) return;
           emit(WalkthroughLoadSkipFailed(model: state.model, message: error.message));
         }, 
         (result) {

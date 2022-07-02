@@ -1,10 +1,10 @@
-import 'package:crosscheck/assets/icons/custom_icons.dart';
+import 'package:crosscheck/core/widgets/dialog/dialog.dart';
+import 'package:crosscheck/features/profile/presentation/view/profile_settings_section.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -29,110 +29,7 @@ class SettingsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  SvgPicture.asset(CustomIcons.avatar),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Username",
-                          key: const Key("textUsername"),
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        Text(
-                          "username@email.com",
-                          key: const Key("textEmail"),
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)
-                          ),
-                        )
-                      ],
-                    )
-                  )
-                ],
-              ),
-              const SizedBox(height: 32),
-              Text(
-                "Personal Information",
-                key: const Key("labelPersonalInformation"),
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                "Full name",
-                key: const Key("labelFullName"),
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "N/A",
-                key: const Key("textFullName"),
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w400
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                "Email Address",
-                key: const Key("labelEmailAddress"),
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "N/A",
-                key: const Key("textEmailAddress"),
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w400
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                "Date of Birth",
-                key: const Key("labelDOB"),
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "N/A",
-                key: const Key("textDOB"),
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w400
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                "Address",
-                key: const Key("labelAddress"),
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5)
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "N/A",
-                key: const Key("textAddress"),
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w400
-                ),
-              ),
+              const ProfileSettingsSection(),
               const SizedBox(height: 32),
               Text(
                 "Others",
@@ -173,7 +70,28 @@ class SettingsView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BlocBuilder<SettingsBloc, SettingsState>(
+                  BlocConsumer<SettingsBloc, SettingsState>(
+                    listener: (context, state) {
+                      debugPrint("Settings: ${state.runtimeType}");
+                      if (state is SettingsGeneralError) {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        showResponseDialog(
+                          context: context,
+                          status: ResponseDialogStatus.error,
+                          title: state.title,
+                          message: state.message
+                        );
+                        return;
+                      }
+
+                      if (state is SettingsLoading) {
+                        showLoadingDialog(context: context);
+                        return;
+                      }
+
+                      if (state is! SettingsLoadingFinished) return;
+                      Navigator.of(context).pop();
+                    },
                     builder: (context, state) {
                       return Switch(
                         key: const Key("switchDarkMode"),

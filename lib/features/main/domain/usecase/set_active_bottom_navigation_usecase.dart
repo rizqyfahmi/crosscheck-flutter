@@ -20,7 +20,7 @@ class SetActiveBottomNavigationUsecase implements Usecase<BottomNavigationEntity
     try {
       await repository.setActiveBottomNavigation(params.currentPage);
     } on CacheException catch (e) {
-      return Left(CachedFailure(message: e.message));
+      return Left(CacheFailure(message: e.message));
     }
     return await repository.getActiveBottomNavigation();
 

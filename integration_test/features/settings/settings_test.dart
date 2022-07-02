@@ -15,6 +15,9 @@ import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entit
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
+import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart';
+import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart';
 import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
@@ -33,6 +36,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../test/utils/utils.dart';
 import 'settings_test.mocks.dart';
 
 @GenerateMocks([
@@ -44,7 +48,8 @@ import 'settings_test.mocks.dart';
   GetActiveBottomNavigationUsecase,
   GetDashboardUsecase,
   SetThemeUsecase,
-  GetThemeUsecase
+  GetThemeUsecase,
+  GetProfileUsecase
 ])
 void main() {
   late MockRegistrationUsecase mockRegistrationUsecase;
@@ -56,6 +61,7 @@ void main() {
   late MockGetDashboardUsecase mockGetDashboardUsecase;
   late MockSetThemeUsecase mockSetThemeUsecase;
   late MockGetThemeUsecase mockGetThemeUsecase;
+  late MockGetProfileUsecase mockGetProfileUsecase;
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
   late RegistrationBloc registrationBloc;
@@ -63,6 +69,7 @@ void main() {
   late MainBloc mainBloc;
   late DashboardBloc dashboardBloc;
   late SettingsBloc settingsBloc;
+  late ProfileBloc profileBloc;
   late Widget main;
 
   final currentDate = DateTime.now();
@@ -89,6 +96,7 @@ void main() {
     mockGetDashboardUsecase = MockGetDashboardUsecase();
     mockSetThemeUsecase = MockSetThemeUsecase();
     mockGetThemeUsecase = MockGetThemeUsecase();
+    mockGetProfileUsecase = MockGetProfileUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -100,6 +108,7 @@ void main() {
     );
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
     settingsBloc = SettingsBloc(setThemeUsecase: mockSetThemeUsecase, getThemeUsecase: mockGetThemeUsecase);
+    profileBloc = ProfileBloc(getProfileUsecase: mockGetProfileUsecase);
 
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(
@@ -122,12 +131,15 @@ void main() {
       ),
       BlocProvider<SettingsBloc>(
         create: (_) => settingsBloc..add(SettingsLoad())
-      )
+      ),
+      BlocProvider<ProfileBloc>(
+        create: (_) => profileBloc
+      ),
     ]);
   });
 
   testWidgets("Should properly get default theme on walkthrough view", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -137,6 +149,7 @@ void main() {
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
     when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
    
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -171,7 +184,7 @@ void main() {
   });
 
   testWidgets("Should properly get default theme on login view", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -223,7 +236,7 @@ void main() {
   });
 
   testWidgets("Should properly get default theme on registration view", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -279,7 +292,7 @@ void main() {
   });
 
   testWidgets("Should properly get default theme on settings view", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -287,8 +300,15 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      final mockedEntity = Utils().dashboardEntity.copyWith(
+        fullname: "fulan",
+        photoUrl: "https://via.placeholder.com/60x60"
+      );
+      return Right(mockedEntity);
+    });
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
    
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -327,14 +347,14 @@ void main() {
       final scaffolds = tester.widgetList<Scaffold>(find.byType(Scaffold));
       expect(scaffolds.last.backgroundColor, CustomColors.secondary);
       
-      await tester.ensureVisible(find.byKey(const Key("textUsername")));
+      await tester.ensureVisible(find.byKey(const Key("textProfileFullName")));
       await tester.pumpAndSettle();
-      final textUsername = tester.widget<Text>(find.byKey(const Key("textUsername")));
-      expect(textUsername.style?.color, Colors.white);
-      await tester.ensureVisible(find.byKey(const Key("textEmail")));
+      final textProfileFullName = tester.widget<Text>(find.byKey(const Key("textProfileFullName")));
+      expect(textProfileFullName.style?.color, Colors.white);
+      await tester.ensureVisible(find.byKey(const Key("textProfileEmail")));
       await tester.pumpAndSettle();
-      final textEmail = tester.widget<Text>(find.byKey(const Key("textEmail")));
-      expect(textEmail.style?.color, Colors.white.withOpacity(0.5));
+      final textProfileEmail = tester.widget<Text>(find.byKey(const Key("textProfileEmail")));
+      expect(textProfileEmail.style?.color, Colors.white.withOpacity(0.5));
       await tester.ensureVisible(find.byKey(const Key("labelPersonalInformation")));
       await tester.pumpAndSettle();
       final labelPersonalInformation = tester.widget<Text>(find.byKey(const Key("labelPersonalInformation")));
@@ -397,7 +417,7 @@ void main() {
   });
 
   testWidgets("Should properly get default theme on dashboard view", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -405,8 +425,15 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      final mockedEntity = Utils().dashboardEntity.copyWith(
+        fullname: "fulan",
+        photoUrl: "https://via.placeholder.com/60x60"
+      );
+      return Right(mockedEntity);
+    });
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
    
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -479,7 +506,7 @@ void main() {
   });
 
   testWidgets("Should set default theme properly", (WidgetTester tester) async {
-    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => Left(CachedFailure(message: Failure.cacheError)));
+    when(mockGetIsSkipUsecase(NoParam())).thenAnswer((_) async => const  Left(CacheFailure(message: Failure.cacheError)));
     when(mockSetIsSkipUsecase(WalkthroughParams(isSkip: true))).thenAnswer((_) async => const Right(null));
     when(mockLoginUsecase(any)).thenAnswer((_) async {
       await Future.delayed(const Duration(seconds: 2));
@@ -487,9 +514,16 @@ void main() {
     });
     when(mockGetActiveBottomNavigationUsecase(NoParam())).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.home)));
     when(mockSetActiveBottomNavigationUsecase(const BottomNavigationParams(currentPage: BottomNavigation.setting))).thenAnswer((_) async => const Right(BottomNavigationEntity(currentPage: BottomNavigation.setting)));
-    when(mockGetDashboardUsecase(any)).thenAnswer((_) async => Right(entity));
+    when(mockGetDashboardUsecase(any)).thenAnswer((_) async {
+      final mockedEntity = Utils().dashboardEntity.copyWith(
+        fullname: "fulan",
+        photoUrl: "https://via.placeholder.com/60x60"
+      );
+      return Right(mockedEntity);
+    });
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
     when(mockSetThemeUsecase(any)).thenAnswer((_) async => const Right(null));
+    when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
@@ -528,14 +562,14 @@ void main() {
       Iterable<Scaffold> scaffolds = tester.widgetList<Scaffold>(find.byType(Scaffold));
       expect(scaffolds.last.backgroundColor, CustomColors.secondary);
 
-      await tester.ensureVisible(find.byKey(const Key("textUsername")));
+      await tester.ensureVisible(find.byKey(const Key("textProfileFullName")));
       await tester.pumpAndSettle();
-      Text textUsername = tester.widget<Text>(find.byKey(const Key("textUsername")));
-      expect(textUsername.style?.color, Colors.white);
-      await tester.ensureVisible(find.byKey(const Key("textEmail")));
+      Text textProfileFullName = tester.widget<Text>(find.byKey(const Key("textProfileFullName")));
+      expect(textProfileFullName.style?.color, Colors.white);
+      await tester.ensureVisible(find.byKey(const Key("textProfileEmail")));
       await tester.pumpAndSettle();
-      Text textEmail = tester.widget<Text>(find.byKey(const Key("textEmail")));
-      expect(textEmail.style?.color, Colors.white.withOpacity(0.5));
+      Text textProfileEmail = tester.widget<Text>(find.byKey(const Key("textProfileEmail")));
+      expect(textProfileEmail.style?.color, Colors.white.withOpacity(0.5));
       await tester.ensureVisible(find.byKey(const Key("labelPersonalInformation")));
       await tester.pumpAndSettle();
       Text labelPersonalInformation = tester.widget<Text>(find.byKey(const Key("labelPersonalInformation")));
@@ -599,14 +633,14 @@ void main() {
       scaffolds = tester.widgetList<Scaffold>(find.byType(Scaffold));
       expect(scaffolds.last.backgroundColor, Colors.white);
 
-      await tester.ensureVisible(find.byKey(const Key("textUsername")));
+      await tester.ensureVisible(find.byKey(const Key("textProfileFullName")));
       await tester.pumpAndSettle();
-      textUsername = tester.widget<Text>(find.byKey(const Key("textUsername")));
-      expect(textUsername.style?.color, CustomColors.secondary);
-      await tester.ensureVisible(find.byKey(const Key("textEmail")));
+      textProfileFullName = tester.widget<Text>(find.byKey(const Key("textProfileFullName")));
+      expect(textProfileFullName.style?.color, CustomColors.secondary);
+      await tester.ensureVisible(find.byKey(const Key("textProfileEmail")));
       await tester.pumpAndSettle();
-      textEmail = tester.widget<Text>(find.byKey(const Key("textEmail")));
-      expect(textEmail.style?.color, CustomColors.secondary.withOpacity(0.5));
+      textProfileEmail = tester.widget<Text>(find.byKey(const Key("textProfileEmail")));
+      expect(textProfileEmail.style?.color, CustomColors.secondary.withOpacity(0.5));
       await tester.ensureVisible(find.byKey(const Key("labelPersonalInformation")));
       await tester.pumpAndSettle();
       labelPersonalInformation = tester.widget<Text>(find.byKey(const Key("labelPersonalInformation")));

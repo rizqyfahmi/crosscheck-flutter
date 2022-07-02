@@ -36,11 +36,11 @@ void main() {
 
   test("Should not set \"is skip\" status and return CachedFailure when error is happened", () async {
     const params = WalkthroughModel(isSkip: true);
-    when(mockWalkthroughLocalDataSource.setIsSkip(params)).thenThrow(CacheException(message: Failure.generalError));
+    when(mockWalkthroughLocalDataSource.setIsSkip(params)).thenThrow(const CacheException(message: Failure.generalError));
 
     final result = await walkthroughRepository.setIsSkip(params.isSkip);
 
-    expect(result, Left(CachedFailure(message: Failure.generalError)));
+    expect(result, const Left(CacheFailure(message: Failure.generalError)));
     verify(mockWalkthroughLocalDataSource.setIsSkip(params));
   });
 
@@ -56,11 +56,11 @@ void main() {
   });
 
   test("Should not get \"is skip\" status and return CachedFailure when error is happened", () async {
-    when(mockWalkthroughLocalDataSource.getIsSkip()).thenThrow(CacheException(message: Failure.generalError));
+    when(mockWalkthroughLocalDataSource.getIsSkip()).thenThrow(const CacheException(message: Failure.generalError));
 
     final result = await walkthroughRepository.getIsSkip();
 
-    expect(result, Left(CachedFailure(message: Failure.generalError)));
+    expect(result, const Left(CacheFailure(message: Failure.generalError)));
     verify(mockWalkthroughLocalDataSource.getIsSkip());
   });
 }

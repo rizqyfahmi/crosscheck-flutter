@@ -33,11 +33,11 @@ void main() {
   });
 
   test("Should not get \"is skip\" status and return CachedFailure when error is happened", () async {
-    when(mockWalkthroughRepository.getIsSkip()).thenAnswer((_) async => Left(CacheException(message: Failure.cacheError)));
+    when(mockWalkthroughRepository.getIsSkip()).thenAnswer((_) async => const Left(CacheException(message: Failure.cacheError)));
 
     final result = await getIsSkipUsecase(NoParam());
 
-    expect(result, Left(CacheException(message: Failure.cacheError)));
+    expect(result, const Left(CacheException(message: Failure.cacheError)));
     verify(mockWalkthroughRepository.getIsSkip());
   });
 }
