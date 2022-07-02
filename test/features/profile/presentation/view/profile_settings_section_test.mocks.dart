@@ -2,18 +2,28 @@
 // in crosscheck/test/features/profile/presentation/view/profile_settings_section_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
+import 'dart:async' as _i7;
 
-import 'package:crosscheck/core/error/failure.dart' as _i7;
-import 'package:crosscheck/core/param/param.dart' as _i9;
+import 'package:crosscheck/core/error/failure.dart' as _i8;
+import 'package:crosscheck/core/param/param.dart' as _i10;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i3;
 import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart'
-    as _i8;
+    as _i9;
 import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart'
     as _i2;
 import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart'
+    as _i6;
+import 'package:crosscheck/features/settings/data/models/params/settings_params.dart'
+    as _i12;
+import 'package:crosscheck/features/settings/domain/entities/settings_entity.dart'
+    as _i14;
+import 'package:crosscheck/features/settings/domain/repositories/settings_repository.dart'
     as _i5;
+import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart'
+    as _i13;
+import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart'
+    as _i11;
 import 'package:dartz/dartz.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -35,10 +45,13 @@ class _FakeAuthenticationRepository_1 extends _i1.Fake
 
 class _FakeEither_2<L, R> extends _i1.Fake implements _i4.Either<L, R> {}
 
+class _FakeSettingsRepository_3 extends _i1.Fake
+    implements _i5.SettingsRepository {}
+
 /// A class which mocks [GetProfileUsecase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetProfileUsecase extends _i1.Mock implements _i5.GetProfileUsecase {
+class MockGetProfileUsecase extends _i1.Mock implements _i6.GetProfileUsecase {
   MockGetProfileUsecase() {
     _i1.throwOnMissingStub(this);
   }
@@ -53,10 +66,52 @@ class MockGetProfileUsecase extends _i1.Mock implements _i5.GetProfileUsecase {
               returnValue: _FakeAuthenticationRepository_1())
           as _i3.AuthenticationRepository);
   @override
-  _i6.Future<_i4.Either<_i7.Failure, _i8.ProfileEntity>> call(
-          _i9.NoParam? param) =>
+  _i7.Future<_i4.Either<_i8.Failure, _i9.ProfileEntity>> call(
+          _i10.NoParam? param) =>
       (super.noSuchMethod(Invocation.method(#call, [param]),
-          returnValue: Future<_i4.Either<_i7.Failure, _i8.ProfileEntity>>.value(
-              _FakeEither_2<_i7.Failure, _i8.ProfileEntity>())) as _i6
-          .Future<_i4.Either<_i7.Failure, _i8.ProfileEntity>>);
+          returnValue: Future<_i4.Either<_i8.Failure, _i9.ProfileEntity>>.value(
+              _FakeEither_2<_i8.Failure, _i9.ProfileEntity>())) as _i7
+          .Future<_i4.Either<_i8.Failure, _i9.ProfileEntity>>);
+}
+
+/// A class which mocks [SetThemeUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSetThemeUsecase extends _i1.Mock implements _i11.SetThemeUsecase {
+  MockSetThemeUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.SettingsRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeSettingsRepository_3()) as _i5.SettingsRepository);
+  @override
+  _i7.Future<_i4.Either<_i8.Failure, void>> call(_i12.SettingsParams? params) =>
+      (super.noSuchMethod(Invocation.method(#call, [params]),
+              returnValue: Future<_i4.Either<_i8.Failure, void>>.value(
+                  _FakeEither_2<_i8.Failure, void>()))
+          as _i7.Future<_i4.Either<_i8.Failure, void>>);
+}
+
+/// A class which mocks [GetThemeUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetThemeUsecase extends _i1.Mock implements _i13.GetThemeUsecase {
+  MockGetThemeUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.SettingsRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeSettingsRepository_3()) as _i5.SettingsRepository);
+  @override
+  _i7.Future<_i4.Either<_i8.Failure, _i14.SettingsEntity>> call(
+          _i10.NoParam? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+              returnValue:
+                  Future<_i4.Either<_i8.Failure, _i14.SettingsEntity>>.value(
+                      _FakeEither_2<_i8.Failure, _i14.SettingsEntity>()))
+          as _i7.Future<_i4.Either<_i8.Failure, _i14.SettingsEntity>>);
 }

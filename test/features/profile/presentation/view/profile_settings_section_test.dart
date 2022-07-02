@@ -4,7 +4,10 @@ import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart'
 import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/profile/presentation/bloc/profile_event.dart';
-import 'package:crosscheck/features/profile/presentation/view/profile_settings_section.dart';
+import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
+import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:crosscheck/features/settings/presentation/view/settings_view.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,20 +16,31 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
-import '../bloc/profile_bloc_test.mocks.dart';
+import 'profile_settings_section_test.mocks.dart';
 
 @GenerateMocks([
-  GetProfileUsecase
+  GetProfileUsecase,
+  SetThemeUsecase,
+  GetThemeUsecase
 ])
 void main() {
   late MockGetProfileUsecase mockGetProfileUsecase;
+  late MockSetThemeUsecase mockSetThemeUsecase;
+  late MockGetThemeUsecase mockGetThemeUsecase;
   late ProfileBloc profileBloc;
+  late SettingsBloc settingsBloc;
   late Widget testWidget;
 
   setUp(() {
     mockGetProfileUsecase = MockGetProfileUsecase();
+    mockSetThemeUsecase = MockSetThemeUsecase();
+    mockGetThemeUsecase = MockGetThemeUsecase();
     profileBloc = ProfileBloc(getProfileUsecase: mockGetProfileUsecase);
-    testWidget = buildWidget(profileBloc: profileBloc);
+    settingsBloc = SettingsBloc(setThemeUsecase: mockSetThemeUsecase, getThemeUsecase: mockGetThemeUsecase);
+    testWidget = buildWidget(
+      profileBloc: profileBloc,
+      settingsBloc: settingsBloc
+    );
   });
 
   testWidgets('Should properly display profile section in settings view', (WidgetTester tester) async {
@@ -38,9 +52,14 @@ void main() {
 
     await tester.runAsync(() async {
       await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
+      
       expect(find.byKey(const Key("loadingIndicator")), findsNothing);
       
       await tester.pump();
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
       expect(find.byKey(const Key("loadingIndicator")), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 1));
@@ -93,9 +112,14 @@ void main() {
 
     await tester.runAsync(() async {
       await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
+
       expect(find.byKey(const Key("loadingIndicator")), findsNothing);
 
       await tester.pump();
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
       expect(find.byKey(const Key("loadingIndicator")), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 1));
@@ -158,6 +182,10 @@ void main() {
       expect(find.byKey(const Key("loadingIndicator")), findsNothing);
 
       await tester.pump();
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
       expect(find.byKey(const Key("loadingIndicator")), findsOneWidget);
       
       await Future.delayed(const Duration(seconds: 1));
@@ -209,9 +237,15 @@ void main() {
   });
 }
 
-Widget buildWidget({required ProfileBloc profileBloc}) {
+Widget buildWidget({
+  required ProfileBloc profileBloc,
+  required SettingsBloc settingsBloc
+}) {
   return MultiBlocProvider(
     providers: [
+      BlocProvider<SettingsBloc>(
+          create: (_) => settingsBloc
+      ),
       BlocProvider<ProfileBloc>(
           create: (_) => profileBloc..add(ProfileGetData())
       )
@@ -220,9 +254,7 @@ Widget buildWidget({required ProfileBloc profileBloc}) {
       home: Builder(
         builder: (context) {
           return const Scaffold(
-            body: SingleChildScrollView(
-              child: ProfileSettingsSection()
-            ),
+            body: SettingsView(),
           );
         }
       ),
