@@ -21,6 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final path = (await getApplicationDocumentsDirectory()).path;
@@ -81,9 +83,10 @@ class MyApp extends StatelessWidget {
               LoginView.routeName: (context) => const LoginView(),
               MainView.routeName: (context) => const MainView()
             },
+            navigatorKey: navigatorKey,
           );
         }
-      ),
+      )
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:crosscheck/core/widgets/dialog/dialog.dart';
 import 'package:crosscheck/features/profile/presentation/view/profile_settings_section.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
@@ -69,7 +70,28 @@ class SettingsView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BlocBuilder<SettingsBloc, SettingsState>(
+                  BlocConsumer<SettingsBloc, SettingsState>(
+                    listener: (context, state) {
+                      debugPrint("Settings: ${state.runtimeType}");
+                      if (state is SettingsGeneralError) {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        showResponseDialog(
+                          context: context,
+                          status: ResponseDialogStatus.error,
+                          title: state.title,
+                          message: state.message
+                        );
+                        return;
+                      }
+
+                      if (state is SettingsLoading) {
+                        showLoadingDialog(context: context);
+                        return;
+                      }
+
+                      if (state is! SettingsLoadingFinished) return;
+                      Navigator.of(context).pop();
+                    },
                     builder: (context, state) {
                       return Switch(
                         key: const Key("switchDarkMode"),

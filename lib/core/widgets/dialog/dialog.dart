@@ -13,7 +13,7 @@ Future showLoadingDialog({
   return await showDialog(
     barrierDismissible: false,
     useSafeArea: false,
-    context: context, 
+    context: context,
     builder: (BuildContext context) {
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -63,6 +63,7 @@ Future showResponseDialog({
   String? title,
   String? message
 }) async {
+  debugPrint("response: $message");
   final tempTitle = title ?? (status == ResponseDialogStatus.error ? "Error!" : "Congratulations!");
   final color = status == ResponseDialogStatus.error ? CustomColors.primary : CustomColors.success;
   final icon = status == ResponseDialogStatus.error ? CustomIcons.cross : CustomIcons.check;
@@ -161,7 +162,9 @@ Future showResponseDialog({
                                                         Text(
                                                           message ?? "",
                                                           textAlign: TextAlign.center,
-                                                          style: TextStyles.poppinsMedium14
+                                                          style: TextStyles.poppinsMedium14.copyWith(
+                                                            color: CustomColors.secondary
+                                                          )
                                                         ),
                                                         const SizedBox(height: 32),
                                                         Row(

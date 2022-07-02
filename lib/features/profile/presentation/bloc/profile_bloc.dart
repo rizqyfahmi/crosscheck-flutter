@@ -15,8 +15,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileGetData>((event, emit) async {
       emit(ProfileLoading(model: state.model));
 
-      // await Future.delayed(const Duration(seconds: 5));
-      // emit(ProfileGeneralError(model: state.model, message: "Hello"));
       final response = await getProfileUsecase(NoParam());
       response.fold(
         (error) {
@@ -30,7 +28,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             address: result.address ?? "-", 
             photoUrl: result.photoUrl ?? "https://via.placeholder.com/60x60/F24B59/F24B59?text=."
           );
-
           emit(ProfileLoaded(model: model));
         }
       );

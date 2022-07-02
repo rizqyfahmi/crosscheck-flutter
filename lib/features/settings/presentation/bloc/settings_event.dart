@@ -19,3 +19,16 @@ class SettingsChangeTheme extends SettingsEvent {
   List<Object?> get props => [themeMode];
 
 }
+
+class SettingsSetLoading extends SettingsEvent {}
+class SettingsFinishLoading extends SettingsEvent {}
+class SettingsResetGeneralError extends SettingsEvent {}
+class SettingsSetGeneralError extends SettingsEvent {
+  final String? title;
+  final String message;
+
+  SettingsSetGeneralError({this.title, required this.message});
+
+  @override
+  List<Object?> get props => [title, message];
+}

@@ -3,9 +3,6 @@ import 'package:crosscheck/core/widgets/loading_modal/loading_modal.dart';
 import 'package:crosscheck/core/widgets/message_modal/message_modal.dart';
 import 'package:crosscheck/core/widgets/plus_button/plus_button.dart';
 import 'package:crosscheck/core/widgets/styles/text_styles.dart';
-import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:crosscheck/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:crosscheck/features/main/domain/entities/bottom_navigation_entity.dart';
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart';
@@ -66,12 +63,22 @@ class MainView extends StatelessWidget {
     );
   }
 
+  Future<void> getProfileData(BuildContext context) async {
+    context.read<ProfileBloc>().add(ProfileGetData());
+    return await Future.value(null);
+  }
+
   Widget buildContent(BuildContext context, MainState state) {
     switch (state.model.currentPage) {
       case BottomNavigation.setting:
-        context.read<ProfileBloc>().add(ProfileGetData());
-        return const Center(
-          child: SettingsView(),
+        
+        return FutureBuilder(
+          future: getProfileData(context),
+          builder: (context, _) {
+            return const Center(
+              child: SettingsView(),
+            );
+          }
         );
       case BottomNavigation.history:
         return const Center(
@@ -82,7 +89,6 @@ class MainView extends StatelessWidget {
           child: Text("Event"),
         );
       default:
-        context.read<ProfileBloc>().add(ProfileGetData());
         return const DashboardView();
     }
   }
@@ -164,12 +170,6 @@ class MainView extends StatelessWidget {
       body: BlocConsumer<MainBloc, MainState>(
         listener: (context, state) {
 
-          if (state is! MainResetGeneralError) return;
- 
-          final dashboardBloc = context.watch<DashboardBloc>();
-          if (dashboardBloc.state is DashboardGeneralError) {
-            context.read<DashboardBloc>().add(DashboardResetGeneralError());
-          }
         },
         builder: (context, state) {
           if (state is MainInit) {

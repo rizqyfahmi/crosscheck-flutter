@@ -1,6 +1,7 @@
-import 'package:crosscheck/core/widgets/dialog/dialog.dart';
 import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/profile/presentation/bloc/profile_state.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,23 +12,22 @@ class ProfileSettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is ProfileLoading) {
-          showLoadingDialog(context: context);
+        if (state is ProfileGeneralError) {
+          debugPrint("listener: ${state.runtimeType} ${state.message}");
+          context.read<SettingsBloc>().add(SettingsSetGeneralError(message: state.message));
           return;
         }
 
-        if (state is ProfileGeneralError) {
-          Navigator.of(context, rootNavigator: true).pop();
-          showResponseDialog(
-            context: context,
-            status: ResponseDialogStatus.error,
-            message: state.message
-          );
+        if (state is ProfileLoading) {
+          debugPrint("listener: ${state.runtimeType}");
+          context.read<SettingsBloc>().add(SettingsSetLoading());
           return;
         }
 
         if (state is ProfileLoaded) {
-          Navigator.of(context, rootNavigator: true).pop();
+          debugPrint("listener: ${state.runtimeType}");
+          context.read<SettingsBloc>().add(SettingsFinishLoading());
+          return;
         }
       },
       builder: (context, state) {
