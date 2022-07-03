@@ -1,6 +1,7 @@
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart';
+import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 
 class Utils {
 
@@ -23,5 +24,19 @@ class Utils {
 
   DashboardEntity get dashboardEntity {
     return DashboardEntity(progress: 20, upcoming: 20, completed: 5, activities: activityEntity);
+  }
+
+  List<TaskEntity> get taskEntities {
+    return List<int>.generate(10, (index) => index).map((v) {
+      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v));
+      return TaskEntity(
+        title: "hello title $v",
+        description: "hello description $v", 
+        start: DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v)), 
+        end: start.add(Duration(hours: v)), 
+        isAllDay: false, 
+        alerts: const []
+      );
+    }).toList();
   }
 }
