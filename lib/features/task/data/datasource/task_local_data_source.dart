@@ -40,8 +40,9 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<void> clearCachedHistory() {
-    // TODO: implement clearCachedHistory
-    throw UnimplementedError();
+  Future<void> clearCachedHistory() async {
+    if (!box.isOpen) throw const CacheException(message: Failure.cacheError);
+
+    await box.deleteAll(box.keys);
   }
 }
