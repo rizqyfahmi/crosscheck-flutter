@@ -9,6 +9,8 @@ abstract class TaskLocalDataSource {
 
   Future<void> cacheHistory(List<TaskModel> models);
 
+  Future<void> clearCachedHistory();
+
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
@@ -35,5 +37,11 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
     final response = box.values.toList();
 
     return Future.value(response);
+  }
+  
+  @override
+  Future<void> clearCachedHistory() {
+    // TODO: implement clearCachedHistory
+    throw UnimplementedError();
   }
 }
