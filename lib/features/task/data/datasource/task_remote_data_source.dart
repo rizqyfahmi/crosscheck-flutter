@@ -1,7 +1,7 @@
-import 'package:crosscheck/features/task/data/models/data/task_model.dart';
+import 'package:crosscheck/features/task/data/models/response/task_response_model.dart';
 
 abstract class TaskRemoteDataSource {
   
-  Future<List<TaskModel>> getHistory({required String token});
+  Future<TaskResponseModel> getHistory({required String token});
 
 }

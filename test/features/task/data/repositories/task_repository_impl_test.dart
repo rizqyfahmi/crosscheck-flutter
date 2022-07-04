@@ -4,6 +4,7 @@ import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
+import 'package:crosscheck/features/task/data/models/response/task_response_model.dart';
 import 'package:crosscheck/features/task/data/repositories/task_repository_impl.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
 import 'package:dartz/dartz.dart';
@@ -37,7 +38,7 @@ void main() {
   });
 
   test("Should returns list of task(history) from remote data source when device is online where the local data source is still empty", () async {
-    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
@@ -52,7 +53,7 @@ void main() {
   });
 
   test("Should returns CacheFailure when set list of tasks(history) from remote into local data source returns CacheException", () async {
-    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockTaskLocalDataSource.cacheHistory(any)).thenThrow(const CacheException(message: Failure.cacheError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
@@ -82,7 +83,7 @@ void main() {
   });
 
   test("Should returns empty list of task(history) properly when device is offline and the local data source is still empty", () async {
-    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
@@ -97,7 +98,7 @@ void main() {
   });
 
   test("Should returns list of task(history) from local data source when the local data source is not empty", () async {
-    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
@@ -112,7 +113,7 @@ void main() {
   });
 
   test("Should returns CacheFailure when get history list of tasks(history) from local data source returns CacheException", () async {
-    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
