@@ -8,6 +8,8 @@ abstract class TaskRemoteDataSource {
   
   Future<TaskResponseModel> getHistory({required String token});
 
+  Future<TaskResponseModel> getMoreHistory({required String token, required int limit, required int offset});
+
 }
 
 class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
@@ -31,6 +33,12 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     }
 
     throw ServerException(message: body["message"]);
+  }
+  
+  @override
+  Future<TaskResponseModel> getMoreHistory({required String token, required int limit, required int offset}) {
+    // TODO: implement getMoreHistory
+    throw UnimplementedError();
   }
   
 }

@@ -2,6 +2,7 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
+import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
@@ -50,9 +51,24 @@ class TaskRepositoryImpl extends TaskRepository {
   }
   
   @override
-  Future<Either<Failure, List<TaskEntity>>> getMoreHistory(String token) {
-    // TODO: implement getMoreHistory
-    throw UnimplementedError();
+  Future<Either<Failure, List<TaskEntity>>> getMoreHistory(String token) async {
+    try {
+      List<TaskModel> cachedTasks = await local.getCachedHistory();
+
+      bool isConnected = await networkInfo.isConnected;
+      if (!isConnected) {
+        return Left(NetworkFailure(message: Failure.networkError, data: cachedTasks));
+      }
+
+      final response = await remote.getMoreHistory(token: token, limit: 10, offset: cachedTasks.length);
+      final data = [...cachedTasks, ...response.tasks];
+      await local.cacheHistory(data);
+      return Right(data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message));
+    }
   }
 
 }

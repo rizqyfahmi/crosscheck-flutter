@@ -47,5 +47,10 @@ class NullFailure extends Failure {
 }
 
 class NetworkFailure extends Failure {
-  const NetworkFailure({required super.message});
+  final dynamic data;
+
+  const NetworkFailure({required super.message, this.data});
+
+  @override
+  List<Object?> get props => [...super.props, data];
 }
