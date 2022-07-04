@@ -48,5 +48,11 @@ class TaskRepositoryImpl extends TaskRepository {
       return Left(CacheFailure(message: e.message));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<TaskEntity>>> getMoreHistory(String token) {
+    // TODO: implement getMoreHistory
+    throw UnimplementedError();
+  }
 
 }

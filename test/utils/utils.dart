@@ -57,4 +57,20 @@ class Utils {
       );
     }).toList();
   }
+
+  List<TaskModel> get moreTaskModels {
+    return List<int>.generate(10, (index) => index).map((v) {
+      final index = v + 10;
+      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: index + 1));
+      return TaskModel(
+        id: index.toString(),
+        title: "hello title $index",
+        description: "hello description $index", 
+        start: start, 
+        end: start.add(const Duration(hours: 1)), 
+        isAllDay: false, 
+        alerts: const []
+      );
+    }).toList();
+  }
 }
