@@ -63,7 +63,6 @@ Future showResponseDialog({
   String? title,
   String? message
 }) async {
-  debugPrint("response: $message");
   final tempTitle = title ?? (status == ResponseDialogStatus.error ? "Error!" : "Congratulations!");
   final color = status == ResponseDialogStatus.error ? CustomColors.primary : CustomColors.success;
   final icon = status == ResponseDialogStatus.error ? CustomIcons.cross : CustomIcons.check;
