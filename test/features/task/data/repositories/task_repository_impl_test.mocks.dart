@@ -38,20 +38,14 @@ class MockTaskRemoteDataSource extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.TaskResponseModel> getHistory({String? token}) =>
-      (super.noSuchMethod(Invocation.method(#getHistory, [], {#token: token}),
-              returnValue: Future<_i2.TaskResponseModel>.value(
-                  _FakeTaskResponseModel_0()))
-          as _i4.Future<_i2.TaskResponseModel>);
-  @override
-  _i4.Future<_i2.TaskResponseModel> getMoreHistory(
+  _i4.Future<_i2.TaskResponseModel> getHistory(
           {String? token, int? limit, int? offset}) =>
       (super.noSuchMethod(
-              Invocation.method(#getMoreHistory, [],
-                  {#token: token, #limit: limit, #offset: offset}),
-              returnValue: Future<_i2.TaskResponseModel>.value(
-                  _FakeTaskResponseModel_0()))
-          as _i4.Future<_i2.TaskResponseModel>);
+          Invocation.method(
+              #getHistory, [], {#token: token, #limit: limit, #offset: offset}),
+          returnValue: Future<_i2.TaskResponseModel>.value(
+              _FakeTaskResponseModel_0())) as _i4
+          .Future<_i2.TaskResponseModel>);
 }
 
 /// A class which mocks [TaskLocalDataSource].

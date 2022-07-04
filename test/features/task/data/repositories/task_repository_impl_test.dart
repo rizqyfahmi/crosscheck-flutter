@@ -53,7 +53,7 @@ void main() {
     verify(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should returns CacheFailure when set list of tasks(history) from remote into local data source returns CacheException", () async {
+  test("Should returns CacheFailure with empty list of tasks(history) as the latest cached data when set list of tasks(history) from remote into local data source throws CacheException", () async {
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockTaskLocalDataSource.cacheHistory(any)).thenThrow(const CacheException(message: Failure.cacheError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
@@ -61,14 +61,15 @@ void main() {
 
     final result = await taskRepository.getHistory(Utils.token);
 
-    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
+    // "data" has empty list of tasks because the local data source would be empty when we call "taskRepository.getHistory(Utils.token)" for first time
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
     verify(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should returns ServerFailure when get list of tasks(history) from remote data source returns ServerException", () async {
+  test("Should returns ServerFailure with empty list of tasks(history) as the latest cached data when get list of tasks(history) from remote data source throws ServerException", () async {
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenThrow(const ServerException(message: Failure.generalError));
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
@@ -76,7 +77,8 @@ void main() {
 
     final result = await taskRepository.getHistory(Utils.token);
 
-    expect(result, const Left(ServerFailure(message: Failure.generalError)));
+    // "data" has empty list of tasks because the local data source would be empty when we call "taskRepository.getHistory(Utils.token)" for first time
+    expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
@@ -91,6 +93,7 @@ void main() {
 
     final result = await taskRepository.getHistory(Utils.token);
 
+     // "data" has empty list of tasks because the local data source would be empty when we call "taskRepository.getHistory(Utils.token)" for first time
     expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
@@ -106,7 +109,7 @@ void main() {
 
     final result = await taskRepository.getHistory(Utils.token);
 
-    expect(result.toString() == Right(Utils().taskModels).toString(), true);
+    expect(result.toString(), Right(Utils().taskModels).toString());
     verify(mockTaskLocalDataSource.getCachedHistory());
     verifyNever(mockNetworkInfo.isConnected);
     verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token));
@@ -133,14 +136,14 @@ void main() {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
-    when(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().moreTaskModels));
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().moreTaskModels));
 
     final result = await taskRepository.getMoreHistory(Utils.token);
 
     expect(result.toString() == Right([...Utils().taskModels, ...Utils().moreTaskModels]).toString(), true);
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10));
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10));
     verify(mockTaskLocalDataSource.cacheHistory(any));
   });
 
@@ -148,28 +151,30 @@ void main() {
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.cacheHistory(any)).thenThrow(const CacheException(message: Failure.cacheError));
-    when(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().moreTaskModels));
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().moreTaskModels));
 
     final result = await taskRepository.getMoreHistory(Utils.token);
 
-    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
+    // "data" has list of tasks because the local data source would have been filled when we call "taskRepository.getMoreHistory(Utils.token)" by lazy load
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: Utils().taskModels)));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10));
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10));
     verify(mockTaskLocalDataSource.cacheHistory(any));
   });
 
   test("Should returns ServerFailure when get more history throws ServerException", () async {
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10)).thenThrow(const ServerException(message: Failure.generalError));
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10)).thenThrow(const ServerException(message: Failure.generalError));
 
     final result = await taskRepository.getMoreHistory(Utils.token);
 
-    expect(result, const Left(ServerFailure(message: Failure.generalError)));
+    // "data" has list of tasks because the local data source would have been filled when we call "taskRepository.getMoreHistory(Utils.token)" by lazy load
+    expect(result, Left(ServerFailure(message: Failure.generalError, data: Utils().taskModels)));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10));
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10));
     verifyNever(mockTaskLocalDataSource.cacheHistory(any));
   });
 
@@ -178,21 +183,13 @@ void main() {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
     final result = await taskRepository.getMoreHistory(Utils.token);
-    expect(result.toString(), Left(NetworkFailure(message: Failure.networkError, data: Utils().taskModels)).toString());
+
+    // "data" has list of tasks because the local data source would have been filled when we call "taskRepository.getMoreHistory(Utils.token)" by lazy load
+    expect(result, Left(NetworkFailure(message: Failure.networkError, data: Utils().taskModels)));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
-    verifyNever(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10));
+    verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10));
     verifyNever(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should retrun CacheFailure when get cached history throws CacheException", () async {
-    when(mockTaskLocalDataSource.getCachedHistory()).thenThrow(const CacheException(message: Failure.cacheError));
-
-    final result = await taskRepository.getMoreHistory(Utils.token);
-    expect(result, const Left(CacheFailure(message: Failure.cacheError)));
-    verify(mockTaskLocalDataSource.getCachedHistory());
-    verifyNever(mockNetworkInfo.isConnected);
-    verifyNever(mockTaskRemoteDataSource.getMoreHistory(token: Utils.token, limit: 10, offset: 10));
-    verifyNever(mockTaskLocalDataSource.cacheHistory(any));
-  });
 }
