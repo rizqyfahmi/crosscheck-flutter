@@ -1,3 +1,5 @@
+import 'package:crosscheck/core/error/exception.dart';
+import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:hive/hive.dart';
 
@@ -18,14 +20,20 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   });
 
   @override
-  Future<void> cacheHistory(List<TaskModel> models) {
-    // TODO: implement cacheHistory
-    throw UnimplementedError();
+  Future<void> cacheHistory(List<TaskModel> models) async {
+    if(!box.isOpen) throw const CacheException(message: Failure.cacheError);
+
+    for (var element in models) {
+      await box.put(element.id, element);
+    }
   }
 
   @override
   Future<List<TaskModel>> getCachedHistory() {
-    // TODO: implement getCachedHistory
-    throw UnimplementedError();
+    if (!box.isOpen) throw const CacheException(message: Failure.cacheError);
+    
+    final response = box.values.toList();
+
+    return Future.value(response);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:crosscheck/core/response/response.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
-import 'package:flutter/material.dart';
 
 class TaskResponseModel extends Response {
   
@@ -21,7 +20,6 @@ class TaskResponseModel extends Response {
       "data": (data).map((item) => item.toJSON()).toList()
     };
   }
-
 
   List<TaskModel> get tasks => data as List<TaskModel>;
 }
