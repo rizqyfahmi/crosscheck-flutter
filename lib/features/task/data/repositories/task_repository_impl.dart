@@ -21,12 +21,6 @@ class TaskRepositoryImpl extends TaskRepository {
   });
   
   @override
-  Future<Either<Failure, void>> clearCachedHistory() {
-    // TODO: implement clearCachedHistory
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, List<TaskEntity>>> getHistory(String token) async {
     List<TaskModel> cachedTasks = await local.getCachedHistory(); // this line always returns [] when an error is occured to make the controller still continue, then get the data from the remote 
     if (cachedTasks.isNotEmpty) {
@@ -70,6 +64,12 @@ class TaskRepositoryImpl extends TaskRepository {
     } on CacheException catch (e) {
       return Left(CacheFailure(message: e.message, data: cachedTasks));
     }
+  }
+  
+  @override
+  Future<Either<Failure, List<TaskEntity>>> getRefreshHistory(String token) {
+    // TODO: implement getRefreshHistory
+    throw UnimplementedError();
   }
 
 }

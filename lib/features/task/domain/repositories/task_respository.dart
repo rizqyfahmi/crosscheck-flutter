@@ -8,6 +8,6 @@ abstract class TaskRepository {
   
   Future<Either<Failure, List<TaskEntity>>> getMoreHistory(String token);
 
-  Future<Either<Failure, void>> clearCachedHistory();
+  Future<Either<Failure, List<TaskEntity>>> getRefreshHistory(String token);
 
 }
