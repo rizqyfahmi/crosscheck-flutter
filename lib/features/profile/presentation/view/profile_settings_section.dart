@@ -13,19 +13,16 @@ class ProfileSettingsSection extends StatelessWidget {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is ProfileGeneralError) {
-          debugPrint("listener: ${state.runtimeType} ${state.message}");
           context.read<SettingsBloc>().add(SettingsSetGeneralError(message: state.message));
           return;
         }
 
         if (state is ProfileLoading) {
-          debugPrint("listener: ${state.runtimeType}");
           context.read<SettingsBloc>().add(SettingsSetLoading());
           return;
         }
 
         if (state is ProfileLoaded) {
-          debugPrint("listener: ${state.runtimeType}");
           context.read<SettingsBloc>().add(SettingsFinishLoading());
           return;
         }

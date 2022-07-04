@@ -31,7 +31,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
       final response = await remote.getProfile(token: token);
       final data = response.profileModel;
-      local.setProfile(data);
+      await local.setProfile(data);
       return Right(data);  
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));

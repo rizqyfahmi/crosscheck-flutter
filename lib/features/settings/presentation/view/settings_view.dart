@@ -72,7 +72,6 @@ class SettingsView extends StatelessWidget {
                   ),
                   BlocConsumer<SettingsBloc, SettingsState>(
                     listener: (context, state) {
-                      debugPrint("Settings: ${state.runtimeType}");
                       if (state is SettingsGeneralError) {
                         Navigator.of(context, rootNavigator: true).pop();
                         showResponseDialog(

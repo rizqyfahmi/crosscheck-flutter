@@ -8,7 +8,6 @@ import 'package:crosscheck/features/dashboard/domain/repositories/dashboard_repo
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart';
 import 'package:crosscheck/features/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -41,12 +40,10 @@ void main() {
   test("Should get DashboardEntity properly", () async {
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: Utils.token)));
     when(mockDashboardRepository.getDashboard(token: Utils.token)).thenAnswer((_) async {
-      debugPrint("execute dashboard");
       await Future.delayed(const Duration(seconds: 3));
       return Right(Utils().dashboardEntity);
     });
     when(mockProfileRepository.getProfile(token: Utils.token)).thenAnswer((_) async {
-      debugPrint("execute profile");
       await Future.delayed(const Duration(seconds: 5));
       return Right(Utils.profileEntity);
     });
