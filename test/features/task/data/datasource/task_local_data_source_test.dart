@@ -1,4 +1,4 @@
-import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,7 +21,7 @@ void main() {
     taskLocalDataSource = TaskLocalDataSourceImpl(box: mockBox);
   });
 
-  test("Should cache history properly", () async {
+  test("Should cache all histories properly", () async {
     when(mockBox.isOpen).thenReturn(true);
     when(mockBox.put(any, any)).thenAnswer((_) async => Future.value());
 
@@ -31,14 +31,13 @@ void main() {
     verify(mockBox.put(any, any));
   });
 
-  test("Should returns CacheFailure when cache history where box is not open", () async {
+  test("Should throws CacheException when cache all histories where box is not open", () async {
     when(mockBox.isOpen).thenReturn(false);
-    when(mockBox.put(any, any)).thenAnswer((_) async => Future.value());
 
     final call = taskLocalDataSource.cacheHistory;
 
     expect(() => call(Utils().taskModels), throwsA(
-      predicate((error) => error is CacheFailure)
+      predicate((error) => error is CacheException)
     ));
     verify(mockBox.isOpen);
     verifyNever(mockBox.put(any, any));
@@ -47,7 +46,7 @@ void main() {
   test("Should get cached history properly", () async {
     when(mockBox.isOpen).thenReturn(true);
     when(mockBox.values.toList()).thenReturn(Utils().taskModels);
-
+    
     final result = await taskLocalDataSource.getCachedHistory();
 
     expect(result, Utils().taskModels);
@@ -55,16 +54,35 @@ void main() {
     verify(mockBox.values.toList());
   });
 
-  test("Should returns CacheFailure when get cached history where box is not open", () async {
+  test("Should empty histories when get cached history where box is not open", () async {
     when(mockBox.isOpen).thenReturn(false);
-    when(mockBox.values.toList()).thenReturn(Utils().taskModels);
 
-    final call = taskLocalDataSource.getCachedHistory;
+    final result = await taskLocalDataSource.getCachedHistory();
 
-    expect(() => call(), throwsA(
-      predicate((error) => error is CacheFailure)
-    ));
+    expect(result, []);
     verify(mockBox.isOpen);
     verifyNever(mockBox.values.toList());
+  });
+
+  test("Should clear all cached histories properly", () async {
+    when(mockBox.isOpen).thenReturn(true);
+    when(mockBox.keys).thenReturn(["0", "1", "2"]);
+    when(mockBox.deleteAll(any)).thenAnswer((_) async => Future.value());
+
+    await taskLocalDataSource.clearCachedHistory();
+    verify(mockBox.isOpen);
+    verify(mockBox.deleteAll(any));
+  });
+
+  test("Should throws CacheException when clear all cached histories where box is not open", () async {
+    when(mockBox.isOpen).thenReturn(false);
+
+    final call = taskLocalDataSource.clearCachedHistory;
+
+    expect(() => call(), throwsA(
+      predicate((error) => error is CacheException)
+    ));
+    verify(mockBox.isOpen);
+    verifyNever(mockBox.deleteAll(any));
   });
 }
