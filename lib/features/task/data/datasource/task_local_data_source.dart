@@ -30,7 +30,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
 
   @override
   Future<List<TaskModel>> getCachedHistory() {
-    if (!box.isOpen) throw const CacheException(message: Failure.cacheError);
+    if (!box.isOpen) return Future.value([]);
     
     final response = box.values.toList();
 

@@ -28,46 +28,47 @@ class TaskRepositoryImpl extends TaskRepository {
 
   @override
   Future<Either<Failure, List<TaskEntity>>> getHistory(String token) async {
-    try {
-      List<TaskEntity> cachedTasks = await local.getCachedHistory();
-      if (cachedTasks.isNotEmpty) {
-        return Right(cachedTasks);
-      }
+    List<TaskModel> cachedTasks = await local.getCachedHistory(); // this line always returns [] when an error is occured to make the controller still continue, then get the data from the remote 
+    if (cachedTasks.isNotEmpty) {
+      return Right(cachedTasks);
+    }
 
+    try {
       bool isConnected = await networkInfo.isConnected;
       if (!isConnected) {
-        return const Left(NetworkFailure(message: Failure.networkError, data: []));
+        return Left(NetworkFailure(message: Failure.networkError, data: cachedTasks));
       }
 
       final response = await remote.getHistory(token: token);
       final data = response.tasks;
-      await local.cacheHistory(data);
+      await local.cacheHistory(data); // this line is required so that we still make it throws an exception when an error is occured to synchronize the data
       return Right(data);
     } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message));
+      return Left(ServerFailure(message: e.message, data: cachedTasks));
     } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
+      return Left(CacheFailure(message: e.message, data: cachedTasks));
     }
   }
   
   @override
   Future<Either<Failure, List<TaskEntity>>> getMoreHistory(String token) async {
+    List<TaskModel> cachedTasks = await local.getCachedHistory(); // this line always returns [] when an error is occured to make the controller still continue, then get the data from the remote 
+
     try {
-      List<TaskModel> cachedTasks = await local.getCachedHistory();
 
       bool isConnected = await networkInfo.isConnected;
       if (!isConnected) {
         return Left(NetworkFailure(message: Failure.networkError, data: cachedTasks));
       }
 
-      final response = await remote.getMoreHistory(token: token, limit: 10, offset: cachedTasks.length);
+      final response = await remote.getHistory(token: token, offset: cachedTasks.length);
       final data = [...cachedTasks, ...response.tasks];
-      await local.cacheHistory(data);
+      await local.cacheHistory(data); // this line is required so that we still make it throws an exception when an error is occured to synchronize the data
       return Right(data);
     } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message));
+      return Left(ServerFailure(message: e.message, data: cachedTasks));
     } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
+      return Left(CacheFailure(message: e.message, data: cachedTasks));
     }
   }
 

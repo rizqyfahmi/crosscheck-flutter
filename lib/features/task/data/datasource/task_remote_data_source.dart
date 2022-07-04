@@ -6,9 +6,7 @@ import 'package:http/http.dart';
 
 abstract class TaskRemoteDataSource {
   
-  Future<TaskResponseModel> getHistory({required String token});
-
-  Future<TaskResponseModel> getMoreHistory({required String token, required int limit, required int offset});
+  Future<TaskResponseModel> getHistory({required String token, int? limit, int? offset});
 
 }
 
@@ -21,8 +19,16 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   });
 
   @override
-  Future<TaskResponseModel> getHistory({required String token}) async {
-    final uri = Uri.parse("https://localhost:8080/task/history");
+  Future<TaskResponseModel> getHistory({required String token, int? limit = 10, int? offset = 0}) async {
+    final uri = Uri(
+      scheme: "https",
+      path: "task/history",
+      host: "localhost:8080",
+      queryParameters: {
+        "limit": limit,
+        "offset": offset
+      }
+    );
     final headers = {'Content-Type': 'application/json', "Authorization": token};
     final response = await client.get(uri, headers: headers);
 
@@ -33,12 +39,6 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     }
 
     throw ServerException(message: body["message"]);
-  }
-  
-  @override
-  Future<TaskResponseModel> getMoreHistory({required String token, required int limit, required int offset}) {
-    // TODO: implement getMoreHistory
-    throw UnimplementedError();
   }
   
 }
