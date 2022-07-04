@@ -1,13 +1,13 @@
 import 'package:crosscheck/core/response/response.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
+import 'package:flutter/material.dart';
 
 class TaskResponseModel extends Response {
   
   const TaskResponseModel({required super.message, required super.data});
   
   factory TaskResponseModel.fromJSON(Map<String, dynamic> response) {
-
-    final bool isDataNull = response["data"];
+    final bool isDataNull = response["data"] == null;
 
     return TaskResponseModel(
       message: response["message"], 

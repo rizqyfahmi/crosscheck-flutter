@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class TaskEntity extends Equatable {
 
+  final String id;
   final String title;
   final String description;
   final DateTime start;
@@ -10,6 +11,7 @@ class TaskEntity extends Equatable {
   final List<DateTime> alerts;
 
   const TaskEntity({
+    required this.id,
     required this.title,
     required this.description,
     required this.start,
@@ -19,6 +21,7 @@ class TaskEntity extends Equatable {
   });
 
   TaskEntity copyWith({
+    String? id,
     String? title,
     String? description,
     DateTime? start,
@@ -27,6 +30,7 @@ class TaskEntity extends Equatable {
     List<DateTime>? alerts
   }) {
     return TaskEntity(
+      id: id ?? this.id,
       title: title ?? this.title, 
       description: description ?? this.description, 
       start: start ?? this.start,
@@ -38,7 +42,7 @@ class TaskEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    title, description, start, end, isAllDay, alerts
+    id, title, description, start, end, isAllDay, alerts
   ];
 
 }

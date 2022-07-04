@@ -1,8 +1,10 @@
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
+import 'package:flutter/material.dart';
 
 class TaskModel extends TaskEntity {
   
   const TaskModel({
+    required super.id,
     required super.title, 
     required super.description, 
     required super.start, 
@@ -11,19 +13,21 @@ class TaskModel extends TaskEntity {
     required super.alerts
   });
 
-  factory TaskModel.fromJSON(Map<String, dynamic> response) {
+  factory TaskModel.fromJSON(Map<String, dynamic> response) {    
     return TaskModel(
+      id: response["id"],
       title: response["title"], 
       description: response["description"], 
-      start: response["start"], 
-      end: response["end"], 
+      start: DateTime.parse(response["start"]), 
+      end: DateTime.parse(response["end"]), 
       isAllDay: response["isAllDay"], 
-      alerts: response["alerts"]
+      alerts: (response["alerts"] as List<dynamic>).map((item) => DateTime.parse(item)).toList()
     );
   }
 
   Map<String, dynamic> toJSON() {
     return {
+      "id": id,
       "title": title,
       "description": description,
       "start": start,
