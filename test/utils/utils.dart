@@ -10,6 +10,7 @@ class Utils {
   static const successMessage = "The request has succeeded";
   final currentDate = DateTime.parse("2022-06-14"); 
   static final profileEntity = ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60");
+  Map<String, String> get headers => {'Content-Type': 'application/json', "Authorization": Utils.token};
 
   List<ActivityEntity> get activityEntity {
     return [
@@ -29,12 +30,13 @@ class Utils {
 
   List<TaskEntity> get taskEntities {
     return List<int>.generate(10, (index) => index).map((v) {
-      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v));
+      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
       return TaskEntity(
+        id: v.toString(),
         title: "hello title $v",
         description: "hello description $v", 
-        start: DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v)), 
-        end: start.add(Duration(hours: v)), 
+        start: start, 
+        end: start.add(const Duration(hours: 1)), 
         isAllDay: false, 
         alerts: const []
       );
@@ -43,12 +45,13 @@ class Utils {
 
   List<TaskModel> get taskModels {
     return List<int>.generate(10, (index) => index).map((v) {
-      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v));
+      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
       return TaskModel(
+        id: v.toString(),
         title: "hello title $v",
         description: "hello description $v", 
-        start: DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v)), 
-        end: start.add(Duration(hours: v)), 
+        start: start, 
+        end: start.add(const Duration(hours: 1)), 
         isAllDay: false, 
         alerts: const []
       );
