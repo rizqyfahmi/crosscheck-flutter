@@ -36,7 +36,7 @@ class TaskRepositoryImpl extends TaskRepository {
 
       bool isConnected = await networkInfo.isConnected;
       if (!isConnected) {
-        return const Right([]);
+        return const Left(NetworkFailure(message: Failure.networkError, data: []));
       }
 
       final response = await remote.getHistory(token: token);
