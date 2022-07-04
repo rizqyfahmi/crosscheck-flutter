@@ -53,7 +53,7 @@ void main() {
     verify(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should returns CacheFailure with empty list of tasks(history) as the latest cached data when set list of tasks(history) from remote into local data source throws CacheException", () async {
+  test("Should returns CacheFailure with empty histories as the latest cached data when set histories from remote into local data source throws CacheException", () async {
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockTaskLocalDataSource.cacheHistory(any)).thenThrow(const CacheException(message: Failure.cacheError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
@@ -69,7 +69,7 @@ void main() {
     verify(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should returns ServerFailure with empty list of tasks(history) as the latest cached data when get list of tasks(history) from remote data source throws ServerException", () async {
+  test("Should returns ServerFailure with empty histories as the latest cached data when get histories from remote data source throws ServerException", () async {
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenThrow(const ServerException(message: Failure.generalError));
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
@@ -116,7 +116,7 @@ void main() {
     verifyNever(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should returns CacheFailure when get history list of tasks(history) from local data source returns CacheException", () async {
+  test("Should returns CacheFailure when get history histories from local data source returns CacheException", () async {
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
@@ -132,7 +132,7 @@ void main() {
   });
 
   /*--------------------------------------------------- Get More History ---------------------------------------------------*/ 
-  test("Should returns next/more list of tasks(history) from remote data source properly when device is online", () async {
+  test("Should returns next/more histories from remote data source properly when device is online", () async {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
     when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
@@ -192,4 +192,119 @@ void main() {
     verifyNever(mockTaskLocalDataSource.cacheHistory(any));
   });
 
+  /*--------------------------------------------------- Get Refresh History (empty cached data) ---------------------------------------------------*/ 
+  test("Should returns refreshed histories properly when get cached history returns empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result.toString(), Right(Utils().taskModels).toString());
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verify(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  test("Should returns CacheFailure with empty histories when set/cache history throws CacheException and get cached history returns empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheHistory(any)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verify(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  test("Should returns ServerFailure with empty histories when get history from remote data source throws ServerException and and get cached history returns empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verifyNever(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  test("Should returns ServerFailure with empty histories when clear cached histories throws CacheException and and get cached history returns empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verifyNever(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  /*--------------------------------------------------- Get Refresh History (not empty cached data) ---------------------------------------------------*/ 
+  test("Should returns refreshed histories properly when get cached history returns not empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheHistory(any)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result.toString(), Right(Utils().taskModels).toString());
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verify(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  test("Should returns CacheFailure with empty histories when set/cache history throws CacheException and get cached history returns not empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheHistory(any)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verify(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  test("Should returns ServerFailure with empty histories when get history from remote data source throws ServerException and and get cached history returns not empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result, Left(ServerFailure(message: Failure.generalError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verify(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verifyNever(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  test("Should returns ServerFailure with empty histories when clear cached histories throws CacheException and and get cached history returns not empty histories", () async {
+    when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedHistory()).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshHistory(Utils.token);
+
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedHistory());
+    verify(mockTaskLocalDataSource.clearCachedHistory());
+    verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token));
+    verifyNever(mockTaskLocalDataSource.cacheHistory(any));
+  });
 }

@@ -67,6 +67,11 @@ class MockTaskLocalDataSource extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#cacheHistory, [models]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
+  @override
+  _i4.Future<void> clearCachedHistory() =>
+      (super.noSuchMethod(Invocation.method(#clearCachedHistory, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
 }
 
 /// A class which mocks [NetworkInfo].
