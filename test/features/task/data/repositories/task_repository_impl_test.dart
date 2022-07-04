@@ -83,7 +83,7 @@ void main() {
     verifyNever(mockTaskLocalDataSource.cacheHistory(any));
   });
 
-  test("Should returns empty list of task(history) properly when device is offline and the local data source is still empty", () async {
+  test("Should returns NetworkFailure with empty list of task(history) properly when device is offline and the local data source is still empty", () async {
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     when(mockTaskLocalDataSource.getCachedHistory()).thenAnswer((_) async => []);
@@ -91,7 +91,7 @@ void main() {
 
     final result = await taskRepository.getHistory(Utils.token);
 
-    expect(result.toString() == const Right([]).toString(), true);
+    expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
     verify(mockTaskLocalDataSource.getCachedHistory());
     verify(mockNetworkInfo.isConnected);
     verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token));
