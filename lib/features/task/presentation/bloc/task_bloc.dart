@@ -17,6 +17,49 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetMoreHistoryUsecase getMoreHistoryUsecase;
   final GetRefreshHistoryUsecase getRefreshHistoryUsecase;
 
-  TaskBloc(super.initialState, {required this.getHistoryUsecase, required this.getMoreHistoryUsecase, required this.getRefreshHistoryUsecase});
+  TaskBloc({
+    required this.getHistoryUsecase,
+    required this.getMoreHistoryUsecase,
+    required this.getRefreshHistoryUsecase
+  }) : super(TaskInit()) {
+    on<TaskGetHistory>((event, emit) async {
+      await getHistory(event, emit, () async {
+        return await getHistoryUsecase(NoParam());
+      });
+    });
+    on<TaskGetMoreHistory>((event, emit) async {
+      await getHistory(event, emit, () async {
+        return await getMoreHistoryUsecase(NoParam());
+      });
+    });
+    on<TaskGetRefreshHistory>((event, emit) async {
+      await getHistory(event, emit, () async {
+        return await getRefreshHistoryUsecase(NoParam());
+      });
+    });
+    on<TaskResetGeneralError>((event, emit) {
+      emit(TaskIdle(models: state.models));
+    });
+  }
+
+  getHistory(TaskEvent event, Emitter<TaskState> emit, Usecase usecase) async {
+    emit(TaskLoading(models: state.models));
+
+    final response = await usecase();
+    response.fold(
+      (error) {
+        List<TaskModel> models = (error.data as List<dynamic>).map((entity) {
+          final temp = entity as TaskEntity;
+          return TaskModel.fromTaskEntity(temp);
+        }).toList();
+        emit(TaskGeneralError(models: models, message: error.message));
+      },
+      (result) {
+        List<TaskModel> models = result.map((entity) => TaskModel.fromTaskEntity(entity)).toList();
+        emit(TaskLoaded(models: models));
+        emit(TaskIdle(models: models));
+      }
+    );
+  }
 
 }
