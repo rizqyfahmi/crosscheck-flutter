@@ -6,8 +6,10 @@ class TaskModel extends Equatable {
   final String id;
   final String title;
   final String description;
-  final DateTime start;
-  final DateTime end;
+  final String startDate;
+  final String startTime;
+  final String endDate;
+  final String endTime;
   final bool isAllDay;
   final List<DateTime> alerts;
   final String status;
@@ -16,20 +18,29 @@ class TaskModel extends Equatable {
     required this.id,
     required this.title,
     required this.description,
-    required this.start,
-    required this.end,
+    required this.startDate,
+    required this.startTime,
+    required this.endDate,
+    required this.endTime,
     required this.isAllDay,
     required this.alerts,
     required this.status
   });
 
   factory TaskModel.fromTaskEntity(TaskEntity entity) {
+    String startDate = "${entity.start.day.toString().padLeft(2, "0")}-${entity.start.month.toString().padLeft(2, "0")}-${entity.start.year}";
+    String startTime = "${entity.start.hour.toString().padLeft(2, "0")}:${entity.start.minute.toString().padLeft(2, "0")}";
+    String endDate = "${entity.end.day.toString().padLeft(2, "0")}-${entity.end.month.toString().padLeft(2, "0")}-${entity.end.year}";
+    String endTime = "${entity.start.hour.toString().padLeft(2, "0")}:${entity.start.minute.toString().padLeft(2, "0")}";
+    
     return TaskModel(
       id: entity.id,
       title: entity.title,
       description: entity.description,
-      start: entity.start,
-      end: entity.end,
+      startDate: startDate,
+      startTime: startTime,
+      endDate: endDate,
+      endTime: endTime,
       isAllDay: entity.isAllDay,
       alerts: entity.alerts,
       status: entity.start.isBefore(DateTime.now()) ? "Completed" : "Active"
@@ -46,12 +57,19 @@ class TaskModel extends Equatable {
     List<DateTime>? alerts,
     String? status
   ) {
+    String startDate = "${start?.day.toString().padLeft(2, "0")}-${start?.month.toString().padLeft(2, "0")}-${start?.year}";
+    String startTime = "${start?.hour.toString().padLeft(2, "0")}:${start?.minute.toString().padLeft(2, "0")}";
+    String endDate = "${end?.day.toString().padLeft(2, "0")}-${end?.month.toString().padLeft(2, "0")}-${end?.year}";
+    String endTime = "${end?.hour.toString().padLeft(2, "0")}:${end?.minute.toString().padLeft(2, "0")}";
+
     return TaskModel(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      start: start ?? this.start,
-      end: end ?? this.end,
+      startDate: (start == null) ? this.startDate : startDate,
+      startTime: (start == null) ? this.startTime : startTime,
+      endDate: (end == null) ? this.endDate : endDate,
+      endTime: (end == null) ? this.endTime : endTime,
       isAllDay: isAllDay ?? this.isAllDay,
       alerts: alerts ?? this.alerts,
       status: status ?? this.status
@@ -60,7 +78,7 @@ class TaskModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    id, title, description, start, end, isAllDay, alerts, status
+    id, title, description, startDate, startTime, endDate, endTime, isAllDay, alerts, status
   ];
 
 }
