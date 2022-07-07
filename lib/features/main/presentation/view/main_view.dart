@@ -11,6 +11,9 @@ import 'package:crosscheck/features/main/presentation/bloc/main_state.dart';
 import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:crosscheck/features/profile/presentation/bloc/profile_event.dart';
 import 'package:crosscheck/features/settings/presentation/view/settings_view.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
+import 'package:crosscheck/features/task/presentation/view/history_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -68,10 +71,14 @@ class MainView extends StatelessWidget {
     return await Future.value(null);
   }
 
+  Future<void> getHistoryData(BuildContext context) async {
+    context.read<TaskBloc>().add(TaskGetHistory());
+    return await Future.value(null);
+  }
+
   Widget buildContent(BuildContext context, MainState state) {
     switch (state.model.currentPage) {
       case BottomNavigation.setting:
-        
         return FutureBuilder(
           future: getProfileData(context),
           builder: (context, _) {
@@ -81,8 +88,11 @@ class MainView extends StatelessWidget {
           }
         );
       case BottomNavigation.history:
-        return const Center(
-          child: Text("History"),
+        return FutureBuilder(
+          future: getHistoryData(context),
+          builder: (context, _) {
+            return const HistoryView();
+          }
         );
       case BottomNavigation.event:
         return const Center(

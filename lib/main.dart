@@ -12,6 +12,8 @@ import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart'
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
+import 'package:crosscheck/features/task/data/models/data/task_model.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_bloc.dart';
 import 'package:crosscheck/features/walkthrough/presentation/bloc/walkthrough_event.dart';
@@ -29,6 +31,7 @@ void main() async {
   
   Hive.init(path);
   Hive.registerAdapter(ProfileModelAdapter());
+  Hive.registerAdapter(TaskModelAdapter());
   
   await di.init();
 
@@ -56,7 +59,10 @@ void main() async {
     ),
     BlocProvider<ProfileBloc>(
       create: (_) => di.locator<ProfileBloc>(),
-    )
+    ),
+    BlocProvider<TaskBloc>(
+      create: (_) => di.locator<TaskBloc>(),
+    ),
   ];
   runApp(MyApp(providers: providers));
 }

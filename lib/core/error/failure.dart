@@ -13,39 +13,32 @@ abstract class Failure extends Equatable {
   static const networkError = "Network error";
 
   final String message;
+  final dynamic data;
 
-  const Failure({
-    required this.message
-  });
+  const Failure({required this.message, this.data});
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, data];
 }
 
 class ServerFailure extends Failure {
   final List<Map<String, dynamic>>? errors;
-  final dynamic data;
-
+  
   const ServerFailure({
     required super.message,
     this.errors,
-    this.data
+    super.data
   });
 
   @override
-  List<Object?> get props => [super.message, errors, data];
+  List<Object?> get props => [message, errors, data];
 }
 
 class CacheFailure extends Failure {
-  final dynamic data;
-
-  const CacheFailure({
-    required super.message,
-    this.data
-  });
+  const CacheFailure({required super.message, super.data});
 
   @override
-  List<Object?> get props => [super.message, data];
+  List<Object?> get props => [message, data];
 
 }
 
@@ -54,10 +47,8 @@ class NullFailure extends Failure {
 }
 
 class NetworkFailure extends Failure {
-  final dynamic data;
-
-  const NetworkFailure({required super.message, this.data});
+  const NetworkFailure({required super.message, super.data});
 
   @override
-  List<Object?> get props => [super.message, data];
+  List<Object?> get props => [message, data];
 }

@@ -32,6 +32,15 @@ import 'package:crosscheck/features/settings/domain/repositories/settings_reposi
 import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart';
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
+import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
+import 'package:crosscheck/features/task/data/models/data/task_model.dart';
+import 'package:crosscheck/features/task/data/repositories/task_repository_impl.dart';
+import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
 import 'package:crosscheck/features/walkthrough/data/repositories/walkthrough_repository_impl.dart';
 import 'package:crosscheck/features/walkthrough/domain/repositories/walkthrough_repository.dart';
@@ -55,6 +64,7 @@ Future<void> init() async  {
   locator.registerFactory(() => DashboardBloc(getDashboardUsecase: locator()));
   locator.registerFactory(() => SettingsBloc(setThemeUsecase: locator(), getThemeUsecase: locator()));
   locator.registerFactory(() => ProfileBloc(getProfileUsecase: locator()));
+  locator.registerFactory(() => TaskBloc(getHistoryUsecase: locator(), getMoreHistoryUsecase: locator(), getRefreshHistoryUsecase: locator()));
 
   locator.registerLazySingleton(() => RegistrationUsecase(repository: locator()));
   locator.registerLazySingleton(() => LoginUsecase(repository: locator()));
@@ -66,12 +76,16 @@ Future<void> init() async  {
   locator.registerLazySingleton(() => SetThemeUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetThemeUsecase(repository: locator()));
   locator.registerLazySingleton(() => GetProfileUsecase(repository: locator(), authenticationRepository: locator()));
+  locator.registerLazySingleton(() => GetHistoryUsecase(repository: locator(), authenticationRepository: locator()));
+  locator.registerLazySingleton(() => GetMoreHistoryUsecase(repository: locator(), authenticationRepository: locator()));
+  locator.registerLazySingleton(() => GetRefreshHistoryUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton<WalkthroughRepository>(() => WalkthroughRepositoryImpl(walkthroughLocalDataSource: locator()));
   locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
   locator.registerLazySingleton<MainRepository>(() => MainRepositoryImpl(mainLocalDataSource: locator()));
   locator.registerLazySingleton<DashboardRepository>(() => DashboardRepositoryImpl(remote: locator(), networkInfo: locator()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(settingsLocalDataSource: locator()));
   locator.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
+  locator.registerLazySingleton<TaskRepository>(() => TaskRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
 
   locator.registerLazySingleton<AuthenticationRemoteDataSource>(() => AuthenticationRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<AuthenticationLocalDataSource>(() => AuthenticationLocalDataSourceImpl(sharedPreferences: locator()));
@@ -81,6 +95,8 @@ Future<void> init() async  {
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(sharedPreferences: locator()));
   locator.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<ProfileLocalDataSource>(() => ProfileLocalDdataSourceImpl(box: locator()));
+  locator.registerLazySingleton<TaskRemoteDataSource>(() => TaskRemoteDataSourceImpl(client: locator()));
+  locator.registerLazySingleton<TaskLocalDataSource>(() => TaskLocalDataSourceImpl(box: locator()));
 
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
   
@@ -89,6 +105,9 @@ Future<void> init() async  {
   
   final Box<ProfileModel> boxProfileModel = await Hive.openBox("profile");
   locator.registerLazySingleton<Box<ProfileModel>>(() => boxProfileModel);
+  
+  final Box<TaskModel> boxTaskModel = await Hive.openBox("Task");
+  locator.registerLazySingleton<Box<TaskModel>>(() => boxTaskModel);
   
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => InternetConnectionChecker());

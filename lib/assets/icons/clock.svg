@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Task-detail" transform="translate(-16.000000, -260.000000)" stroke="#203A40" stroke-width="1.5">
+            <g id="Group" transform="translate(16.000000, 260.000000)">
+                <path d="M2.75,12 C2.75,18.937 5.063,21.25 12,21.25 C18.937,21.25 21.25,18.937 21.25,12 C21.25,5.063 18.937,2.75 12,2.75 C5.063,2.75 2.75,5.063 2.75,12 Z" id="Path"></path>
+                <polyline id="Path" points="15.39 14.018 11.999 11.995 11.999 7.63403"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

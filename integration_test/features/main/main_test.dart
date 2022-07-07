@@ -19,6 +19,10 @@ import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.da
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/walkthrough/data/models/request/walkthrough_params.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/get_is_skip_usecase.dart';
 import 'package:crosscheck/features/walkthrough/domain/usecases/set_is_skip_usecase.dart';
@@ -44,7 +48,10 @@ import 'main_test.mocks.dart';
   GetDashboardUsecase,
   SetThemeUsecase,
   GetThemeUsecase,
-  GetProfileUsecase
+  GetProfileUsecase,
+  GetHistoryUsecase,
+  GetMoreHistoryUsecase,
+  GetRefreshHistoryUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -56,6 +63,9 @@ void main() {
   late MockGetProfileUsecase mockGetProfileUsecase;
   late MockSetThemeUsecase mockSetThemeUsecase;
   late MockGetThemeUsecase mockGetThemeUsecase;
+  late MockGetHistoryUsecase mockGetHistoryUsecase;
+  late MockGetMoreHistoryUsecase mockGetMoreHistoryUsecase;
+  late MockGetRefreshHistoryUsecase mockGetRefreshHistoryUsecase;
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
   late LoginBloc loginBloc;
@@ -63,6 +73,7 @@ void main() {
   late DashboardBloc dashboardBloc;
   late SettingsBloc settingsBloc;
   late ProfileBloc profileBloc;
+  late TaskBloc taskBloc;
   late Widget main;
 
   setUp(() {
@@ -75,6 +86,9 @@ void main() {
     mockSetThemeUsecase = MockSetThemeUsecase();
     mockGetThemeUsecase = MockGetThemeUsecase();
     mockGetProfileUsecase = MockGetProfileUsecase();
+    mockGetHistoryUsecase = MockGetHistoryUsecase();
+    mockGetMoreHistoryUsecase = MockGetMoreHistoryUsecase();
+    mockGetRefreshHistoryUsecase = MockGetRefreshHistoryUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -86,6 +100,11 @@ void main() {
     dashboardBloc = DashboardBloc(getDashboardUsecase: mockGetDashboardUsecase);
     settingsBloc = SettingsBloc(setThemeUsecase: mockSetThemeUsecase, getThemeUsecase: mockGetThemeUsecase);
     profileBloc = ProfileBloc(getProfileUsecase: mockGetProfileUsecase);
+    taskBloc = TaskBloc(
+      getHistoryUsecase: mockGetHistoryUsecase,
+      getMoreHistoryUsecase: mockGetMoreHistoryUsecase,
+      getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase
+    );
 
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(
@@ -108,6 +127,9 @@ void main() {
       ),
       BlocProvider<ProfileBloc>(
         create: (_) => profileBloc
+      ),
+      BlocProvider<TaskBloc>(
+        create: (_) => taskBloc
       ),
     ]);
   });
@@ -260,6 +282,10 @@ void main() {
     });
     when(mockGetThemeUsecase(any)).thenAnswer((_) async => const Right(SettingsEntity(themeMode: Brightness.dark)));
     when(mockGetProfileUsecase(NoParam())).thenAnswer((_) async => Right(ProfileEntity(id: "123", fullname: "fulan", email: "fulan@email.com", dob: DateTime.parse("1991-01-11"), address: "Indonesia", photoUrl: "https://via.placeholder.com/60x60")));
+    when(mockGetHistoryUsecase(any)).thenAnswer((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      return Right(Utils().getTaskEntities(end: 10));
+    });
 
     await tester.runAsync(() async {
       await tester.pumpWidget(main);
