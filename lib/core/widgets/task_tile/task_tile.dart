@@ -18,7 +18,7 @@ class TaskTile extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.background,
           border: Border.all(
             color: CustomColors.borderField
           ),
@@ -32,10 +32,12 @@ class TaskTile extends StatelessWidget {
                 Expanded(
                   child: Text(
                     task.title,
+                    key: const Key("TaskTileTitle"),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
+                      color: Theme.of(context).colorScheme.onBackground
+                    ),
                   )
                 ),
                 Container(
@@ -45,7 +47,11 @@ class TaskTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16)
                   ),
                   child: Text(
-                    task.status
+                    task.status,
+                    key: const Key("TaskTileStatus"),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground
+                    ),
                   ),
                 )
               ],
@@ -53,6 +59,7 @@ class TaskTile extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               task.description,
+              key: const Key("TaskTileDescription"),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyText2?.copyWith(
@@ -72,6 +79,7 @@ class TaskTile extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   task.startDate,
+                  key: const Key("TaskTileStartDate"),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyText2?.copyWith(

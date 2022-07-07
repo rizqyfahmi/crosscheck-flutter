@@ -1,6 +1,10 @@
+import 'package:crosscheck/core/widgets/dialog/dialog.dart';
 import 'package:crosscheck/core/widgets/task_tile/task_tile.dart';
-import 'package:crosscheck/features/task/presentation/bloc/task_model.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HistoryView extends StatefulWidget {
   const HistoryView({Key? key}) : super(key: key);
@@ -11,26 +15,6 @@ class HistoryView extends StatefulWidget {
 
 class _HistoryViewState extends State<HistoryView> {
   late ScrollController controller;
-  List<TaskModel> items = List.generate(10, (v) {
-    final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
-    String startDate = "${start.day.toString().padLeft(2, "0")}-${start.month.toString().padLeft(2, "0")}-${start.year}";
-    String startTime = "${start.hour.toString().padLeft(2, "0")}:${start.minute.toString().padLeft(2, "0")}";
-    String endDate = "${start.add(const Duration(hours: 1)).day.toString().padLeft(2, "0")}-${start.add(const Duration(hours: 1)).month.toString().padLeft(2, "0")}-${start.add(const Duration(hours: 1)).year}";
-    String endTime = "${start.add(const Duration(hours: 1)).hour.toString().padLeft(2, "0")}:${start.add(const Duration(hours: 1)).minute.toString().padLeft(2, "0")}";
-
-    return TaskModel(
-      id: v.toString(),
-      title: "hello title $v",
-      description: "hello description $v", 
-      startDate: startDate,
-      startTime: startTime,
-      endDate: endDate, 
-      endTime: endTime, 
-      isAllDay: false, 
-      alerts: const [],
-      status: "active"
-    );
-  }).toList();
 
   @override
   void initState() {
@@ -45,31 +29,8 @@ class _HistoryViewState extends State<HistoryView> {
   }
 
   void _scrollListener() {
-    if (controller.position.extentAfter < 50) {
-      setState(() {
-        items.addAll(
-          List.generate(10, (v) {
-            final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
-            String startDate = "${start.day.toString().padLeft(2, "0")}-${start.month.toString().padLeft(2, "0")}-${start.year}";
-            String startTime = "${start.hour.toString().padLeft(2, "0")}:${start.minute.toString().padLeft(2, "0")}";
-            String endDate = "${start.add(const Duration(hours: 1)).day.toString().padLeft(2, "0")}-${start.add(const Duration(hours: 1)).month.toString().padLeft(2, "0")}-${start.add(const Duration(hours: 1)).year}";
-            String endTime = "${start.add(const Duration(hours: 1)).hour.toString().padLeft(2, "0")}:${start.add(const Duration(hours: 1)).minute.toString().padLeft(2, "0")}";
-
-            return TaskModel(
-              id: v.toString(),
-              title: "hello title $v",
-              description: "hello description $v", 
-              startDate: startDate,
-              startTime: startTime,
-              endDate: endDate, 
-              endTime: endTime, 
-              isAllDay: false, 
-              alerts: const [],
-              status: "active"
-            );
-          }).toList()
-        );
-      });
+    if (controller.position.extentAfter == 0) {
+      context.read<TaskBloc>().add(TaskGetMoreHistory());
     }
   }
 
@@ -85,22 +46,51 @@ class _HistoryViewState extends State<HistoryView> {
             color: Theme.of(context).colorScheme.onBackground
           ),
         ),
-        
         backgroundColor: Theme.of(context).colorScheme.background,
         shadowColor: Colors.black.withOpacity(0.4),
       ),
-      body: ListView.builder(
-        itemCount: items.length,
-        controller: controller,
-        padding: const EdgeInsets.all(16),
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              TaskTile(task: items[index]),
-              const SizedBox(height: 16)
-            ],
+      body: BlocConsumer<TaskBloc, TaskState>(
+        listener: (context, state) {
+          
+          if (state is TaskGeneralError) {
+            Navigator.of(context, rootNavigator: true).pop();
+            showResponseDialog(
+              context: context,
+              status: ResponseDialogStatus.error,
+              title: state.title,
+              message: state.message
+            );
+            return;
+          }
+
+          if (state is TaskLoading) {
+            showLoadingDialog(context: context);
+            return;
+          }
+
+          if (state is! TaskLoaded) return;
+          Navigator.of(context).pop();
+        }, builder: (context, state) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<TaskBloc>().add(TaskGetRefreshHistory());
+            },
+            child: ListView.builder(
+              itemCount: state.models.length,
+              controller: controller,
+              padding: const EdgeInsets.all(16),
+              itemBuilder: (context, index) {
+                final id = state.models[index].id;
+                return Column(
+                  children: [
+                    TaskTile(key: Key("TaskTile$id"), task: state.models[index]),
+                    const SizedBox(height: 16)
+                  ],
+                );
+              },
+            ),
           );
-        },
+        }
       ),
     );
   }

@@ -14,6 +14,8 @@ import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart'
 import 'package:crosscheck/features/profile/presentation/bloc/profile_state.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
+import 'package:crosscheck/features/task/presentation/bloc/task_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,7 +30,8 @@ import 'main_view_test.mocks.dart';
   MainBloc,
   DashboardBloc,
   SettingsBloc,
-  ProfileBloc
+  ProfileBloc,
+  TaskBloc
 ])
 void main() {
   late MockAuthenticationBloc mockAuthenticationBloc;
@@ -36,6 +39,7 @@ void main() {
   late MockDashboardBloc mockDashboardBloc;
   late MockSettingsBloc mockSettingsBloc;
   late MockProfileBloc mockProfileBloc;
+  late MockTaskBloc mockTaskBloc;
   late Widget testWidget;
 
   setUp(() {
@@ -46,12 +50,14 @@ void main() {
     mockDashboardBloc = MockDashboardBloc();
     mockSettingsBloc = MockSettingsBloc();
     mockProfileBloc = MockProfileBloc();
+    mockTaskBloc = MockTaskBloc();
     testWidget = buildWidget(
       authenticationBloc: mockAuthenticationBloc,
       mainBloc: mockMainBloc,
       dashboardBloc: mockDashboardBloc,
       settingsBloc: mockSettingsBloc,
-      profileBloc: mockProfileBloc
+      profileBloc: mockProfileBloc,
+      taskBloc: mockTaskBloc
     );
   });
 
@@ -134,6 +140,8 @@ void main() {
     when(mockDashboardBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
     when(mockProfileBloc.state).thenReturn(const ProfileInit());
     when(mockProfileBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
+    when(mockTaskBloc.state).thenReturn(TaskInit());
+    when(mockTaskBloc.stream).thenAnswer((_) => Stream.fromIterable([]));
 
     await mockNetworkImagesFor(() => tester.pumpWidget(testWidget));
     await tester.pumpAndSettle();
@@ -184,7 +192,8 @@ Widget buildWidget({
   required MainBloc mainBloc,
   required DashboardBloc dashboardBloc,
   required SettingsBloc settingsBloc,
-  required ProfileBloc profileBloc
+  required ProfileBloc profileBloc,
+  required TaskBloc taskBloc
 }) {
   return MultiBlocProvider(
     providers: [
@@ -202,6 +211,9 @@ Widget buildWidget({
       ),
       BlocProvider<ProfileBloc>(
         create: (_) => profileBloc
+      ),
+      BlocProvider<TaskBloc>(
+        create: (_) => taskBloc
       )
     ], 
     child: MaterialApp(

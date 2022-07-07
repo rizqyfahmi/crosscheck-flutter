@@ -24,16 +24,55 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }) : super(TaskInit()) {
     on<TaskGetHistory>((event, emit) async {
       await getHistory(event, emit, () async {
+        // final entities = List<int>.generate(10, (index) => index).map((v) {
+        //   final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
+        //   return TaskEntity(
+        //     id: v.toString(),
+        //     title: "hello title $v",
+        //     description: "hello description $v", 
+        //     start: start, 
+        //     end: start.add(const Duration(hours: 1)), 
+        //     isAllDay: false, 
+        //     alerts: const []
+        //   );
+        // }).toList();
+        // return Right(entities);
         return await getHistoryUsecase(NoParam());
       });
     });
     on<TaskGetMoreHistory>((event, emit) async {
       await getHistory(event, emit, () async {
+        // final entities = List<int>.generate(20, (index) => index).map((v) {
+        //   final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
+        //   return TaskEntity(
+        //     id: v.toString(),
+        //     title: "hello title $v",
+        //     description: "hello description $v", 
+        //     start: start, 
+        //     end: start.add(const Duration(hours: 1)), 
+        //     isAllDay: false, 
+        //     alerts: const []
+        //   );
+        // }).toList();
+        // return Right(entities);
         return await getMoreHistoryUsecase(NoParam());
       });
     });
     on<TaskGetRefreshHistory>((event, emit) async {
       await getHistory(event, emit, () async {
+        // final entities = List<int>.generate(10, (index) => index).map((v) {
+        //   final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
+        //   return TaskEntity(
+        //     id: v.toString(),
+        //     title: "hello title $v",
+        //     description: "hello description $v", 
+        //     start: start, 
+        //     end: start.add(const Duration(hours: 1)), 
+        //     isAllDay: false, 
+        //     alerts: const []
+        //   );
+        // }).toList();
+        // return Right(entities);
         return await getRefreshHistoryUsecase(NoParam());
       });
     });

@@ -29,11 +29,12 @@ class TaskIdle extends TaskState {
 }
 
 class TaskGeneralError extends TaskState {
+  final String? title;
   final String message;
 
-  const TaskGeneralError({required super.models, required this.message});
+  const TaskGeneralError({required super.models, required this.message, this.title});
 
   @override
-  List<Object?> get props => [models, message];
+  List<Object?> get props => [models, title, message];
 
 }

@@ -43,6 +43,25 @@ class Utils {
     }).toList();
   }
 
+  List<TaskEntity> getTaskEntities({int start = 0, int end = 10}) {
+    List<TaskEntity> results = [];
+    for (var i = start; i < end; i++) {
+      final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: i));
+      final entity = TaskEntity(
+        id: i.toString(),
+        title: "hello title $i",
+        description: "hello description $i", 
+        start: start, 
+        end: start.add(const Duration(hours: 1)), 
+        isAllDay: false, 
+        alerts: const []
+      );
+      results.add(entity);
+    }
+
+    return results;
+  }
+
   List<TaskModel> get taskModels {
     return List<int>.generate(10, (index) => index).map((v) {
       final start = DateTime.parse("2022-07-03 00:00:00").add(Duration(hours: v + 1));
