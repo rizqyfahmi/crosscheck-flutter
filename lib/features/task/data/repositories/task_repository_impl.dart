@@ -3,6 +3,7 @@ import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
+import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart';
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
@@ -81,6 +82,15 @@ class TaskRepositoryImpl extends TaskRepository {
     } on CacheException catch (e) {
       return Left(CacheFailure(message: e.message, data: cachedTasks));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<CountedDailyTaskEntity>>> countDailyTaskByMonth({
+    required String token,
+    required String month
+  }) {
+    // TODO: implement countDailyTaskByMonth
+    throw UnimplementedError();
   }
 
 }
