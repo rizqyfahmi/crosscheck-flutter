@@ -18,7 +18,7 @@ void main() {
 
   setUp(() {
     mockBox = MockBox();
-    taskLocalDataSource = TaskLocalDataSourceImpl(box: mockBox);
+    taskLocalDataSource = TaskLocalDataSourceImpl(taskBox: mockBox);
   });
 
   test("Should cache all histories properly", () async {
