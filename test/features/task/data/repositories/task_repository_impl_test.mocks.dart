@@ -99,6 +99,11 @@ class MockTaskLocalDataSource extends _i1.Mock
               returnValue: Future<List<_i8.CountedDailyTaskModel>>.value(
                   <_i8.CountedDailyTaskModel>[]))
           as _i5.Future<List<_i8.CountedDailyTaskModel>>);
+  @override
+  _i5.Future<void> clearCachedDailyTask() =>
+      (super.noSuchMethod(Invocation.method(#clearCachedDailyTask, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
 }
 
 /// A class which mocks [NetworkInfo].
