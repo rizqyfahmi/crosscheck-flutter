@@ -4,6 +4,7 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/task/data/models/response/counted_daily_task_response_model.dart';
 import 'package:crosscheck/features/task/data/models/response/task_response_model.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 abstract class TaskRemoteDataSource {
   
@@ -40,9 +41,18 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   }
   
   @override
-  Future<CountedDailyTaskResponseModel> countDailyTask({required String token, required DateTime time}) {
-    // TODO: implement countDailyTask
-    throw UnimplementedError();
+  Future<CountedDailyTaskResponseModel> countDailyTask({required String token, required DateTime time}) async {
+    final uri = Uri.parse("http://localhost:8080/task/month/${DateFormat("YYYY-MM").format(time)}");
+    final headers = {'Content-Type': 'application/json', "Authorization": token};
+    final response = await client.get(uri, headers: headers);
+
+    final body = await json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return CountedDailyTaskResponseModel.fromJSON(body);
+    }
+
+    throw ServerException(message: body["message"]);
   }
   
 }

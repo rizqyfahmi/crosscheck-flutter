@@ -16,14 +16,18 @@ abstract class TaskLocalDataSource {
 
   Future<List<CountedDailyTaskModel>> getCacheCountDailyTask();
 
+  Future<void> clearCachedDailyTask();
+
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   
   final Box<TaskModel> taskBox;
+  final Box<CountedDailyTaskModel> countedDailyTaskBox;
 
   TaskLocalDataSourceImpl({
-    required this.taskBox
+    required this.taskBox,
+    required this.countedDailyTaskBox
   });
 
   @override
@@ -52,14 +56,27 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models) {
-    // TODO: implement cacheCountDailyTask
-    throw UnimplementedError();
+  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models) async {
+    if(!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+
+    for (var element in models) {
+      await countedDailyTaskBox.put(element.id, element);
+    }
   }
   
   @override
   Future<List<CountedDailyTaskModel>> getCacheCountDailyTask() {
-    // TODO: implement getCacheCountDailyTask
-    throw UnimplementedError();
+    if (!countedDailyTaskBox.isOpen) return Future.value([]);
+
+    final response = countedDailyTaskBox.values.toList();
+
+    return Future.value(response);
+  }
+  
+  @override
+  Future<void> clearCachedDailyTask() async {
+    if (!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+
+    await countedDailyTaskBox.deleteAll(countedDailyTaskBox.keys);
   }
 }

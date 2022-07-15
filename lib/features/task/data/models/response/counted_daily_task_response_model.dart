@@ -9,7 +9,7 @@ class CountedDailyTaskResponseModel extends Response {
     final bool isDataNull = response["data"] == null;
     return CountedDailyTaskResponseModel(
       message: response["message"],
-      data: isDataNull ? [] : (response["data"] as List).map((item) => CountedDailyTaskModel.fromJSON(item))
+      data: isDataNull ? [] : (response["data"] as List).map((item) => CountedDailyTaskModel.fromJSON(item)).toList()
     );
   }
   
