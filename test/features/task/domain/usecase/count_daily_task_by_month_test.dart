@@ -11,7 +11,10 @@ import 'package:mockito/mockito.dart';
 import '../../../../utils/utils.dart';
 import 'count_daily_task_by_month_test.mocks.dart';
 
-@GenerateMocks([AuthenticationRepository, TaskRepository])
+@GenerateMocks([
+  AuthenticationRepository,
+  TaskRepository
+])
 void main() {
   late MockAuthenticationRepository mockAuthenticationRepository;
   late MockTaskRepository mockTaskRepository;
