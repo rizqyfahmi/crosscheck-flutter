@@ -96,7 +96,7 @@ Future<void> init() async  {
   locator.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<ProfileLocalDataSource>(() => ProfileLocalDdataSourceImpl(box: locator()));
   locator.registerLazySingleton<TaskRemoteDataSource>(() => TaskRemoteDataSourceImpl(client: locator()));
-  locator.registerLazySingleton<TaskLocalDataSource>(() => TaskLocalDataSourceImpl(box: locator()));
+  locator.registerLazySingleton<TaskLocalDataSource>(() => TaskLocalDataSourceImpl(taskBox: locator()));
 
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
   

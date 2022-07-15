@@ -20,35 +20,35 @@ abstract class TaskLocalDataSource {
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   
-  final Box<TaskModel> box;
+  final Box<TaskModel> taskBox;
 
   TaskLocalDataSourceImpl({
-    required this.box
+    required this.taskBox
   });
 
   @override
   Future<void> cacheHistory(List<TaskModel> models) async {
-    if(!box.isOpen) throw const CacheException(message: Failure.cacheError);
+    if(!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
-      await box.put(element.id, element);
+      await taskBox.put(element.id, element);
     }
   }
 
   @override
   Future<List<TaskModel>> getCachedHistory() {
-    if (!box.isOpen) return Future.value([]);
+    if (!taskBox.isOpen) return Future.value([]);
     
-    final response = box.values.toList();
+    final response = taskBox.values.toList();
 
     return Future.value(response);
   }
   
   @override
   Future<void> clearCachedHistory() async {
-    if (!box.isOpen) throw const CacheException(message: Failure.cacheError);
+    if (!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
-    await box.deleteAll(box.keys);
+    await taskBox.deleteAll(taskBox.keys);
   }
   
   @override
