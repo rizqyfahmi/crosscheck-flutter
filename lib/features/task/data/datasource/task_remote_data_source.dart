@@ -1,12 +1,18 @@
 import 'dart:convert';
 
 import 'package:crosscheck/core/error/exception.dart';
+import 'package:crosscheck/features/task/data/models/response/counted_daily_task_response_model.dart';
 import 'package:crosscheck/features/task/data/models/response/task_response_model.dart';
 import 'package:http/http.dart';
 
 abstract class TaskRemoteDataSource {
   
   Future<TaskResponseModel> getHistory({required String token, int? limit, int? offset});
+
+  Future<CountedDailyTaskResponseModel> countDailyTask({
+    required String token,
+    required String month // "YYYY-MM"
+  });
 
 }
 
@@ -31,6 +37,12 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     }
 
     throw ServerException(message: body["message"]);
+  }
+  
+  @override
+  Future<CountedDailyTaskResponseModel> countDailyTask({required String token, required String month}) {
+    // TODO: implement countDailyTask
+    throw UnimplementedError();
   }
   
 }

@@ -1,5 +1,6 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:hive/hive.dart';
 
@@ -10,6 +11,10 @@ abstract class TaskLocalDataSource {
   Future<void> cacheHistory(List<TaskModel> models);
 
   Future<void> clearCachedHistory();
+
+  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models);
+
+  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask();
 
 }
 
@@ -44,5 +49,17 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
     if (!box.isOpen) throw const CacheException(message: Failure.cacheError);
 
     await box.deleteAll(box.keys);
+  }
+  
+  @override
+  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models) {
+    // TODO: implement cacheCountDailyTask
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask() {
+    // TODO: implement getCacheCountDailyTask
+    throw UnimplementedError();
   }
 }
