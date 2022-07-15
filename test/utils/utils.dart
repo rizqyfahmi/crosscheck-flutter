@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'package:crosscheck/features/dashboard/domain/entities/activity_entity.dart';
 import 'package:crosscheck/features/dashboard/domain/entities/dashboard_entity.dart';
 import 'package:crosscheck/features/profile/domain/entities/profile_entity.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
+import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart';
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 
 class Utils {
@@ -89,6 +91,17 @@ class Utils {
         end: start.add(const Duration(hours: 1)), 
         isAllDay: false, 
         alerts: const []
+      );
+    }).toList();
+  }
+
+  List<CountedDailyTaskEntity> getCountedDailyTaskEntity({required DateTime time}) {
+    Random random = Random();
+    int days = DateTime(time.year, time.month + 1, 0).day;
+    return List<int>.generate(days, (index) => index).map((v) {
+      int randomNumber = random.nextInt(90) + 1;
+      return CountedDailyTaskEntity(
+        date: DateTime(2022, 7, v + 1), total: randomNumber
       );
     }).toList();
   }
