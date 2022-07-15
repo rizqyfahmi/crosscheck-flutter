@@ -11,7 +11,7 @@ abstract class TaskRemoteDataSource {
 
   Future<CountedDailyTaskResponseModel> countDailyTask({
     required String token,
-    required String month // "YYYY-MM"
+    required DateTime time // "YYYY-MM"
   });
 
 }
@@ -40,7 +40,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   }
   
   @override
-  Future<CountedDailyTaskResponseModel> countDailyTask({required String token, required String month}) {
+  Future<CountedDailyTaskResponseModel> countDailyTask({required String token, required DateTime time}) {
     // TODO: implement countDailyTask
     throw UnimplementedError();
   }

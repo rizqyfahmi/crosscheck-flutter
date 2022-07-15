@@ -2,6 +2,7 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
+import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart';
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
@@ -10,7 +11,6 @@ import 'package:crosscheck/features/task/domain/repositories/task_respository.da
 import 'package:dartz/dartz.dart';
 
 class TaskRepositoryImpl extends TaskRepository {
-
   final TaskRemoteDataSource remote;
   final TaskLocalDataSource local;
   final NetworkInfo networkInfo;
@@ -85,12 +85,25 @@ class TaskRepositoryImpl extends TaskRepository {
   }
 
   @override
-  Future<Either<Failure, List<CountedDailyTaskEntity>>> countDailyTaskByMonth({
-    required String token,
-    required DateTime time
-  }) {
-    // TODO: implement countDailyTaskByMonth
-    throw UnimplementedError();
+  Future<Either<Failure, List<CountedDailyTaskEntity>>> countDailyTaskByMonth({required String token, required DateTime time}) async {
+    List<CountedDailyTaskModel> cachedData = await local.getCacheCountDailyTask();
+
+    try {
+      bool isConnected = await networkInfo.isConnected;
+      if (!isConnected) {
+        return Left(NetworkFailure(message: Failure.networkError, data: cachedData));
+      }
+
+      final response = await remote.countDailyTask(token: token, time: time);
+      final data = response.models;
+      await local.cacheCountDailyTask(data);
+      return Right(data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, data: cachedData));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message, data: cachedData));
+    }
+
   }
 
 }
