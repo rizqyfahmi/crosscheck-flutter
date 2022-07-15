@@ -13,7 +13,7 @@ abstract class TaskRepository {
 
   Future<Either<Failure, List<CountedDailyTaskEntity>>> countDailyTaskByMonth({
     required String token,
-    required String month // YYYY-MM
+    required DateTime time // YYYY-MM-01
   });
 
 }

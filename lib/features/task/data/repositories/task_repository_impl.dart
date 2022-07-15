@@ -87,7 +87,7 @@ class TaskRepositoryImpl extends TaskRepository {
   @override
   Future<Either<Failure, List<CountedDailyTaskEntity>>> countDailyTaskByMonth({
     required String token,
-    required String month
+    required DateTime time
   }) {
     // TODO: implement countDailyTaskByMonth
     throw UnimplementedError();
