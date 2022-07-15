@@ -6,8 +6,10 @@ import 'dart:async' as _i4;
 
 import 'package:crosscheck/core/error/failure.dart' as _i5;
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart'
-    as _i8;
+    as _i9;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
+    as _i8;
+import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart'
     as _i7;
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart'
     as _i6;
@@ -60,13 +62,22 @@ class MockTaskRepository extends _i1.Mock implements _i3.TaskRepository {
                   Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>.value(
                       _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>()))
           as _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i7.CountedDailyTaskEntity>>>
+      countDailyTaskByMonth({String? token, DateTime? time}) => (super.noSuchMethod(
+          Invocation.method(
+              #countDailyTaskByMonth, [], {#token: token, #time: time}),
+          returnValue:
+              Future<_i2.Either<_i5.Failure, List<_i7.CountedDailyTaskEntity>>>.value(
+                  _FakeEither_0<_i5.Failure, List<_i7.CountedDailyTaskEntity>>())) as _i4
+          .Future<_i2.Either<_i5.Failure, List<_i7.CountedDailyTaskEntity>>>);
 }
 
 /// A class which mocks [AuthenticationRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationRepository extends _i1.Mock
-    implements _i7.AuthenticationRepository {
+    implements _i8.AuthenticationRepository {
   MockAuthenticationRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -97,10 +108,10 @@ class MockAuthenticationRepository extends _i1.Mock
                   _FakeEither_0<_i5.Failure, void>()))
           as _i4.Future<_i2.Either<_i5.Failure, void>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, _i8.AuthenticationEntity>> getToken() =>
+  _i4.Future<_i2.Either<_i5.Failure, _i9.AuthenticationEntity>> getToken() =>
       (super.noSuchMethod(Invocation.method(#getToken, []),
               returnValue: Future<
-                      _i2.Either<_i5.Failure, _i8.AuthenticationEntity>>.value(
-                  _FakeEither_0<_i5.Failure, _i8.AuthenticationEntity>()))
-          as _i4.Future<_i2.Either<_i5.Failure, _i8.AuthenticationEntity>>);
+                      _i2.Either<_i5.Failure, _i9.AuthenticationEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i9.AuthenticationEntity>()))
+          as _i4.Future<_i2.Either<_i5.Failure, _i9.AuthenticationEntity>>);
 }

@@ -4,6 +4,7 @@ import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
+import 'package:crosscheck/features/task/data/models/response/counted_daily_task_response_model.dart';
 import 'package:crosscheck/features/task/data/models/response/task_response_model.dart';
 import 'package:crosscheck/features/task/data/repositories/task_repository_impl.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
@@ -306,5 +307,126 @@ void main() {
     verify(mockTaskLocalDataSource.clearCachedHistory());
     verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token));
     verifyNever(mockTaskLocalDataSource.cacheHistory(any));
+  });
+
+  /*--------------------------------------------------- Get Count Daily Task by Month ---------------------------------------------------*/
+  test("Should count daily task by month from remote and cache its data into local properly", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => CountedDailyTaskResponseModel(message: Utils.successMessage, data: expected));
+    when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, Right(expected));
+
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheCountDailyTask(expected));
+  });
+
+  test("Should returns CacheFailure when cache count daily task returns CacheException", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => CountedDailyTaskResponseModel(message: Utils.successMessage, data: expected));
+    when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheCountDailyTask(expected));
+  });
+
+  test("Should returns CacheFailure with latest local data when cache count daily task returns CacheException", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => expected);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => CountedDailyTaskResponseModel(message: Utils.successMessage, data: expected));
+    when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: expected)));
+    
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheCountDailyTask(expected));
+  });
+
+  test("Should returns ServerFailure when cache count daily task returns ServerException", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
+    
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
+  });
+
+  test("Should returns ServerFailure with latest local data when cache count daily task returns ServerException", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => expected);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, Left(ServerFailure(message: Failure.generalError, data: expected)));
+    
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
+  });
+
+  test("Should returns NetworkFailure when get count task by month at the time device is offline", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+    
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
+    
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verifyNever(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
+  });
+
+  test("Should returns NetworkFailure with latest local data when get count task by month at the time device is offline", () async {
+    final time = DateTime(2022, 7);
+    final utils = Utils();
+    final expected = utils.getCountedDailyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => expected);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+    
+    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    expect(result, Left(NetworkFailure(message: Failure.networkError, data: expected)));
+    
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskLocalDataSource.getCacheCountDailyTask());
+    verifyNever(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 }

@@ -12,6 +12,7 @@ import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart'
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart';
+import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/walkthrough/presentation/view/walkthrough_view.dart';
@@ -32,6 +33,7 @@ void main() async {
   Hive.init(path);
   Hive.registerAdapter(ProfileModelAdapter());
   Hive.registerAdapter(TaskModelAdapter());
+  Hive.registerAdapter(CountedDailyTaskModelAdapter());
   
   await di.init();
 

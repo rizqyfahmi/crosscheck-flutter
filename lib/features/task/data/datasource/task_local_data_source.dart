@@ -1,5 +1,6 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
+import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:hive/hive.dart';
 
@@ -11,38 +12,71 @@ abstract class TaskLocalDataSource {
 
   Future<void> clearCachedHistory();
 
+  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models);
+
+  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask();
+
+  Future<void> clearCachedDailyTask();
+
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   
-  final Box<TaskModel> box;
+  final Box<TaskModel> taskBox;
+  final Box<CountedDailyTaskModel> countedDailyTaskBox;
 
   TaskLocalDataSourceImpl({
-    required this.box
+    required this.taskBox,
+    required this.countedDailyTaskBox
   });
 
   @override
   Future<void> cacheHistory(List<TaskModel> models) async {
-    if(!box.isOpen) throw const CacheException(message: Failure.cacheError);
+    if(!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
-      await box.put(element.id, element);
+      await taskBox.put(element.id, element);
     }
   }
 
   @override
   Future<List<TaskModel>> getCachedHistory() {
-    if (!box.isOpen) return Future.value([]);
+    if (!taskBox.isOpen) return Future.value([]);
     
-    final response = box.values.toList();
+    final response = taskBox.values.toList();
 
     return Future.value(response);
   }
   
   @override
   Future<void> clearCachedHistory() async {
-    if (!box.isOpen) throw const CacheException(message: Failure.cacheError);
+    if (!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
-    await box.deleteAll(box.keys);
+    await taskBox.deleteAll(taskBox.keys);
+  }
+  
+  @override
+  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models) async {
+    if(!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+
+    for (var element in models) {
+      await countedDailyTaskBox.put(element.id, element);
+    }
+  }
+  
+  @override
+  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask() {
+    if (!countedDailyTaskBox.isOpen) return Future.value([]);
+
+    final response = countedDailyTaskBox.values.toList();
+
+    return Future.value(response);
+  }
+  
+  @override
+  Future<void> clearCachedDailyTask() async {
+    if (!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+
+    await countedDailyTaskBox.deleteAll(countedDailyTaskBox.keys);
   }
 }
