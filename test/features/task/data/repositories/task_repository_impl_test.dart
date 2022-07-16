@@ -496,4 +496,70 @@ void main() {
     verifyNever(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheTask(any));
   });
+
+  /*--------------------------------------------------- Get More Task by Date ---------------------------------------------------*/ 
+  test("Should returns next/more tasks from remote data source properly when get more task by date at the time device is online", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockCache = Utils().taskModels;
+    final mockMore = Utils().moreTaskModels;
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => mockCache);
+    when(mockTaskLocalDataSource.cacheTask(any)).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time, offset: 10)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: mockMore));
+
+    final result = await taskRepository.getMoreTaskByDate(token: Utils.token, time: time);
+
+    expect(result.toString(), Right([...Utils().taskModels, ...Utils().moreTaskModels]).toString());
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time, offset: 10));
+    verify(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns CacheFailure when store combined latest local + more task by date from remote into local data source throws CacheException", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskLocalDataSource.cacheTask(any)).thenThrow(const CacheException(message: Failure.cacheError));
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time, offset: 10)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().moreTaskModels));
+
+    final result = await taskRepository.getMoreTaskByDate(token: Utils.token, time: time);
+
+    // "data" has list of tasks because the local data source would have been filled when we call "taskRepository.getMoreTaskByDate" by lazy load
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time, offset: 10));
+    verify(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns ServerFailure when get more task by date throws ServerException", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time, offset: 10)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getMoreTaskByDate(token: Utils.token, time: time);
+
+    // "data" has list of tasks because the local data source would have been filled when we call "taskRepository.getMoreTaskByDate" by lazy load
+    expect(result, Left(ServerFailure(message: Failure.generalError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockNetworkInfo.isConnected);
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time, offset: 10));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns NetworkFailure when get more task by date at the time device is offline", () async {
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+
+    final result = await taskRepository.getMoreHistory(Utils.token);
+
+    // "data" has list of tasks because the local data source would have been filled when we call "taskRepository.getMoreTaskByDate" by lazy load
+    expect(result, Left(NetworkFailure(message: Failure.networkError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockNetworkInfo.isConnected);
+    verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
 }
