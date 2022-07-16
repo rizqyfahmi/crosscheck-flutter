@@ -87,7 +87,12 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   
   @override
   Future<List<TaskModel>> getCachedTaskByDate(DateTime time) {
-    // TODO: implement getCachedTaskByDate
-    throw UnimplementedError();
+    if (!taskBox.isOpen) return Future.value([]);
+
+    final response = taskBox.values.where((item) {
+      return (time.isAtSameMomentAs(item.start) || time.isAfter(item.start)) && (time.isAtSameMomentAs(item.end) || time.isBefore(item.end));
+    }).toList();
+
+    return Future.value(response);
   }
 }
