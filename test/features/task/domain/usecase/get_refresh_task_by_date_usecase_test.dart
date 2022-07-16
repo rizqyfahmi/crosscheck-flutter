@@ -1,9 +1,7 @@
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/core/param/param.dart';
 import 'package:crosscheck/features/authentication/domain/entities/authentication_entity.dart';
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
-import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_task_by_date_usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';

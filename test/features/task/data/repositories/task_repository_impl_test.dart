@@ -224,7 +224,7 @@ void main() {
     verify(mockTaskLocalDataSource.cacheTask(any));
   });
 
-  test("Should returns ServerFailure with empty histories when get history from remote data source throws ServerException and and get cached history returns empty histories", () async {
+  test("Should returns ServerFailure with empty histories when get history from remote data source throws ServerException and get cached history returns empty histories", () async {
     when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => []);
     when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
     when(mockTaskRemoteDataSource.getHistory(token: Utils.token)).thenThrow(const ServerException(message: Failure.generalError));
@@ -562,4 +562,132 @@ void main() {
     verifyNever(mockTaskRemoteDataSource.getHistory(token: Utils.token, offset: 10));
     verifyNever(mockTaskLocalDataSource.cacheTask(any));
   });
+
+
+
+
+  /*--------------------------------------------------- Get Refresh Task by Date (empty cached data) ---------------------------------------------------*/ 
+  test("Should returns refreshed task by date properly when get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheTask(any)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result.toString(), Right(Utils().taskModels).toString());
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns CacheFailure with empty data when set/cache task by date throws CacheException and get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheTask(any)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when get task by date from remote data source throws ServerException and and get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when clear cached task throws CacheException and and get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verifyNever(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  /*--------------------------------------------------- Get Refresh Task by Date (not empty cached data) ---------------------------------------------------*/ 
+  test("Should returns refreshed task by date properly when get cached task returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheTask(any)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result.toString(), Right(Utils().taskModels).toString());
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns CacheFailure with empty data when set/cache task by date throws CacheException and get cached returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    when(mockTaskLocalDataSource.cacheTask(any)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when get task by date from remote data source throws ServerException and and get cached task returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result, Left(ServerFailure(message: Failure.generalError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when clear cached task throws CacheException and get cached task returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => Utils().taskModels);
+    when(mockTaskLocalDataSource.clearCachedTask()).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshTaskByDate(token: Utils.token, time: time);
+
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: Utils().taskModels)));
+    verify(mockTaskLocalDataSource.getCachedTask());
+    verify(mockTaskLocalDataSource.clearCachedTask());
+    verifyNever(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+
 }
