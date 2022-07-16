@@ -122,4 +122,50 @@ void main() {
     ));
     verify(mockClient.get(any, headers: Utils().headers));
   });
+
+  /*--------------------------------------------------- Get Task by Date ---------------------------------------------------*/ 
+  test("Should returns TaskResponseModel properly when get task by date", () async {
+    final time = DateTime(2022, 7);
+    final response = stringify("test/features/task/data/datasource/task_remote_data_source_success_response.json");
+    when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(response, 200));
+
+    final result = await taskRemoteDataSource.getTaskByDate(token: Utils.token, time: time);
+
+    expect(result, TaskResponseModel(message: Utils.successMessage, data: Utils().taskModels));
+    verify(mockClient.get(any, headers: Utils().headers));
+  });
+
+  test("Should returns TaskResponseModel with empty list of task model when response data of get task by date is null", () async {
+    final time = DateTime(2022, 7);
+    final response = stringify("test/features/task/data/datasource/task_remote_data_source_success_null_data_response.json");
+    when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(response, 200));
+
+    final result = await taskRemoteDataSource.getTaskByDate(token: Utils.token, time: time);
+
+    expect(result, const TaskResponseModel(message: Utils.successMessage, data: []));
+    verify(mockClient.get(any, headers: Utils().headers));
+  });
+
+  test("Should properly returns TaskResponseModel with empty list of task model when response data of get task by date is empty list", () async {
+    final time = DateTime(2022, 7);
+    final response = stringify("test/features/task/data/datasource/task_remote_data_source_success_empty_data_response.json");
+    when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(response, 200));
+
+    final result = await taskRemoteDataSource.getTaskByDate(token: Utils.token, time: time);
+
+    expect(result, const TaskResponseModel(message: Utils.successMessage, data: []));
+    verify(mockClient.get(any, headers: Utils().headers));
+  });
+
+  test("Should returns ServerException when get task by date from client is failed", () async {
+    final time = DateTime(2022, 7);
+    when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(json.encode({"message": Failure.generalError}), 500));
+    
+    final call = taskRemoteDataSource.getTaskByDate;
+
+    expect(() => call(token: Utils.token, time: time), throwsA(
+      predicate((error) => error is ServerFailure)
+    ));
+    verify(mockClient.get(any, headers: Utils().headers));
+  });
 }
