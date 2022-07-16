@@ -112,8 +112,8 @@ class MockTaskLocalDataSource extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i5.Future<List<_i7.TaskModel>> getTaskByDate(DateTime? time) =>
-      (super.noSuchMethod(Invocation.method(#getTaskByDate, [time]),
+  _i5.Future<List<_i7.TaskModel>> getCachedTaskByDate(DateTime? time) =>
+      (super.noSuchMethod(Invocation.method(#getCachedTaskByDate, [time]),
               returnValue: Future<List<_i7.TaskModel>>.value(<_i7.TaskModel>[]))
           as _i5.Future<List<_i7.TaskModel>>);
 }

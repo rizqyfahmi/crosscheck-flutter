@@ -19,7 +19,7 @@ abstract class TaskLocalDataSource {
 
   Future<void> clearCachedMonthlyTask();
 
-  Future<List<TaskModel>> getTaskByDate(DateTime time);
+  Future<List<TaskModel>> getCachedTaskByDate(DateTime time);
 
 }
 
@@ -86,8 +86,8 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<List<TaskModel>> getTaskByDate(DateTime time) {
-    // TODO: implement getTaskByDate
+  Future<List<TaskModel>> getCachedTaskByDate(DateTime time) {
+    // TODO: implement getCachedTaskByDate
     throw UnimplementedError();
   }
 }

@@ -437,12 +437,12 @@ void main() {
     when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheTask(any)).thenAnswer((_) async => Future.value());
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskLocalDataSource.getTaskByDate(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCachedTaskByDate(time)).thenAnswer((_) async => []);
 
     final result = await taskRepository.getTaskByDate(token: Utils.token, time: time);
 
     expect(result, Right(expected));
-    verify(mockTaskLocalDataSource.getTaskByDate(time));
+    verify(mockTaskLocalDataSource.getCachedTaskByDate(time));
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheTask(any));
@@ -454,13 +454,13 @@ void main() {
     when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenAnswer((_) async => TaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheTask(any)).thenThrow(const CacheException(message: Failure.cacheError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskLocalDataSource.getTaskByDate(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCachedTaskByDate(time)).thenAnswer((_) async => []);
 
     final result = await taskRepository.getTaskByDate(token: Utils.token, time: time);
 
     // "data" has empty list of tasks because the local data source would be empty when we call "taskRepository.getTaskByDate" for first time
     expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
-    verify(mockTaskLocalDataSource.getTaskByDate(time));
+    verify(mockTaskLocalDataSource.getCachedTaskByDate(time));
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheTask(any));
@@ -470,13 +470,13 @@ void main() {
     final time = DateTime(2022, 7);
     when(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskLocalDataSource.getTaskByDate(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCachedTaskByDate(time)).thenAnswer((_) async => []);
 
     final result = await taskRepository.getTaskByDate(token: Utils.token, time: time);
 
     // "data" has empty list of tasks because the local data source would be empty when we call "taskRepository.getTaskByDate" for first time
     expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
-    verify(mockTaskLocalDataSource.getTaskByDate(time));
+    verify(mockTaskLocalDataSource.getCachedTaskByDate(time));
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheTask(any));
@@ -485,13 +485,13 @@ void main() {
   test("Should returns NetworkFailure with empty tasks properly when device is offline and the local data source is still empty", () async {
     final time = DateTime(2022, 7);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-    when(mockTaskLocalDataSource.getTaskByDate(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCachedTaskByDate(time)).thenAnswer((_) async => []);
     
     final result = await taskRepository.getTaskByDate(token: Utils.token, time: time);
 
      // "data" has empty list of tasks because the local data source would be empty when we call "taskRepository.getTaskByDate" for first time
     expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
-    verify(mockTaskLocalDataSource.getTaskByDate(time));
+    verify(mockTaskLocalDataSource.getCachedTaskByDate(time));
     verify(mockNetworkInfo.isConnected);
     verifyNever(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheTask(any));

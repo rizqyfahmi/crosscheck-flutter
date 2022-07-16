@@ -108,7 +108,7 @@ class TaskRepositoryImpl extends TaskRepository {
   
   @override
   Future<Either<Failure, List<TaskEntity>>> getTaskByDate({required String token, required DateTime time}) async {
-    List<TaskModel> cachedTasks = await local.getTaskByDate(time); // this line always returns [] when an error is occured to make the controller still continue, then get the data from the remote 
+    List<TaskModel> cachedTasks = await local.getCachedTaskByDate(time); // this line always returns [] when an error is occured to make the controller still continue, then get the data from the remote 
     
     try {
       bool isConnected = await networkInfo.isConnected;
