@@ -18,6 +18,8 @@ abstract class TaskLocalDataSource {
 
   Future<void> clearCachedMonthlyTask();
 
+  Future<List<TaskModel>> getTaskByDate(DateTime time);
+
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
@@ -78,5 +80,11 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
     if (!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     await monthlyTaskBox.deleteAll(monthlyTaskBox.keys);
+  }
+  
+  @override
+  Future<List<TaskModel>> getTaskByDate(DateTime time) {
+    // TODO: implement getTaskByDate
+    throw UnimplementedError();
   }
 }

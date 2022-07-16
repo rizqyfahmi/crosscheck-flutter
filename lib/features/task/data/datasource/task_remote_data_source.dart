@@ -15,6 +15,8 @@ abstract class TaskRemoteDataSource {
     required DateTime time // "YYYY-MM"
   });
 
+  Future<TaskResponseModel> getTaskByDate({required String token, required DateTime time});
+
 }
 
 class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
@@ -53,6 +55,12 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
     }
 
     throw ServerException(message: body["message"]);
+  }
+  
+  @override
+  Future<TaskResponseModel> getTaskByDate({required String token, required DateTime time}) {
+    // TODO: implement getTaskByDate
+    throw UnimplementedError();
   }
   
 }
