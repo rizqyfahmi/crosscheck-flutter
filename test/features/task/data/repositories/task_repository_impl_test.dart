@@ -314,7 +314,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheMonthlyTask(expected)).thenAnswer((_) async => Future.value());
@@ -323,7 +323,7 @@ void main() {
     expect(result, Right(expected));
 
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -332,7 +332,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheMonthlyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
@@ -341,7 +341,7 @@ void main() {
     expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -350,7 +350,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => expected);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheMonthlyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
@@ -359,7 +359,7 @@ void main() {
     expect(result, Left(CacheFailure(message: Failure.cacheError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -368,7 +368,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
@@ -376,7 +376,7 @@ void main() {
     expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -385,7 +385,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => expected);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
@@ -393,7 +393,7 @@ void main() {
     expect(result, Left(ServerFailure(message: Failure.generalError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -402,14 +402,14 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -418,14 +418,14 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask()).thenAnswer((_) async => expected);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Left(NetworkFailure(message: Failure.networkError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask());
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
     verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });

@@ -3,6 +3,7 @@ import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 abstract class TaskLocalDataSource {
 
@@ -14,7 +15,7 @@ abstract class TaskLocalDataSource {
 
   Future<void> cacheMonthlyTask(List<MonthlyTaskModel> models);
 
-  Future<List<MonthlyTaskModel>> getCacheMonthlyTask();
+  Future<List<MonthlyTaskModel>> getCacheMonthlyTask(DateTime time);
 
   Future<void> clearCachedMonthlyTask();
 
@@ -67,10 +68,12 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<List<MonthlyTaskModel>> getCacheMonthlyTask() {
+  Future<List<MonthlyTaskModel>> getCacheMonthlyTask(DateTime time) {
     if (!monthlyTaskBox.isOpen) return Future.value([]);
 
-    final response = monthlyTaskBox.values.toList();
+    final response = monthlyTaskBox.values.where((item) {
+      return DateFormat("YYYY-MM").format(item.date) == DateFormat("YYYY-MM").format(time);
+    }).toList();
 
     return Future.value(response);
   }

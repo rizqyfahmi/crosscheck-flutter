@@ -126,7 +126,7 @@ void main() {
     when(mockMonthlyTaskBox.isOpen).thenReturn(true);
     when(mockMonthlyTaskBox.values.toList()).thenReturn(expected);
     
-    final result = await taskLocalDataSource.getCacheMonthlyTask();
+    final result = await taskLocalDataSource.getCacheMonthlyTask(time);
 
     expect(result, expected);
     verify(mockMonthlyTaskBox.isOpen);
@@ -134,9 +134,10 @@ void main() {
   });
 
   test("Should empty list when get cache monthly task at the time box is not open", () async {
+    final time = DateTime(2022, 7);
     when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
-    final result = await taskLocalDataSource.getCacheMonthlyTask();
+    final result = await taskLocalDataSource.getCacheMonthlyTask(time);
 
     expect(result, []);
     verify(mockMonthlyTaskBox.isOpen);

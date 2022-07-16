@@ -86,7 +86,7 @@ class TaskRepositoryImpl extends TaskRepository {
 
   @override
   Future<Either<Failure, List<MonthlyTaskEntity>>> getMonthlyTask({required String token, required DateTime time}) async {
-    List<MonthlyTaskModel> cachedData = await local.getCacheMonthlyTask();
+    List<MonthlyTaskModel> cachedData = await local.getCacheMonthlyTask(time);
 
     try {
       bool isConnected = await networkInfo.isConnected;
