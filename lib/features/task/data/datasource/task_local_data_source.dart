@@ -6,17 +6,17 @@ import 'package:hive/hive.dart';
 
 abstract class TaskLocalDataSource {
 
-  Future<List<TaskModel>> getCachedHistory();
+  Future<List<TaskModel>> getCachedTask();
 
-  Future<void> cacheHistory(List<TaskModel> models);
+  Future<void> cacheTask(List<TaskModel> models);
 
-  Future<void> clearCachedHistory();
+  Future<void> clearCachedTask();
 
-  Future<void> cacheCountDailyTask(List<MonthlyTaskModel> models);
+  Future<void> cacheMonthlyTask(List<MonthlyTaskModel> models);
 
-  Future<List<MonthlyTaskModel>> getCacheCountDailyTask();
+  Future<List<MonthlyTaskModel>> getCacheMonthlyTask();
 
-  Future<void> clearCachedDailyTask();
+  Future<void> clearCachedMonthlyTask();
 
 }
 
@@ -31,7 +31,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   });
 
   @override
-  Future<void> cacheHistory(List<TaskModel> models) async {
+  Future<void> cacheTask(List<TaskModel> models) async {
     if(!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
@@ -40,7 +40,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
 
   @override
-  Future<List<TaskModel>> getCachedHistory() {
+  Future<List<TaskModel>> getCachedTask() {
     if (!taskBox.isOpen) return Future.value([]);
     
     final response = taskBox.values.toList();
@@ -49,14 +49,14 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<void> clearCachedHistory() async {
+  Future<void> clearCachedTask() async {
     if (!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     await taskBox.deleteAll(taskBox.keys);
   }
   
   @override
-  Future<void> cacheCountDailyTask(List<MonthlyTaskModel> models) async {
+  Future<void> cacheMonthlyTask(List<MonthlyTaskModel> models) async {
     if(!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
@@ -65,7 +65,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<List<MonthlyTaskModel>> getCacheCountDailyTask() {
+  Future<List<MonthlyTaskModel>> getCacheMonthlyTask() {
     if (!monthlyTaskBox.isOpen) return Future.value([]);
 
     final response = monthlyTaskBox.values.toList();
@@ -74,7 +74,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<void> clearCachedDailyTask() async {
+  Future<void> clearCachedMonthlyTask() async {
     if (!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     await monthlyTaskBox.deleteAll(monthlyTaskBox.keys);
