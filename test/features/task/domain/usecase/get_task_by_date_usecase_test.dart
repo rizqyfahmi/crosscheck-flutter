@@ -11,7 +11,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../../utils/utils.dart';
-import 'get_task_by_date_test.mocks.dart';
+import 'get_task_by_date_usecase_test.mocks.dart';
 
 @GenerateMocks([
   TaskRepository,

@@ -122,4 +122,14 @@ class MockTaskRepository extends _i1.Mock implements _i7.TaskRepository {
               Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>.value(
                   _FakeEither_0<_i5.Failure, List<_i8.TaskEntity>>())) as _i4
           .Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>> getMoreTaskByDate(
+          {String? token, DateTime? time}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #getMoreTaskByDate, [], {#token: token, #time: time}),
+              returnValue:
+                  Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>.value(
+                      _FakeEither_0<_i5.Failure, List<_i8.TaskEntity>>()))
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>);
 }
