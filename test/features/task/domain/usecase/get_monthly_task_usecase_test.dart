@@ -18,12 +18,12 @@ import 'get_monthly_task_usecase_test.mocks.dart';
 void main() {
   late MockAuthenticationRepository mockAuthenticationRepository;
   late MockTaskRepository mockTaskRepository;
-  late GetMonthlyTaskUsecase countDailyTaskByMonth;
+  late GetMonthlyTaskUsecase getMonthlyTaskUsescase;
 
   setUp(() {
     mockAuthenticationRepository = MockAuthenticationRepository();
     mockTaskRepository = MockTaskRepository();
-    countDailyTaskByMonth = GetMonthlyTaskUsecase(
+    getMonthlyTaskUsescase = GetMonthlyTaskUsecase(
       repository: mockTaskRepository,
       authenticationRepository: mockAuthenticationRepository
     );
@@ -34,47 +34,47 @@ void main() {
     final utils = Utils();
     final expected = utils.getMonthlyTaskEntity(time: time);
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: Utils.token)));
-    when(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time)).thenAnswer((_) async => Right(expected));
+    when(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => Right(expected));
 
-    final result = await countDailyTaskByMonth(time);
+    final result = await getMonthlyTaskUsescase(time);
 
     expect(result, Right(expected));
     verify(mockAuthenticationRepository.getToken());
-    verify(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time));
+    verify(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time));
   });
 
   test("Should returns CacheFailure when get token returns CacheFailure", () async {
     final time = DateTime(2022, 7);
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Left(CacheFailure(message: Failure.cacheError)));
 
-    final result = await countDailyTaskByMonth(time);
+    final result = await getMonthlyTaskUsescase(time);
 
     expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockAuthenticationRepository.getToken());
-    verifyNever(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time));
+    verifyNever(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time));
   });
 
   test("Should returns ServerFailure when monthly task returns ServerFailure", () async {
     final time = DateTime(2022, 7);
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: Utils.token)));
-    when(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
+    when(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => const Left(ServerFailure(message: Failure.generalError)));
 
-    final result = await countDailyTaskByMonth(time);
+    final result = await getMonthlyTaskUsescase(time);
 
     expect(result, const Left(ServerFailure(message: Failure.generalError)));
     verify(mockAuthenticationRepository.getToken());
-    verify(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time));
+    verify(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time));
   });
 
   test("Should returns CacheFailure when monthly task returns CacheFailure", () async {
     final time = DateTime(2022, 7);
     when(mockAuthenticationRepository.getToken()).thenAnswer((_) async => const Right(AuthenticationEntity(token: Utils.token)));
-    when(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time)).thenAnswer((_) async => const Left(CacheFailure(message: Failure.cacheError)));
+    when(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => const Left(CacheFailure(message: Failure.cacheError)));
 
-    final result = await countDailyTaskByMonth(time);
+    final result = await getMonthlyTaskUsescase(time);
 
     expect(result, const Left(CacheFailure(message: Failure.cacheError)));
     verify(mockAuthenticationRepository.getToken());
-    verify(mockTaskRepository.countDailyTaskByMonth(token: Utils.token, time: time));
+    verify(mockTaskRepository.getMonthlyTask(token: Utils.token, time: time));
   });
 }

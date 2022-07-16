@@ -319,7 +319,7 @@ void main() {
     when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenAnswer((_) async => Future.value());
 
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Right(expected));
 
     verify(mockNetworkInfo.isConnected);
@@ -337,7 +337,7 @@ void main() {
     when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
 
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
@@ -355,7 +355,7 @@ void main() {
     when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
 
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Left(CacheFailure(message: Failure.cacheError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
@@ -372,7 +372,7 @@ void main() {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
@@ -389,7 +389,7 @@ void main() {
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Left(ServerFailure(message: Failure.generalError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
@@ -405,7 +405,7 @@ void main() {
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
@@ -421,7 +421,7 @@ void main() {
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     
-    final result = await taskRepository.countDailyTaskByMonth(token: Utils.token, time: time);
+    final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Left(NetworkFailure(message: Failure.networkError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);

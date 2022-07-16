@@ -106,14 +106,20 @@ class MockTaskRepository extends _i1.Mock implements _i7.TaskRepository {
                       _FakeEither_0<_i5.Failure, List<_i8.TaskEntity>>()))
           as _i4.Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>);
   @override
-  _i4.Future<
-      _i2.Either<_i5.Failure, List<_i9.MonthlyTaskEntity>>> countDailyTaskByMonth(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i9.MonthlyTaskEntity>>>
+      getMonthlyTask({String? token, DateTime? time}) => (super.noSuchMethod(
+          Invocation.method(#getMonthlyTask, [], {#token: token, #time: time}),
+          returnValue: Future<
+                  _i2.Either<_i5.Failure, List<_i9.MonthlyTaskEntity>>>.value(
+              _FakeEither_0<_i5.Failure, List<_i9.MonthlyTaskEntity>>())) as _i4
+          .Future<_i2.Either<_i5.Failure, List<_i9.MonthlyTaskEntity>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>> getTask(
           {String? token, DateTime? time}) =>
       (super.noSuchMethod(
-              Invocation.method(
-                  #countDailyTaskByMonth, [], {#token: token, #time: time}),
+              Invocation.method(#getTask, [], {#token: token, #time: time}),
               returnValue:
-                  Future<_i2.Either<_i5.Failure, List<_i9.MonthlyTaskEntity>>>.value(
-                      _FakeEither_0<_i5.Failure, List<_i9.MonthlyTaskEntity>>()))
-          as _i4.Future<_i2.Either<_i5.Failure, List<_i9.MonthlyTaskEntity>>>);
+                  Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>.value(
+                      _FakeEither_0<_i5.Failure, List<_i8.TaskEntity>>()))
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i8.TaskEntity>>>);
 }

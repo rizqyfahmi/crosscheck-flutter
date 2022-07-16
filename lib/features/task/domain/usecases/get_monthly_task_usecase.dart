@@ -22,7 +22,7 @@ class GetMonthlyTaskUsecase implements Usecase<List<MonthlyTaskEntity>, DateTime
     return response.fold(
       (error) => Left(error),
       (result) async {
-        return await repository.countDailyTaskByMonth(token: result.token, time: param);
+        return await repository.getMonthlyTask(token: result.token, time: param);
       }
     );
   }

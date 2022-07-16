@@ -85,7 +85,7 @@ class TaskRepositoryImpl extends TaskRepository {
   }
 
   @override
-  Future<Either<Failure, List<MonthlyTaskEntity>>> countDailyTaskByMonth({required String token, required DateTime time}) async {
+  Future<Either<Failure, List<MonthlyTaskEntity>>> getMonthlyTask({required String token, required DateTime time}) async {
     List<MonthlyTaskModel> cachedData = await local.getCacheCountDailyTask();
 
     try {
