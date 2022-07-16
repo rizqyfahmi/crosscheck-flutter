@@ -58,9 +58,18 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   }
   
   @override
-  Future<TaskResponseModel> getTaskByDate({required String token, required DateTime time}) {
-    // TODO: implement getTaskByDate
-    throw UnimplementedError();
+  Future<TaskResponseModel> getTaskByDate({required String token, required DateTime time}) async {
+    final uri = Uri.parse("http://localhost:8080/task/date/${DateFormat("YYYY-MM-DD").format(time)}");
+    final headers = {'Content-Type': 'application/json', "Authorization": token};
+    final response = await client.get(uri, headers: headers);
+
+    final body = await json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return TaskResponseModel.fromJSON(body);
+    }
+
+    throw ServerException(message: body["message"]);
   }
   
 }
