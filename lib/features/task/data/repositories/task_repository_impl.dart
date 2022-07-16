@@ -127,4 +127,10 @@ class TaskRepositoryImpl extends TaskRepository {
     }
   }
   
+  @override
+  Future<Either<Failure, List<TaskEntity>>> getMoreTaskByDate({required String token, required DateTime time}) {
+    // TODO: implement getMoreTaskByDate
+    throw UnimplementedError();
+  }
+  
 }
