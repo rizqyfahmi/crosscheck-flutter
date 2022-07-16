@@ -10,7 +10,7 @@ abstract class TaskRemoteDataSource {
   
   Future<TaskResponseModel> getHistory({required String token, int? limit, int? offset});
 
-  Future<MonthlyTaskResponseModel> countDailyTask({
+  Future<MonthlyTaskResponseModel> getMonthlyTask({
     required String token,
     required DateTime time // "YYYY-MM"
   });
@@ -41,7 +41,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   }
   
   @override
-  Future<MonthlyTaskResponseModel> countDailyTask({required String token, required DateTime time}) async {
+  Future<MonthlyTaskResponseModel> getMonthlyTask({required String token, required DateTime time}) async {
     final uri = Uri.parse("http://localhost:8080/task/month/${DateFormat("YYYY-MM").format(time)}");
     final headers = {'Content-Type': 'application/json', "Authorization": token};
     final response = await client.get(uri, headers: headers);

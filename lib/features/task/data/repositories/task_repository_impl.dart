@@ -94,7 +94,7 @@ class TaskRepositoryImpl extends TaskRepository {
         return Left(NetworkFailure(message: Failure.networkError, data: cachedData));
       }
 
-      final response = await remote.countDailyTask(token: token, time: time);
+      final response = await remote.getMonthlyTask(token: token, time: time);
       final data = response.models;
       await local.cacheCountDailyTask(data);
       return Right(data);

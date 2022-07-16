@@ -54,10 +54,10 @@ class MockTaskRemoteDataSource extends _i1.Mock
               _FakeTaskResponseModel_0())) as _i5
           .Future<_i2.TaskResponseModel>);
   @override
-  _i5.Future<_i3.MonthlyTaskResponseModel> countDailyTask(
+  _i5.Future<_i3.MonthlyTaskResponseModel> getMonthlyTask(
           {String? token, DateTime? time}) =>
       (super.noSuchMethod(
-          Invocation.method(#countDailyTask, [], {#token: token, #time: time}),
+          Invocation.method(#getMonthlyTask, [], {#token: token, #time: time}),
           returnValue: Future<_i3.MonthlyTaskResponseModel>.value(
               _FakeMonthlyTaskResponseModel_1())) as _i5
           .Future<_i3.MonthlyTaskResponseModel>);

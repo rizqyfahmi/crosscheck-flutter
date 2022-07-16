@@ -316,7 +316,7 @@ void main() {
     final expected = utils.getMonthlyTaskModel(time: time);
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenAnswer((_) async => Future.value());
 
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
@@ -324,7 +324,7 @@ void main() {
 
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 
@@ -334,7 +334,7 @@ void main() {
     final expected = utils.getMonthlyTaskModel(time: time);
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
 
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
@@ -342,7 +342,7 @@ void main() {
     
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 
@@ -352,7 +352,7 @@ void main() {
     final expected = utils.getMonthlyTaskModel(time: time);
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheCountDailyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
 
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
@@ -360,7 +360,7 @@ void main() {
     
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 
@@ -370,14 +370,14 @@ void main() {
     final expected = utils.getMonthlyTaskModel(time: time);
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 
@@ -387,14 +387,14 @@ void main() {
     final expected = utils.getMonthlyTaskModel(time: time);
     when(mockTaskLocalDataSource.getCacheCountDailyTask()).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-    when(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Left(ServerFailure(message: Failure.generalError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verify(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 
@@ -410,7 +410,7 @@ void main() {
     
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verifyNever(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 
@@ -426,7 +426,7 @@ void main() {
     
     verify(mockNetworkInfo.isConnected);
     verify(mockTaskLocalDataSource.getCacheCountDailyTask());
-    verifyNever(mockTaskRemoteDataSource.countDailyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheCountDailyTask(expected));
   });
 }

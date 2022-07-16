@@ -81,7 +81,7 @@ void main() {
     final response = stringify("test/features/task/data/datasource/task_remote_data_source_success_monthly_task_response.json");
     when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(response, 200));
 
-    final result = await taskRemoteDataSource.countDailyTask(token: Utils.token, time: time);
+    final result = await taskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time);
 
     expect(result, MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     verify(mockClient.get(any, headers: Utils().headers));
@@ -93,7 +93,7 @@ void main() {
     final response = stringify("test/features/task/data/datasource/task_remote_data_source_success_null_data_response.json");
     when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(response, 200));
 
-    final result = await taskRemoteDataSource.countDailyTask(token: Utils.token, time: time);
+    final result = await taskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time);
 
     expect(result, MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     verify(mockClient.get(any, headers: Utils().headers));
@@ -105,7 +105,7 @@ void main() {
     final response = stringify("test/features/task/data/datasource/task_remote_data_source_success_empty_data_response.json");
     when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(response, 200));
 
-    final result = await taskRemoteDataSource.countDailyTask(token: Utils.token, time: time);
+    final result = await taskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time);
 
     expect(result, MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     verify(mockClient.get(any, headers: Utils().headers));
@@ -115,7 +115,7 @@ void main() {
     final time = DateTime(2022, 7);
     when(mockClient.get(any, headers: Utils().headers)).thenAnswer((_) async => Response(json.encode({"message": Failure.generalError}), 500));
     
-    final call = taskRemoteDataSource.countDailyTask;
+    final call = taskRemoteDataSource.getMonthlyTask;
 
     expect(() => call(token: Utils.token, time: time), throwsA(
       predicate((error) => error is ServerFailure)
