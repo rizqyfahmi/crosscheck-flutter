@@ -29,7 +29,7 @@ void main() {
     when(mockBox.isOpen).thenReturn(true);
     when(mockBox.put(any, any)).thenAnswer((_) async => Future.value());
 
-    await taskLocalDataSource.cacheHistory(Utils().taskModels);
+    await taskLocalDataSource.cacheTask(Utils().taskModels);
 
     verify(mockBox.isOpen);
     verify(mockBox.put(any, any));
@@ -38,7 +38,7 @@ void main() {
   test("Should throws CacheException when cache all histories where box is not open", () async {
     when(mockBox.isOpen).thenReturn(false);
 
-    final call = taskLocalDataSource.cacheHistory;
+    final call = taskLocalDataSource.cacheTask;
 
     expect(() => call(Utils().taskModels), throwsA(
       predicate((error) => error is CacheException)
@@ -51,7 +51,7 @@ void main() {
     when(mockBox.isOpen).thenReturn(true);
     when(mockBox.values.toList()).thenReturn(Utils().taskModels);
     
-    final result = await taskLocalDataSource.getCachedHistory();
+    final result = await taskLocalDataSource.getCachedTask();
 
     expect(result, Utils().taskModels);
     verify(mockBox.isOpen);
@@ -61,7 +61,7 @@ void main() {
   test("Should empty histories when get cached history where box is not open", () async {
     when(mockBox.isOpen).thenReturn(false);
 
-    final result = await taskLocalDataSource.getCachedHistory();
+    final result = await taskLocalDataSource.getCachedTask();
 
     expect(result, []);
     verify(mockBox.isOpen);
@@ -73,7 +73,7 @@ void main() {
     when(mockBox.keys).thenReturn(["0", "1", "2"]);
     when(mockBox.deleteAll(any)).thenAnswer((_) async => Future.value());
 
-    await taskLocalDataSource.clearCachedHistory();
+    await taskLocalDataSource.clearCachedTask();
     verify(mockBox.isOpen);
     verify(mockBox.deleteAll(any));
   });
@@ -81,7 +81,7 @@ void main() {
   test("Should throws CacheException when clear all cached histories where box is not open", () async {
     when(mockBox.isOpen).thenReturn(false);
 
-    final call = taskLocalDataSource.clearCachedHistory;
+    final call = taskLocalDataSource.clearCachedTask;
 
     expect(() => call(), throwsA(
       predicate((error) => error is CacheException)
@@ -98,7 +98,7 @@ void main() {
     when(mockMonthlyTaskBox.isOpen).thenReturn(true);
     when(mockMonthlyTaskBox.put(any, any)).thenAnswer((_) async => Future.value());
 
-    await taskLocalDataSource.cacheCountDailyTask(expected);
+    await taskLocalDataSource.cacheMonthlyTask(expected);
 
     verify(mockMonthlyTaskBox.isOpen);
     verify(mockMonthlyTaskBox.put(any, any));
@@ -110,7 +110,7 @@ void main() {
     final expected = utils.getMonthlyTaskModel(time: time);
     when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
-    final call = taskLocalDataSource.cacheCountDailyTask;
+    final call = taskLocalDataSource.cacheMonthlyTask;
 
     expect(() => call(expected), throwsA(
       predicate((error) => error is CacheException)
@@ -126,7 +126,7 @@ void main() {
     when(mockMonthlyTaskBox.isOpen).thenReturn(true);
     when(mockMonthlyTaskBox.values.toList()).thenReturn(expected);
     
-    final result = await taskLocalDataSource.getCacheCountDailyTask();
+    final result = await taskLocalDataSource.getCacheMonthlyTask();
 
     expect(result, expected);
     verify(mockMonthlyTaskBox.isOpen);
@@ -136,7 +136,7 @@ void main() {
   test("Should empty list when get cache monthly task at the time box is not open", () async {
     when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
-    final result = await taskLocalDataSource.getCacheCountDailyTask();
+    final result = await taskLocalDataSource.getCacheMonthlyTask();
 
     expect(result, []);
     verify(mockMonthlyTaskBox.isOpen);
@@ -148,7 +148,7 @@ void main() {
     when(mockMonthlyTaskBox.keys).thenReturn(["0", "1", "2"]);
     when(mockMonthlyTaskBox.deleteAll(any)).thenAnswer((_) async => Future.value());
 
-    await taskLocalDataSource.clearCachedDailyTask();
+    await taskLocalDataSource.clearCachedMonthlyTask();
     verify(mockMonthlyTaskBox.isOpen);
     verify(mockMonthlyTaskBox.deleteAll(any));
   });
@@ -156,7 +156,7 @@ void main() {
   test("Should throws CacheException when clear cache monthly task at the time box is not open", () async {
     when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
-    final call = taskLocalDataSource.clearCachedDailyTask;
+    final call = taskLocalDataSource.clearCachedMonthlyTask;
 
     expect(() => call(), throwsA(
       predicate((error) => error is CacheException)
