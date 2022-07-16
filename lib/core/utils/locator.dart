@@ -96,7 +96,7 @@ Future<void> init() async  {
   locator.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<ProfileLocalDataSource>(() => ProfileLocalDdataSourceImpl(box: locator()));
   locator.registerLazySingleton<TaskRemoteDataSource>(() => TaskRemoteDataSourceImpl(client: locator()));
-  locator.registerLazySingleton<TaskLocalDataSource>(() => TaskLocalDataSourceImpl(taskBox: locator(), countedDailyTaskBox: locator()));
+  locator.registerLazySingleton<TaskLocalDataSource>(() => TaskLocalDataSourceImpl(taskBox: locator(), monthlyTaskBox: locator()));
 
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
   
@@ -109,8 +109,8 @@ Future<void> init() async  {
   final Box<TaskModel> boxTaskModel = await Hive.openBox("Task");
   locator.registerLazySingleton<Box<TaskModel>>(() => boxTaskModel);
 
-  final Box<TaskModel> boxCountedTaskByMonthModel = await Hive.openBox("CountedTaskByMonth");
-  locator.registerLazySingleton<Box<TaskModel>>(() => boxCountedTaskByMonthModel);
+  final Box<TaskModel> boxMonthlyTaskModel = await Hive.openBox("MonthlyTask");
+  locator.registerLazySingleton<Box<TaskModel>>(() => boxMonthlyTaskModel);
   
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => InternetConnectionChecker());

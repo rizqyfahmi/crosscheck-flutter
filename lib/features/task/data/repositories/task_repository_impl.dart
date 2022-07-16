@@ -2,9 +2,9 @@ import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/network/network_info.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
-import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
+import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
-import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart';
+import 'package:crosscheck/features/task/domain/entities/monthly_task_entity.dart';
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
@@ -85,8 +85,8 @@ class TaskRepositoryImpl extends TaskRepository {
   }
 
   @override
-  Future<Either<Failure, List<CountedDailyTaskEntity>>> countDailyTaskByMonth({required String token, required DateTime time}) async {
-    List<CountedDailyTaskModel> cachedData = await local.getCacheCountDailyTask();
+  Future<Either<Failure, List<MonthlyTaskEntity>>> countDailyTaskByMonth({required String token, required DateTime time}) async {
+    List<MonthlyTaskModel> cachedData = await local.getCacheCountDailyTask();
 
     try {
       bool isConnected = await networkInfo.isConnected;

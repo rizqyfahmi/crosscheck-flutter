@@ -1,6 +1,6 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
-import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
+import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -15,13 +15,13 @@ import 'task_local_data_source_test.mocks.dart';
 ])
 void main() {
   late MockBox<TaskModel> mockBox;
-  late MockBox<CountedDailyTaskModel> mockCountedDailyTaskBox;
+  late MockBox<MonthlyTaskModel> mockMonthlyTaskBox;
   late TaskLocalDataSource taskLocalDataSource;
 
   setUp(() {
     mockBox = MockBox();
-    mockCountedDailyTaskBox = MockBox();
-    taskLocalDataSource = TaskLocalDataSourceImpl(taskBox: mockBox, countedDailyTaskBox: mockCountedDailyTaskBox);
+    mockMonthlyTaskBox = MockBox();
+    taskLocalDataSource = TaskLocalDataSourceImpl(taskBox: mockBox, monthlyTaskBox: mockMonthlyTaskBox);
   });
 
   /*--------------------------------------------------- Get History ---------------------------------------------------*/
@@ -90,78 +90,78 @@ void main() {
     verifyNever(mockBox.deleteAll(any));
   });
 
-  /*--------------------------------------------------- Get Count Daily Task by Month ---------------------------------------------------*/
-  test("Should cache counted daily task by month properly", () async {
+  /*--------------------------------------------------- Get Monthly Task ---------------------------------------------------*/
+  test("Should cache monthly task properly", () async {
     final time = DateTime(2022, 7);
     final utils = Utils();
-    final expected = utils.getCountedDailyTaskModel(time: time);
-    when(mockCountedDailyTaskBox.isOpen).thenReturn(true);
-    when(mockCountedDailyTaskBox.put(any, any)).thenAnswer((_) async => Future.value());
+    final expected = utils.getMonthlyTaskModel(time: time);
+    when(mockMonthlyTaskBox.isOpen).thenReturn(true);
+    when(mockMonthlyTaskBox.put(any, any)).thenAnswer((_) async => Future.value());
 
     await taskLocalDataSource.cacheCountDailyTask(expected);
 
-    verify(mockCountedDailyTaskBox.isOpen);
-    verify(mockCountedDailyTaskBox.put(any, any));
+    verify(mockMonthlyTaskBox.isOpen);
+    verify(mockMonthlyTaskBox.put(any, any));
   });
 
-  test("Should throws CacheException when cache counted daily task by month at the time box is not open", () async {
+  test("Should throws CacheException when cache monthly task at the time box is not open", () async {
     final time = DateTime(2022, 7);
     final utils = Utils();
-    final expected = utils.getCountedDailyTaskModel(time: time);
-    when(mockCountedDailyTaskBox.isOpen).thenReturn(false);
+    final expected = utils.getMonthlyTaskModel(time: time);
+    when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
     final call = taskLocalDataSource.cacheCountDailyTask;
 
     expect(() => call(expected), throwsA(
       predicate((error) => error is CacheException)
     ));
-    verify(mockCountedDailyTaskBox.isOpen);
-    verifyNever(mockCountedDailyTaskBox.put(any, any));
+    verify(mockMonthlyTaskBox.isOpen);
+    verifyNever(mockMonthlyTaskBox.put(any, any));
   });
 
-  test("Should get cache counted daily task by month properly", () async {
+  test("Should get cache monthly task properly", () async {
     final time = DateTime(2022, 7);
     final utils = Utils();
-    final expected = utils.getCountedDailyTaskModel(time: time);
-    when(mockCountedDailyTaskBox.isOpen).thenReturn(true);
-    when(mockCountedDailyTaskBox.values.toList()).thenReturn(expected);
+    final expected = utils.getMonthlyTaskModel(time: time);
+    when(mockMonthlyTaskBox.isOpen).thenReturn(true);
+    when(mockMonthlyTaskBox.values.toList()).thenReturn(expected);
     
     final result = await taskLocalDataSource.getCacheCountDailyTask();
 
     expect(result, expected);
-    verify(mockCountedDailyTaskBox.isOpen);
-    verify(mockCountedDailyTaskBox.values.toList());
+    verify(mockMonthlyTaskBox.isOpen);
+    verify(mockMonthlyTaskBox.values.toList());
   });
 
-  test("Should empty list when get cache counted daily task by month at the time box is not open", () async {
-    when(mockCountedDailyTaskBox.isOpen).thenReturn(false);
+  test("Should empty list when get cache monthly task at the time box is not open", () async {
+    when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
     final result = await taskLocalDataSource.getCacheCountDailyTask();
 
     expect(result, []);
-    verify(mockCountedDailyTaskBox.isOpen);
-    verifyNever(mockCountedDailyTaskBox.values.toList());
+    verify(mockMonthlyTaskBox.isOpen);
+    verifyNever(mockMonthlyTaskBox.values.toList());
   });
 
-  test("Should clear cache counted daily task by month properly", () async {
-    when(mockCountedDailyTaskBox.isOpen).thenReturn(true);
-    when(mockCountedDailyTaskBox.keys).thenReturn(["0", "1", "2"]);
-    when(mockCountedDailyTaskBox.deleteAll(any)).thenAnswer((_) async => Future.value());
+  test("Should clear cache monthly task properly", () async {
+    when(mockMonthlyTaskBox.isOpen).thenReturn(true);
+    when(mockMonthlyTaskBox.keys).thenReturn(["0", "1", "2"]);
+    when(mockMonthlyTaskBox.deleteAll(any)).thenAnswer((_) async => Future.value());
 
     await taskLocalDataSource.clearCachedDailyTask();
-    verify(mockCountedDailyTaskBox.isOpen);
-    verify(mockCountedDailyTaskBox.deleteAll(any));
+    verify(mockMonthlyTaskBox.isOpen);
+    verify(mockMonthlyTaskBox.deleteAll(any));
   });
 
-  test("Should throws CacheException when clear cache counted daily task by month at the time box is not open", () async {
-    when(mockCountedDailyTaskBox.isOpen).thenReturn(false);
+  test("Should throws CacheException when clear cache monthly task at the time box is not open", () async {
+    when(mockMonthlyTaskBox.isOpen).thenReturn(false);
 
     final call = taskLocalDataSource.clearCachedDailyTask;
 
     expect(() => call(), throwsA(
       predicate((error) => error is CacheException)
     ));
-    verify(mockCountedDailyTaskBox.isOpen);
-    verifyNever(mockCountedDailyTaskBox.deleteAll(any));
+    verify(mockMonthlyTaskBox.isOpen);
+    verifyNever(mockMonthlyTaskBox.deleteAll(any));
   });
 }

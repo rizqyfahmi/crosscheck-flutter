@@ -9,11 +9,11 @@ import 'package:crosscheck/features/task/data/datasource/task_local_data_source.
     as _i6;
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart'
     as _i4;
-import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart'
+import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart'
     as _i8;
 import 'package:crosscheck/features/task/data/models/data/task_model.dart'
     as _i7;
-import 'package:crosscheck/features/task/data/models/response/counted_daily_task_response_model.dart'
+import 'package:crosscheck/features/task/data/models/response/monthly_task_response_model.dart'
     as _i3;
 import 'package:crosscheck/features/task/data/models/response/task_response_model.dart'
     as _i2;
@@ -32,8 +32,8 @@ import 'package:mockito/mockito.dart' as _i1;
 class _FakeTaskResponseModel_0 extends _i1.Fake
     implements _i2.TaskResponseModel {}
 
-class _FakeCountedDailyTaskResponseModel_1 extends _i1.Fake
-    implements _i3.CountedDailyTaskResponseModel {}
+class _FakeMonthlyTaskResponseModel_1 extends _i1.Fake
+    implements _i3.MonthlyTaskResponseModel {}
 
 /// A class which mocks [TaskRemoteDataSource].
 ///
@@ -54,13 +54,13 @@ class MockTaskRemoteDataSource extends _i1.Mock
               _FakeTaskResponseModel_0())) as _i5
           .Future<_i2.TaskResponseModel>);
   @override
-  _i5.Future<_i3.CountedDailyTaskResponseModel> countDailyTask(
+  _i5.Future<_i3.MonthlyTaskResponseModel> countDailyTask(
           {String? token, DateTime? time}) =>
       (super.noSuchMethod(
           Invocation.method(#countDailyTask, [], {#token: token, #time: time}),
-          returnValue: Future<_i3.CountedDailyTaskResponseModel>.value(
-              _FakeCountedDailyTaskResponseModel_1())) as _i5
-          .Future<_i3.CountedDailyTaskResponseModel>);
+          returnValue: Future<_i3.MonthlyTaskResponseModel>.value(
+              _FakeMonthlyTaskResponseModel_1())) as _i5
+          .Future<_i3.MonthlyTaskResponseModel>);
 }
 
 /// A class which mocks [TaskLocalDataSource].
@@ -88,17 +88,16 @@ class MockTaskLocalDataSource extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i5.Future<void> cacheCountDailyTask(
-          List<_i8.CountedDailyTaskModel>? models) =>
+  _i5.Future<void> cacheCountDailyTask(List<_i8.MonthlyTaskModel>? models) =>
       (super.noSuchMethod(Invocation.method(#cacheCountDailyTask, [models]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i5.Future<List<_i8.CountedDailyTaskModel>> getCacheCountDailyTask() =>
+  _i5.Future<List<_i8.MonthlyTaskModel>> getCacheCountDailyTask() =>
       (super.noSuchMethod(Invocation.method(#getCacheCountDailyTask, []),
-              returnValue: Future<List<_i8.CountedDailyTaskModel>>.value(
-                  <_i8.CountedDailyTaskModel>[]))
-          as _i5.Future<List<_i8.CountedDailyTaskModel>>);
+              returnValue: Future<List<_i8.MonthlyTaskModel>>.value(
+                  <_i8.MonthlyTaskModel>[]))
+          as _i5.Future<List<_i8.MonthlyTaskModel>>);
   @override
   _i5.Future<void> clearCachedDailyTask() =>
       (super.noSuchMethod(Invocation.method(#clearCachedDailyTask, []),

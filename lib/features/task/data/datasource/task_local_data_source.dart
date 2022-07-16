@@ -1,6 +1,6 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
+import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:hive/hive.dart';
 
@@ -12,9 +12,9 @@ abstract class TaskLocalDataSource {
 
   Future<void> clearCachedHistory();
 
-  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models);
+  Future<void> cacheCountDailyTask(List<MonthlyTaskModel> models);
 
-  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask();
+  Future<List<MonthlyTaskModel>> getCacheCountDailyTask();
 
   Future<void> clearCachedDailyTask();
 
@@ -23,11 +23,11 @@ abstract class TaskLocalDataSource {
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   
   final Box<TaskModel> taskBox;
-  final Box<CountedDailyTaskModel> countedDailyTaskBox;
+  final Box<MonthlyTaskModel> monthlyTaskBox;
 
   TaskLocalDataSourceImpl({
     required this.taskBox,
-    required this.countedDailyTaskBox
+    required this.monthlyTaskBox
   });
 
   @override
@@ -56,27 +56,27 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models) async {
-    if(!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+  Future<void> cacheCountDailyTask(List<MonthlyTaskModel> models) async {
+    if(!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
-      await countedDailyTaskBox.put(element.id, element);
+      await monthlyTaskBox.put(element.id, element);
     }
   }
   
   @override
-  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask() {
-    if (!countedDailyTaskBox.isOpen) return Future.value([]);
+  Future<List<MonthlyTaskModel>> getCacheCountDailyTask() {
+    if (!monthlyTaskBox.isOpen) return Future.value([]);
 
-    final response = countedDailyTaskBox.values.toList();
+    final response = monthlyTaskBox.values.toList();
 
     return Future.value(response);
   }
   
   @override
   Future<void> clearCachedDailyTask() async {
-    if (!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+    if (!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
-    await countedDailyTaskBox.deleteAll(countedDailyTaskBox.keys);
+    await monthlyTaskBox.deleteAll(monthlyTaskBox.keys);
   }
 }
