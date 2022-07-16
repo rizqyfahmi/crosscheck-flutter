@@ -29,7 +29,7 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
 
   @override
   Future<TaskResponseModel> getHistory({required String token, int? limit = 10, int? offset = 0}) async {
-    final uri = Uri.parse("http://localhost:8080/task/history?limit=$token&offset=$offset");
+    final uri = Uri.parse("http://localhost:8080/task/history?limit=$limit&offset=$offset");
     final headers = {'Content-Type': 'application/json', "Authorization": token};
     final response = await client.get(uri, headers: headers);
 
