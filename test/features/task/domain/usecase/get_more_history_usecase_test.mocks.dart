@@ -71,14 +71,14 @@ class MockTaskRepository extends _i1.Mock implements _i3.TaskRepository {
               _FakeEither_0<_i5.Failure, List<_i7.MonthlyTaskEntity>>())) as _i4
           .Future<_i2.Either<_i5.Failure, List<_i7.MonthlyTaskEntity>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>> getTask(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>> getTaskByDate(
           {String? token, DateTime? time}) =>
       (super.noSuchMethod(
-              Invocation.method(#getTask, [], {#token: token, #time: time}),
-              returnValue:
-                  Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>.value(
-                      _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>()))
-          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
+          Invocation.method(#getTaskByDate, [], {#token: token, #time: time}),
+          returnValue:
+              Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>.value(
+                  _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>())) as _i4
+          .Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
 }
 
 /// A class which mocks [AuthenticationRepository].
