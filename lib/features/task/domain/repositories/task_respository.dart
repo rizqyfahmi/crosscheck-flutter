@@ -13,7 +13,12 @@ abstract class TaskRepository {
 
   Future<Either<Failure, List<MonthlyTaskEntity>>> getMonthlyTask({
     required String token,
-    required DateTime time // YYYY-MM-01
+    required DateTime time // YYYY-MM
+  });
+
+  Future<Either<Failure, List<TaskEntity>>> getTaskByDate({
+    required String token, 
+    required DateTime time // YYYY-MM-DD
   });
 
 }

@@ -5,7 +5,7 @@ import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
 import 'package:dartz/dartz.dart';
 
-class GetTaskByDateUsecase implements Usecase<TaskEntity, DateTime> {
+class GetTaskByDateUsecase implements Usecase<List<TaskEntity>, DateTime> {
 
   final TaskRepository repository;
   final AuthenticationRepository authenticationRepository;
@@ -16,9 +16,12 @@ class GetTaskByDateUsecase implements Usecase<TaskEntity, DateTime> {
   });
   
   @override
-  Future<Either<Failure, TaskEntity>> call(DateTime param) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, List<TaskEntity>>> call(DateTime param) async {
+    final response = await authenticationRepository.getToken();
+    return response.fold(
+      (error) => Left(error),
+      (result) async => await repository.getTaskByDate(token: result.token, time: param)
+    );
   }
   
 }
