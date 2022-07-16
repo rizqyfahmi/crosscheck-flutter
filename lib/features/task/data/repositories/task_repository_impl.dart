@@ -149,9 +149,21 @@ class TaskRepositoryImpl extends TaskRepository {
   }
   
   @override
-  Future<Either<Failure, List<TaskEntity>>> getRefreshTaskByDate({required String token, required DateTime time}) {
-    // TODO: implement getRefreshTaskByDate
-    throw UnimplementedError();
+  Future<Either<Failure, List<TaskEntity>>> getRefreshTaskByDate({required String token, required DateTime time}) async {
+    List<TaskModel> cachedTasks = await local.getCachedTask(); // this line always returns [] when an error is occured to make the controller still continue, then get the data from the remote 
+    
+    try {
+      await local.clearCachedTask();
+    
+      final response = await remote.getTaskByDate(token: token, time: time);
+      final data = response.tasks;
+      await local.cacheTask(data); // this line is required so that we still make it throws an exception when an error is occured to synchronize the data
+      return Right(data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, data: cachedTasks));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message, data: cachedTasks));
+    }
   }
   
 }
