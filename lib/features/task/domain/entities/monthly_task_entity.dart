@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class CountedDailyTaskEntity extends Equatable {
+class MonthlyTaskEntity extends Equatable {
 
   final String id;
   final DateTime date;
   final int total; //Total of task
 
-  const CountedDailyTaskEntity({
+  const MonthlyTaskEntity({
     required this.id,
     required this.date,
     required this.total

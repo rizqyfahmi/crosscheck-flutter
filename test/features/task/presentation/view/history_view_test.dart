@@ -129,7 +129,7 @@ void main() {
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
       
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pumpAndSettle();
       expect(find.text("Loading..."), findsNothing);
 
@@ -142,7 +142,7 @@ void main() {
       expect(currentTotalTasks, 10);
       
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       await tester.pump();
@@ -198,7 +198,7 @@ void main() {
       expect(currentTotalTasks, 10);
       
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       await tester.pump();
@@ -259,7 +259,8 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       expect(currentTotalTasks, 10);
@@ -273,7 +274,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1)); // finish the indicator settle animation
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
 
@@ -314,7 +315,8 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       expect(currentTotalTasks, 10);
@@ -328,7 +330,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1)); // finish the indicator settle animation
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       await tester.pump();
@@ -380,7 +382,8 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
 
@@ -394,7 +397,7 @@ void main() {
 
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       
@@ -408,7 +411,7 @@ void main() {
 
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
 
@@ -467,7 +470,9 @@ void main() {
       await tester.pumpWidget(testWidget);
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+
+      await Future.delayed(const Duration(seconds: 2));
+      await tester.pump();
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       expect(currentTotalTasks, 10);
@@ -481,7 +486,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1)); // finish the indicator settle animation
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
 
@@ -495,7 +500,7 @@ void main() {
 
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
       
@@ -515,7 +520,7 @@ void main() {
 
       await tester.pump();
       expect(find.text("Loading..."), findsOneWidget);
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
       expect(find.text("Loading..."), findsNothing);
 

@@ -9,7 +9,7 @@ import 'package:crosscheck/features/authentication/domain/entities/authenticatio
     as _i9;
 import 'package:crosscheck/features/authentication/domain/repositories/authentication_repository.dart'
     as _i8;
-import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart'
+import 'package:crosscheck/features/task/domain/entities/monthly_task_entity.dart'
     as _i7;
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart'
     as _i6;
@@ -63,14 +63,43 @@ class MockTaskRepository extends _i1.Mock implements _i3.TaskRepository {
                       _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>()))
           as _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i7.CountedDailyTaskEntity>>>
-      countDailyTaskByMonth({String? token, DateTime? time}) => (super.noSuchMethod(
-          Invocation.method(
-              #countDailyTaskByMonth, [], {#token: token, #time: time}),
+  _i4.Future<_i2.Either<_i5.Failure, List<_i7.MonthlyTaskEntity>>>
+      getMonthlyTask({String? token, DateTime? time}) => (super.noSuchMethod(
+          Invocation.method(#getMonthlyTask, [], {#token: token, #time: time}),
+          returnValue: Future<
+                  _i2.Either<_i5.Failure, List<_i7.MonthlyTaskEntity>>>.value(
+              _FakeEither_0<_i5.Failure, List<_i7.MonthlyTaskEntity>>())) as _i4
+          .Future<_i2.Either<_i5.Failure, List<_i7.MonthlyTaskEntity>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>> getTaskByDate(
+          {String? token, DateTime? time}) =>
+      (super.noSuchMethod(
+          Invocation.method(#getTaskByDate, [], {#token: token, #time: time}),
           returnValue:
-              Future<_i2.Either<_i5.Failure, List<_i7.CountedDailyTaskEntity>>>.value(
-                  _FakeEither_0<_i5.Failure, List<_i7.CountedDailyTaskEntity>>())) as _i4
-          .Future<_i2.Either<_i5.Failure, List<_i7.CountedDailyTaskEntity>>>);
+              Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>.value(
+                  _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>())) as _i4
+          .Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>> getMoreTaskByDate(
+          {String? token, DateTime? time}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #getMoreTaskByDate, [], {#token: token, #time: time}),
+              returnValue:
+                  Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>.value(
+                      _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>()))
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
+  @override
+  _i4.Future<
+      _i2.Either<_i5.Failure, List<_i6.TaskEntity>>> getRefreshTaskByDate(
+          {String? token, DateTime? time}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #getRefreshTaskByDate, [], {#token: token, #time: time}),
+              returnValue:
+                  Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>.value(
+                      _FakeEither_0<_i5.Failure, List<_i6.TaskEntity>>()))
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.TaskEntity>>>);
 }
 
 /// A class which mocks [AuthenticationRepository].

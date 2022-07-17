@@ -1,37 +1,40 @@
 import 'package:crosscheck/core/error/exception.dart';
 import 'package:crosscheck/core/error/failure.dart';
-import 'package:crosscheck/features/task/data/models/data/counted_daily_task_model.dart';
+import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 abstract class TaskLocalDataSource {
 
-  Future<List<TaskModel>> getCachedHistory();
+  Future<List<TaskModel>> getCachedTask();
 
-  Future<void> cacheHistory(List<TaskModel> models);
+  Future<void> cacheTask(List<TaskModel> models);
 
-  Future<void> clearCachedHistory();
+  Future<void> clearCachedTask();
 
-  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models);
+  Future<void> cacheMonthlyTask(List<MonthlyTaskModel> models);
 
-  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask();
+  Future<List<MonthlyTaskModel>> getCacheMonthlyTask(DateTime time);
 
-  Future<void> clearCachedDailyTask();
+  Future<void> clearCachedMonthlyTask();
+
+  Future<List<TaskModel>> getCachedTaskByDate(DateTime time);
 
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   
   final Box<TaskModel> taskBox;
-  final Box<CountedDailyTaskModel> countedDailyTaskBox;
+  final Box<MonthlyTaskModel> monthlyTaskBox;
 
   TaskLocalDataSourceImpl({
     required this.taskBox,
-    required this.countedDailyTaskBox
+    required this.monthlyTaskBox
   });
 
   @override
-  Future<void> cacheHistory(List<TaskModel> models) async {
+  Future<void> cacheTask(List<TaskModel> models) async {
     if(!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
@@ -40,7 +43,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
 
   @override
-  Future<List<TaskModel>> getCachedHistory() {
+  Future<List<TaskModel>> getCachedTask() {
     if (!taskBox.isOpen) return Future.value([]);
     
     final response = taskBox.values.toList();
@@ -49,34 +52,47 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource  {
   }
   
   @override
-  Future<void> clearCachedHistory() async {
+  Future<void> clearCachedTask() async {
     if (!taskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     await taskBox.deleteAll(taskBox.keys);
   }
   
   @override
-  Future<void> cacheCountDailyTask(List<CountedDailyTaskModel> models) async {
-    if(!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+  Future<void> cacheMonthlyTask(List<MonthlyTaskModel> models) async {
+    if(!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
     for (var element in models) {
-      await countedDailyTaskBox.put(element.id, element);
+      await monthlyTaskBox.put(element.id, element);
     }
   }
   
   @override
-  Future<List<CountedDailyTaskModel>> getCacheCountDailyTask() {
-    if (!countedDailyTaskBox.isOpen) return Future.value([]);
+  Future<List<MonthlyTaskModel>> getCacheMonthlyTask(DateTime time) {
+    if (!monthlyTaskBox.isOpen) return Future.value([]);
 
-    final response = countedDailyTaskBox.values.toList();
+    final response = monthlyTaskBox.values.where((item) {
+      return DateFormat("YYYY-MM").format(item.date) == DateFormat("YYYY-MM").format(time);
+    }).toList();
 
     return Future.value(response);
   }
   
   @override
-  Future<void> clearCachedDailyTask() async {
-    if (!countedDailyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
+  Future<void> clearCachedMonthlyTask() async {
+    if (!monthlyTaskBox.isOpen) throw const CacheException(message: Failure.cacheError);
 
-    await countedDailyTaskBox.deleteAll(countedDailyTaskBox.keys);
+    await monthlyTaskBox.deleteAll(monthlyTaskBox.keys);
+  }
+  
+  @override
+  Future<List<TaskModel>> getCachedTaskByDate(DateTime time) {
+    if (!taskBox.isOpen) return Future.value([]);
+
+    final response = taskBox.values.where((item) {
+      return (time.isAtSameMomentAs(item.start) || time.isAfter(item.start)) && (time.isAtSameMomentAs(item.end) || time.isBefore(item.end));
+    }).toList();
+
+    return Future.value(response);
   }
 }

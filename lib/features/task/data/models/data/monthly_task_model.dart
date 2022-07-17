@@ -1,10 +1,10 @@
-import 'package:crosscheck/features/task/domain/entities/counted_daily_task_entity.dart';
+import 'package:crosscheck/features/task/domain/entities/monthly_task_entity.dart';
 import 'package:hive/hive.dart';
 
-part 'counted_daily_task_model.g.dart';
+part 'monthly_task_model.g.dart';
 
 @HiveType(typeId: 2)
-class CountedDailyTaskModel extends CountedDailyTaskEntity {
+class MonthlyTaskModel extends MonthlyTaskEntity {
 
   @override
   @HiveField(0)
@@ -18,14 +18,14 @@ class CountedDailyTaskModel extends CountedDailyTaskEntity {
   @HiveField(2)
   int get total => super.total;
   
-  const CountedDailyTaskModel({
+  const MonthlyTaskModel({
     required super.id,
     required super.date,
     required super.total
   });
 
-  factory CountedDailyTaskModel.fromJSON(Map<String, dynamic> response) {
-    return CountedDailyTaskModel(
+  factory MonthlyTaskModel.fromJSON(Map<String, dynamic> response) {
+    return MonthlyTaskModel(
       id: response["id"],
       date: DateTime.parse(response["date"]),
       total: response["total"]
