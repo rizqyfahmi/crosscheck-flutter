@@ -13,4 +13,6 @@ class CustomIcons {
   static const cloud = "lib/assets/icons/cloud.svg";
   static const cloudSmall = "lib/assets/icons/cloud_small.svg";
   static const clock = "lib/assets/icons/clock.svg";
+  static const chevronRight = "lib/assets/icons/chevron_right.svg";
+  static const chevronLeft = "lib/assets/icons/chevron_left.svg";
 }
