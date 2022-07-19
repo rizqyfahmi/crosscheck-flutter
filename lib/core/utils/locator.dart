@@ -34,6 +34,7 @@ import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.da
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/task/data/datasource/task_local_data_source.dart';
 import 'package:crosscheck/features/task/data/datasource/task_remote_data_source.dart';
+import 'package:crosscheck/features/task/data/models/data/monthly_task_model.dart';
 import 'package:crosscheck/features/task/data/models/data/task_model.dart';
 import 'package:crosscheck/features/task/data/repositories/task_repository_impl.dart';
 import 'package:crosscheck/features/task/domain/repositories/task_respository.dart';
@@ -109,8 +110,8 @@ Future<void> init() async  {
   final Box<TaskModel> boxTaskModel = await Hive.openBox("Task");
   locator.registerLazySingleton<Box<TaskModel>>(() => boxTaskModel);
 
-  final Box<TaskModel> boxMonthlyTaskModel = await Hive.openBox("MonthlyTask");
-  locator.registerLazySingleton<Box<TaskModel>>(() => boxMonthlyTaskModel);
+  final Box<MonthlyTaskModel> boxMonthlyTaskModel = await Hive.openBox("MonthlyTask");
+  locator.registerLazySingleton<Box<MonthlyTaskModel>>(() => boxMonthlyTaskModel);
   
   locator.registerLazySingleton(() => http.Client());
   locator.registerLazySingleton(() => InternetConnectionChecker());

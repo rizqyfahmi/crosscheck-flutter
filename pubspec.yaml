@@ -91,6 +91,8 @@ flutter:
     - lib/assets/icons/cloud.svg
     - lib/assets/icons/cloud_small.svg
     - lib/assets/icons/clock.svg
+    - lib/assets/icons/chevron_right.svg
+    - lib/assets/icons/chevron_left.svg
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
