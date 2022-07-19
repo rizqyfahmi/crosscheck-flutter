@@ -1005,6 +1005,88 @@ void main() {
       
     });
 
+    testWidgets("Should get value from callback properly", (WidgetTester tester) async {
+      final initialDate = DateTime(2022, 7, 18);
+      DateTime? callbackValue;
+      testWidget = MaterialApp(
+        theme: SettingsModel.light,
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: TaskCalendar(
+              initialDate: initialDate,
+              onSelectDate: (value) {
+                callbackValue = value;
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(testWidget);
+      
+      List<DateTime> dates = [
+        DateTime(2022, 6, 26), 
+        DateTime(2022, 6, 27), 
+        DateTime(2022, 6, 28), 
+        DateTime(2022, 6, 29), 
+        DateTime(2022, 6, 30), 
+        DateTime(2022, 7, 1), 
+        DateTime(2022, 7, 2), 
+        DateTime(2022, 7, 3), 
+        DateTime(2022, 7, 4), 
+        DateTime(2022, 7, 5), 
+        DateTime(2022, 7, 6), 
+        DateTime(2022, 7, 7), 
+        DateTime(2022, 7, 8), 
+        DateTime(2022, 7, 9), 
+        DateTime(2022, 7, 10), 
+        DateTime(2022, 7, 11), 
+        DateTime(2022, 7, 12), 
+        DateTime(2022, 7, 13), 
+        DateTime(2022, 7, 14), 
+        DateTime(2022, 7, 15), 
+        DateTime(2022, 7, 16), 
+        DateTime(2022, 7, 17), 
+        DateTime(2022, 7, 18), 
+        DateTime(2022, 7, 19), 
+        DateTime(2022, 7, 20), 
+        DateTime(2022, 7, 21), 
+        DateTime(2022, 7, 22), 
+        DateTime(2022, 7, 23), 
+        DateTime(2022, 7, 24), 
+        DateTime(2022, 7, 25), 
+        DateTime(2022, 7, 26), 
+        DateTime(2022, 7, 27), 
+        DateTime(2022, 7, 28), 
+        DateTime(2022, 7, 29), 
+        DateTime(2022, 7, 30), 
+        DateTime(2022, 7, 31), 
+        DateTime(2022, 8, 1), 
+        DateTime(2022, 8, 2), 
+        DateTime(2022, 8, 3), 
+        DateTime(2022, 8, 4), 
+        DateTime(2022, 8, 5), 
+        DateTime(2022, 8, 6)
+      ];
+
+      for (var i = 0; i < dates.length; i++) {
+        if (dates[i].isBefore(DateTime(2022, 7, 1)) || dates[i].isAfter(DateTime(2022, 7, 31))) {
+          continue;
+        }
+
+        Key buttonKey = Key("button${DateFormat("yyyyMMdd").format(dates[i])}");
+        await tester.ensureVisible(find.byKey(buttonKey));
+        await tester.pump();
+        expect(find.byKey(buttonKey), findsOneWidget);
+        await tester.tap(find.byKey(buttonKey));
+        await tester.pump();
+
+        expect(callbackValue, dates[i]);
+
+      }
+      
+    });
+
     testWidgets("Should go to next month when click a date of next month in displayed current month", (WidgetTester tester) async {
       final initialDate = DateTime(2022, 7, 18);
       final selected = DateTime(2022, 8, 3);
