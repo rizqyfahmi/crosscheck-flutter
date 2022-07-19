@@ -4,15 +4,15 @@ import 'package:equatable/equatable.dart';
 
 class CombineTaskEntity extends Equatable {
 
-  final MonthlyTaskEntity monthly;
-  final List<TaskEntity> tasks;
+  final List<MonthlyTaskEntity> monthlyTaskEntities;
+  final List<TaskEntity> taskEntities;
 
   const CombineTaskEntity({
-    required this.monthly,
-    required this.tasks
+    required this.monthlyTaskEntities,
+    required this.taskEntities
   });
 
   @override
-  List<Object?> get props => [monthly, tasks];
+  List<Object?> get props => [monthlyTaskEntities, taskEntities];
 
 }
