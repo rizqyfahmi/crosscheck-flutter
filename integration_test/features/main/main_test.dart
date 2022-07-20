@@ -23,6 +23,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dar
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
@@ -57,7 +58,8 @@ import 'main_test.mocks.dart';
   GetRefreshHistoryUsecase,
   GetInitialTaskByDateUsecase,
   GetMonthlyTaskUsecase,
-  GetTaskByDateUsecase
+  GetTaskByDateUsecase,
+  GetMoreTaskByDateUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -75,6 +77,7 @@ void main() {
   late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
   late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
   late MockGetTaskByDateUsecase mockGetTaskByDateUsecase;
+  late MockGetMoreTaskByDateUsecase mockGetMoreTaskByDateUsecase;
 
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
@@ -102,6 +105,7 @@ void main() {
     mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
     mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
     mockGetTaskByDateUsecase = MockGetTaskByDateUsecase();
+    mockGetMoreTaskByDateUsecase = MockGetMoreTaskByDateUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -119,7 +123,8 @@ void main() {
       getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
       getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
       getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase,
-      getTaskByDateUsecase: mockGetTaskByDateUsecase
+      getTaskByDateUsecase: mockGetTaskByDateUsecase,
+      getMoreTaskByDateUsecase: mockGetMoreTaskByDateUsecase
     );
 
     main = MyApp(providers: [

@@ -7,6 +7,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dar
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
@@ -25,6 +26,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetInitialTaskByDateUsecase getInitialTaskByDateUsecase;
   final GetMonthlyTaskUsecase getMonthlyTaskUsecase;
   final GetTaskByDateUsecase getTaskByDateUsecase;
+  final GetMoreTaskByDateUsecase getMoreTaskByDateUsecase;
   
   TaskBloc({
     required this.getHistoryUsecase,
@@ -32,7 +34,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required this.getRefreshHistoryUsecase,
     required this.getInitialTaskByDateUsecase,
     required this.getMonthlyTaskUsecase,
-    required this.getTaskByDateUsecase
+    required this.getTaskByDateUsecase,
+    required this.getMoreTaskByDateUsecase
   }) : super(TaskInit()) {
     on<TaskGetHistory>((event, emit) async {
       await getTask(event, emit, <TaskEntity>() async {
@@ -82,6 +85,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskGetByDate>((event, emit) async {
       await getTask(event, emit, <TaskEntity>() {
         return getTaskByDateUsecase(event.time) as Future<Either<Failure, List<TaskEntity>>>;
+      });
+    });
+    on<TaskGetMoreByDate>((event, emit) async {
+      await getTask(event, emit, <TaskEntity>() {
+        return getMoreTaskByDateUsecase(event.time) as Future<Either<Failure, List<TaskEntity>>>;
       });
     });
   }
