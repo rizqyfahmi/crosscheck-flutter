@@ -18,6 +18,7 @@ import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.da
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
@@ -48,7 +49,8 @@ import 'history_view_test.mocks.dart';
   GetThemeUsecase,
   GetHistoryUsecase,
   GetMoreHistoryUsecase,
-  GetRefreshHistoryUsecase
+  GetRefreshHistoryUsecase,
+  GetInitialTaskByDateUsecase
 ])
 void main() {
   late MockLoginUsecase mockLoginUsecase;
@@ -62,6 +64,7 @@ void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
   late MockGetMoreHistoryUsecase mockGetMoreHistoryUsecase;
   late MockGetRefreshHistoryUsecase mockGetRefreshHistoryUsecase;
+  late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
   
   late AuthenticationBloc authenticationBloc;
   late WalkthroughBloc walkthroughBloc;
@@ -84,6 +87,7 @@ void main() {
     mockGetHistoryUsecase = MockGetHistoryUsecase();
     mockGetMoreHistoryUsecase = MockGetMoreHistoryUsecase();
     mockGetRefreshHistoryUsecase = MockGetRefreshHistoryUsecase();
+    mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
 
     authenticationBloc = AuthenticationBloc();
     walkthroughBloc = WalkthroughBloc(setIsSkipUsecase: mockSetIsSkipUsecase, getIsSkipUsecase: mockGetIsSkipUsecase);
@@ -97,7 +101,8 @@ void main() {
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase,
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase,
-      getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase
+      getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
+      getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase
     );
     main = MyApp(providers: [
       BlocProvider<AuthenticationBloc>(

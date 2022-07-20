@@ -2,20 +2,20 @@
 // in crosscheck/test/features/main/presentation/view/main_view_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i18;
+import 'dart:async' as _i19;
 
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_bloc.dart'
-    as _i17;
+    as _i18;
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_event.dart'
-    as _i19;
+    as _i20;
 import 'package:crosscheck/features/authentication/presentation/authentication/bloc/authentication_state.dart'
     as _i2;
 import 'package:crosscheck/features/dashboard/domain/usecases/get_dashboard_usecase.dart'
     as _i6;
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_bloc.dart'
-    as _i23;
-import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart'
     as _i24;
+import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_event.dart'
+    as _i25;
 import 'package:crosscheck/features/dashboard/presentation/bloc/dashboard_state.dart'
     as _i7;
 import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_navigation_usecase.dart'
@@ -23,17 +23,17 @@ import 'package:crosscheck/features/main/domain/usecase/get_active_bottom_naviga
 import 'package:crosscheck/features/main/domain/usecase/set_active_bottom_navigation_usecase.dart'
     as _i4;
 import 'package:crosscheck/features/main/presentation/bloc/main_bloc.dart'
-    as _i21;
-import 'package:crosscheck/features/main/presentation/bloc/main_event.dart'
     as _i22;
+import 'package:crosscheck/features/main/presentation/bloc/main_event.dart'
+    as _i23;
 import 'package:crosscheck/features/main/presentation/bloc/main_state.dart'
     as _i5;
 import 'package:crosscheck/features/profile/domain/usecases/get_profile_usecase.dart'
     as _i11;
 import 'package:crosscheck/features/profile/presentation/bloc/profile_bloc.dart'
-    as _i27;
-import 'package:crosscheck/features/profile/presentation/bloc/profile_event.dart'
     as _i28;
+import 'package:crosscheck/features/profile/presentation/bloc/profile_event.dart'
+    as _i29;
 import 'package:crosscheck/features/profile/presentation/bloc/profile_state.dart'
     as _i12;
 import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.dart'
@@ -41,24 +41,34 @@ import 'package:crosscheck/features/settings/domain/usecase/get_theme_usecase.da
 import 'package:crosscheck/features/settings/domain/usecase/set_theme_usecase.dart'
     as _i8;
 import 'package:crosscheck/features/settings/presentation/bloc/settings_bloc.dart'
-    as _i25;
-import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart'
     as _i26;
+import 'package:crosscheck/features/settings/presentation/bloc/settings_event.dart'
+    as _i27;
 import 'package:crosscheck/features/settings/presentation/bloc/settings_state.dart'
     as _i10;
+import 'package:crosscheck/features/task/domain/entities/monthly_task_entity.dart'
+    as _i32;
+import 'package:crosscheck/features/task/domain/entities/task_entity.dart'
+    as _i34;
 import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dart'
     as _i13;
+import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart'
+    as _i16;
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart'
     as _i14;
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart'
     as _i15;
+import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart'
+    as _i31;
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart'
-    as _i29;
-import 'package:crosscheck/features/task/presentation/bloc/task_event.dart'
     as _i30;
+import 'package:crosscheck/features/task/presentation/bloc/task_event.dart'
+    as _i35;
+import 'package:crosscheck/features/task/presentation/bloc/task_model.dart'
+    as _i33;
 import 'package:crosscheck/features/task/presentation/bloc/task_state.dart'
-    as _i16;
-import 'package:flutter_bloc/flutter_bloc.dart' as _i20;
+    as _i17;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i21;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -107,13 +117,16 @@ class _FakeGetMoreHistoryUsecase_12 extends _i1.Fake
 class _FakeGetRefreshHistoryUsecase_13 extends _i1.Fake
     implements _i15.GetRefreshHistoryUsecase {}
 
-class _FakeTaskState_14 extends _i1.Fake implements _i16.TaskState {}
+class _FakeGetInitialTaskByDateUsecase_14 extends _i1.Fake
+    implements _i16.GetInitialTaskByDateUsecase {}
+
+class _FakeTaskState_15 extends _i1.Fake implements _i17.TaskState {}
 
 /// A class which mocks [AuthenticationBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationBloc extends _i1.Mock
-    implements _i17.AuthenticationBloc {
+    implements _i18.AuthenticationBloc {
   MockAuthenticationBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -123,20 +136,20 @@ class MockAuthenticationBloc extends _i1.Mock
       Invocation.getter(#state),
       returnValue: _FakeAuthenticationState_0()) as _i2.AuthenticationState);
   @override
-  _i18.Stream<_i2.AuthenticationState> get stream =>
+  _i19.Stream<_i2.AuthenticationState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i2.AuthenticationState>.empty())
-          as _i18.Stream<_i2.AuthenticationState>);
+          as _i19.Stream<_i2.AuthenticationState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i19.AuthenticationEvent? event) =>
+  void add(_i20.AuthenticationEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i19.AuthenticationEvent? event) =>
+  void onEvent(_i20.AuthenticationEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -144,25 +157,25 @@ class MockAuthenticationBloc extends _i1.Mock
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i19.AuthenticationEvent>(
-          _i20.EventHandler<E, _i2.AuthenticationState>? handler,
-          {_i20.EventTransformer<E>? transformer}) =>
+  void on<E extends _i20.AuthenticationEvent>(
+          _i21.EventHandler<E, _i2.AuthenticationState>? handler,
+          {_i21.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i20.Transition<_i19.AuthenticationEvent, _i2.AuthenticationState>?
+          _i21.Transition<_i20.AuthenticationEvent, _i2.AuthenticationState>?
               transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i18.Future<void> close() => (super.noSuchMethod(
+  _i19.Future<void> close() => (super.noSuchMethod(
       Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i18.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i19.Future<void>);
   @override
-  void onChange(_i20.Change<_i2.AuthenticationState>? change) =>
+  void onChange(_i21.Change<_i2.AuthenticationState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -178,7 +191,7 @@ class MockAuthenticationBloc extends _i1.Mock
 /// A class which mocks [MainBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMainBloc extends _i1.Mock implements _i21.MainBloc {
+class MockMainBloc extends _i1.Mock implements _i22.MainBloc {
   MockMainBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -197,20 +210,20 @@ class MockMainBloc extends _i1.Mock implements _i21.MainBloc {
   _i5.MainState get state => (super.noSuchMethod(Invocation.getter(#state),
       returnValue: _FakeMainState_3()) as _i5.MainState);
   @override
-  _i18.Stream<_i5.MainState> get stream =>
+  _i19.Stream<_i5.MainState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i5.MainState>.empty())
-          as _i18.Stream<_i5.MainState>);
+          as _i19.Stream<_i5.MainState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i22.MainEvent? event) =>
+  void add(_i23.MainEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i22.MainEvent? event) =>
+  void onEvent(_i23.MainEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -218,24 +231,24 @@ class MockMainBloc extends _i1.Mock implements _i21.MainBloc {
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i22.MainEvent>(
-          _i20.EventHandler<E, _i5.MainState>? handler,
-          {_i20.EventTransformer<E>? transformer}) =>
+  void on<E extends _i23.MainEvent>(
+          _i21.EventHandler<E, _i5.MainState>? handler,
+          {_i21.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i20.Transition<_i22.MainEvent, _i5.MainState>? transition) =>
+          _i21.Transition<_i23.MainEvent, _i5.MainState>? transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i18.Future<void> close() => (super.noSuchMethod(
+  _i19.Future<void> close() => (super.noSuchMethod(
       Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i18.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i19.Future<void>);
   @override
-  void onChange(_i20.Change<_i5.MainState>? change) =>
+  void onChange(_i21.Change<_i5.MainState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -251,7 +264,7 @@ class MockMainBloc extends _i1.Mock implements _i21.MainBloc {
 /// A class which mocks [DashboardBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDashboardBloc extends _i1.Mock implements _i23.DashboardBloc {
+class MockDashboardBloc extends _i1.Mock implements _i24.DashboardBloc {
   MockDashboardBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -264,10 +277,10 @@ class MockDashboardBloc extends _i1.Mock implements _i23.DashboardBloc {
   _i7.DashboardState get state => (super.noSuchMethod(Invocation.getter(#state),
       returnValue: _FakeDashboardState_5()) as _i7.DashboardState);
   @override
-  _i18.Stream<_i7.DashboardState> get stream =>
+  _i19.Stream<_i7.DashboardState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i7.DashboardState>.empty())
-          as _i18.Stream<_i7.DashboardState>);
+          as _i19.Stream<_i7.DashboardState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
@@ -277,11 +290,11 @@ class MockDashboardBloc extends _i1.Mock implements _i23.DashboardBloc {
       (super.noSuchMethod(Invocation.method(#getProgress, [rawProgress]),
           returnValue: '') as String);
   @override
-  void add(_i24.DashboardEvent? event) =>
+  void add(_i25.DashboardEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i24.DashboardEvent? event) =>
+  void onEvent(_i25.DashboardEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -289,25 +302,25 @@ class MockDashboardBloc extends _i1.Mock implements _i23.DashboardBloc {
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i24.DashboardEvent>(
-          _i20.EventHandler<E, _i7.DashboardState>? handler,
-          {_i20.EventTransformer<E>? transformer}) =>
+  void on<E extends _i25.DashboardEvent>(
+          _i21.EventHandler<E, _i7.DashboardState>? handler,
+          {_i21.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i20.Transition<_i24.DashboardEvent, _i7.DashboardState>?
+          _i21.Transition<_i25.DashboardEvent, _i7.DashboardState>?
               transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i18.Future<void> close() => (super.noSuchMethod(
+  _i19.Future<void> close() => (super.noSuchMethod(
       Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i18.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i19.Future<void>);
   @override
-  void onChange(_i20.Change<_i7.DashboardState>? change) =>
+  void onChange(_i21.Change<_i7.DashboardState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -323,7 +336,7 @@ class MockDashboardBloc extends _i1.Mock implements _i23.DashboardBloc {
 /// A class which mocks [SettingsBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSettingsBloc extends _i1.Mock implements _i25.SettingsBloc {
+class MockSettingsBloc extends _i1.Mock implements _i26.SettingsBloc {
   MockSettingsBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -340,20 +353,20 @@ class MockSettingsBloc extends _i1.Mock implements _i25.SettingsBloc {
   _i10.SettingsState get state => (super.noSuchMethod(Invocation.getter(#state),
       returnValue: _FakeSettingsState_8()) as _i10.SettingsState);
   @override
-  _i18.Stream<_i10.SettingsState> get stream =>
+  _i19.Stream<_i10.SettingsState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i10.SettingsState>.empty())
-          as _i18.Stream<_i10.SettingsState>);
+          as _i19.Stream<_i10.SettingsState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i26.SettingsEvent? event) =>
+  void add(_i27.SettingsEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i26.SettingsEvent? event) =>
+  void onEvent(_i27.SettingsEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -361,25 +374,25 @@ class MockSettingsBloc extends _i1.Mock implements _i25.SettingsBloc {
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i26.SettingsEvent>(
-          _i20.EventHandler<E, _i10.SettingsState>? handler,
-          {_i20.EventTransformer<E>? transformer}) =>
+  void on<E extends _i27.SettingsEvent>(
+          _i21.EventHandler<E, _i10.SettingsState>? handler,
+          {_i21.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i20.Transition<_i26.SettingsEvent, _i10.SettingsState>?
+          _i21.Transition<_i27.SettingsEvent, _i10.SettingsState>?
               transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i18.Future<void> close() => (super.noSuchMethod(
+  _i19.Future<void> close() => (super.noSuchMethod(
       Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i18.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i19.Future<void>);
   @override
-  void onChange(_i20.Change<_i10.SettingsState>? change) =>
+  void onChange(_i21.Change<_i10.SettingsState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -395,7 +408,7 @@ class MockSettingsBloc extends _i1.Mock implements _i25.SettingsBloc {
 /// A class which mocks [ProfileBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockProfileBloc extends _i1.Mock implements _i27.ProfileBloc {
+class MockProfileBloc extends _i1.Mock implements _i28.ProfileBloc {
   MockProfileBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -408,20 +421,20 @@ class MockProfileBloc extends _i1.Mock implements _i27.ProfileBloc {
   _i12.ProfileState get state => (super.noSuchMethod(Invocation.getter(#state),
       returnValue: _FakeProfileState_10()) as _i12.ProfileState);
   @override
-  _i18.Stream<_i12.ProfileState> get stream =>
+  _i19.Stream<_i12.ProfileState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
               returnValue: Stream<_i12.ProfileState>.empty())
-          as _i18.Stream<_i12.ProfileState>);
+          as _i19.Stream<_i12.ProfileState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  void add(_i28.ProfileEvent? event) =>
+  void add(_i29.ProfileEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i28.ProfileEvent? event) =>
+  void onEvent(_i29.ProfileEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
@@ -429,24 +442,24 @@ class MockProfileBloc extends _i1.Mock implements _i27.ProfileBloc {
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i28.ProfileEvent>(
-          _i20.EventHandler<E, _i12.ProfileState>? handler,
-          {_i20.EventTransformer<E>? transformer}) =>
+  void on<E extends _i29.ProfileEvent>(
+          _i21.EventHandler<E, _i12.ProfileState>? handler,
+          {_i21.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i20.Transition<_i28.ProfileEvent, _i12.ProfileState>? transition) =>
+          _i21.Transition<_i29.ProfileEvent, _i12.ProfileState>? transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i18.Future<void> close() => (super.noSuchMethod(
+  _i19.Future<void> close() => (super.noSuchMethod(
       Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i18.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i19.Future<void>);
   @override
-  void onChange(_i20.Change<_i12.ProfileState>? change) =>
+  void onChange(_i21.Change<_i12.ProfileState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
@@ -462,7 +475,7 @@ class MockProfileBloc extends _i1.Mock implements _i27.ProfileBloc {
 /// A class which mocks [TaskBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskBloc extends _i1.Mock implements _i29.TaskBloc {
+class MockTaskBloc extends _i1.Mock implements _i30.TaskBloc {
   MockTaskBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -482,53 +495,68 @@ class MockTaskBloc extends _i1.Mock implements _i29.TaskBloc {
               returnValue: _FakeGetRefreshHistoryUsecase_13())
           as _i15.GetRefreshHistoryUsecase);
   @override
-  _i16.TaskState get state => (super.noSuchMethod(Invocation.getter(#state),
-      returnValue: _FakeTaskState_14()) as _i16.TaskState);
+  _i16.GetInitialTaskByDateUsecase get getInitialTaskByDateUsecase =>
+      (super.noSuchMethod(Invocation.getter(#getInitialTaskByDateUsecase),
+              returnValue: _FakeGetInitialTaskByDateUsecase_14())
+          as _i16.GetInitialTaskByDateUsecase);
   @override
-  _i18.Stream<_i16.TaskState> get stream =>
+  _i17.TaskState get state => (super.noSuchMethod(Invocation.getter(#state),
+      returnValue: _FakeTaskState_15()) as _i17.TaskState);
+  @override
+  _i19.Stream<_i17.TaskState> get stream =>
       (super.noSuchMethod(Invocation.getter(#stream),
-              returnValue: Stream<_i16.TaskState>.empty())
-          as _i18.Stream<_i16.TaskState>);
+              returnValue: Stream<_i17.TaskState>.empty())
+          as _i19.Stream<_i17.TaskState>);
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
   @override
-  dynamic getHistory(_i30.TaskEvent? event, _i20.Emitter<_i16.TaskState>? emit,
-          _i29.Usecase? usecase) =>
+  List<_i31.MonthlyTaskModel> getMonthlyTaskModel(
+          List<_i32.MonthlyTaskEntity>? entities) =>
+      (super.noSuchMethod(Invocation.method(#getMonthlyTaskModel, [entities]),
+              returnValue: <_i31.MonthlyTaskModel>[])
+          as List<_i31.MonthlyTaskModel>);
+  @override
+  List<_i33.TaskModel> getTaskModel(List<_i34.TaskEntity>? entities) =>
+      (super.noSuchMethod(Invocation.method(#getTaskModel, [entities]),
+          returnValue: <_i33.TaskModel>[]) as List<_i33.TaskModel>);
+  @override
+  dynamic getHistory(_i35.TaskEvent? event, _i21.Emitter<_i17.TaskState>? emit,
+          _i30.Usecase? usecase) =>
       super
           .noSuchMethod(Invocation.method(#getHistory, [event, emit, usecase]));
   @override
-  void add(_i30.TaskEvent? event) =>
+  void add(_i35.TaskEvent? event) =>
       super.noSuchMethod(Invocation.method(#add, [event]),
           returnValueForMissingStub: null);
   @override
-  void onEvent(_i30.TaskEvent? event) =>
+  void onEvent(_i35.TaskEvent? event) =>
       super.noSuchMethod(Invocation.method(#onEvent, [event]),
           returnValueForMissingStub: null);
   @override
-  void emit(_i16.TaskState? state) =>
+  void emit(_i17.TaskState? state) =>
       super.noSuchMethod(Invocation.method(#emit, [state]),
           returnValueForMissingStub: null);
   @override
-  void on<E extends _i30.TaskEvent>(
-          _i20.EventHandler<E, _i16.TaskState>? handler,
-          {_i20.EventTransformer<E>? transformer}) =>
+  void on<E extends _i35.TaskEvent>(
+          _i21.EventHandler<E, _i17.TaskState>? handler,
+          {_i21.EventTransformer<E>? transformer}) =>
       super.noSuchMethod(
           Invocation.method(#on, [handler], {#transformer: transformer}),
           returnValueForMissingStub: null);
   @override
   void onTransition(
-          _i20.Transition<_i30.TaskEvent, _i16.TaskState>? transition) =>
+          _i21.Transition<_i35.TaskEvent, _i17.TaskState>? transition) =>
       super.noSuchMethod(Invocation.method(#onTransition, [transition]),
           returnValueForMissingStub: null);
   @override
-  _i18.Future<void> close() => (super.noSuchMethod(
+  _i19.Future<void> close() => (super.noSuchMethod(
       Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i18.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i19.Future<void>);
   @override
-  void onChange(_i20.Change<_i16.TaskState>? change) =>
+  void onChange(_i21.Change<_i17.TaskState>? change) =>
       super.noSuchMethod(Invocation.method(#onChange, [change]),
           returnValueForMissingStub: null);
   @override
