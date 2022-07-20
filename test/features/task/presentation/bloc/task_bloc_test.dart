@@ -4,6 +4,7 @@ import 'package:crosscheck/features/task/domain/entities/monthly_task_entity.dar
 import 'package:crosscheck/features/task/domain/entities/task_entity.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
@@ -23,13 +24,15 @@ import 'task_bloc_test.mocks.dart';
   GetHistoryUsecase,
   GetMoreHistoryUsecase,
   GetRefreshHistoryUsecase,
-  GetInitialTaskByDateUsecase
+  GetInitialTaskByDateUsecase,
+  GetMonthlyTaskUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
   late MockGetMoreHistoryUsecase mockGetMoreHistoryUsecase;
   late MockGetRefreshHistoryUsecase mockGetRefreshHistoryUsecase;
   late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
+  late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
   late TaskBloc taskBloc;
   late List<TaskModel> models;
 
@@ -38,11 +41,13 @@ void main() {
     mockGetMoreHistoryUsecase = MockGetMoreHistoryUsecase();
     mockGetRefreshHistoryUsecase = MockGetRefreshHistoryUsecase();
     mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
+    mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase, 
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase, 
       getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
-      getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase
+      getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
+      getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase
     );
 
     models = Utils().taskEntities.map((entity) => TaskModel.fromTaskEntity(entity)).toList();
@@ -519,5 +524,87 @@ void main() {
       ]));
     });
 
+  });
+
+  /*--------------------------------------------------- Get Monthly Task | Event Page ---------------------------------------------------*/
+  group("Get monthly task", () {
+    late DateTime time;
+    late List<MonthlyTaskEntity> mockedMonthlyTaskEntity;
+    late List<MonthlyTaskModel> expectedMonthlyTaskBlocModel;
+    
+    setUp(() {
+      time = DateTime(2022, 7);
+      final utils = Utils();
+      mockedMonthlyTaskEntity = utils.getMonthlyTaskEntity(time: time);
+      expectedMonthlyTaskBlocModel = mockedMonthlyTaskEntity.map((entity) {
+        return MonthlyTaskModel.fromMonthlyTaskEntity(entity);
+      }).toList();
+    });
+
+    test("Should get monthly task properly", () {
+      when(mockGetMonthlyTaskUsecase(any)).thenAnswer((_) async {
+        return Right(mockedMonthlyTaskEntity);
+      });
+
+      taskBloc.add(TaskGetMonthlyTask(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskLoaded(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel),
+        TaskIdle(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel)
+      ]));
+    });
+
+    test("Should returns ServerFailure when get monthly task returns ServerFailure in the time local data source is empty", () async {
+      when(mockGetMonthlyTaskUsecase(any)).thenAnswer((_) async {
+        return const Left(ServerFailure(message: Failure.generalError, data: []));
+      });
+
+      taskBloc.add(TaskGetMonthlyTask(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns ServerFailure when get monthly task returns ServerFailure in the time local data source is not empty", () async {
+      when(mockGetMonthlyTaskUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: mockedMonthlyTaskEntity));
+      });
+
+      taskBloc.add(TaskGetMonthlyTask(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns CacheFailure when get monthly task returns CacheFailure in the time local data source is empty", () async {
+      when(mockGetMonthlyTaskUsecase(any)).thenAnswer((_) async {
+        return const Left(CacheFailure(message: Failure.cacheError, data: []));
+      });
+
+      taskBloc.add(TaskGetMonthlyTask(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure when get monthly task returns CacheFailure in the time local data source is not empty", () async {
+      when(mockGetMonthlyTaskUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: mockedMonthlyTaskEntity));
+      });
+
+      taskBloc.add(TaskGetMonthlyTask(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.cacheError)
+      ]));
+    });
   });
 }

@@ -20,6 +20,8 @@ import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dar
     as _i6;
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart'
     as _i12;
+import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart'
+    as _i15;
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart'
     as _i10;
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart'
@@ -172,4 +174,33 @@ class MockGetInitialTaskByDateUsecase extends _i1.Mock
   _i5.Failure getFailure(dynamic value, _i13.CombineTaskEntity? data) =>
       (super.noSuchMethod(Invocation.method(#getFailure, [value, data]),
           returnValue: _FakeFailure_3()) as _i5.Failure);
+}
+
+/// A class which mocks [GetMonthlyTaskUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetMonthlyTaskUsecase extends _i1.Mock
+    implements _i15.GetMonthlyTaskUsecase {
+  MockGetMonthlyTaskUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.TaskRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeTaskRepository_0()) as _i2.TaskRepository);
+  @override
+  _i3.AuthenticationRepository get authenticationRepository =>
+      (super.noSuchMethod(Invocation.getter(#authenticationRepository),
+              returnValue: _FakeAuthenticationRepository_1())
+          as _i3.AuthenticationRepository);
+  @override
+  _i7.Future<_i4.Either<_i5.Failure, List<_i14.MonthlyTaskEntity>>> call(
+          DateTime? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+              returnValue: Future<
+                      _i4.Either<_i5.Failure,
+                          List<_i14.MonthlyTaskEntity>>>.value(
+                  _FakeEither_2<_i5.Failure, List<_i14.MonthlyTaskEntity>>()))
+          as _i7.Future<_i4.Either<_i5.Failure, List<_i14.MonthlyTaskEntity>>>);
 }
