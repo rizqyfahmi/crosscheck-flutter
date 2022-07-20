@@ -26,6 +26,8 @@ import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecas
     as _i10;
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart'
     as _i11;
+import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart'
+    as _i16;
 import 'package:dartz/dartz.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -203,4 +205,32 @@ class MockGetMonthlyTaskUsecase extends _i1.Mock
                           List<_i14.MonthlyTaskEntity>>>.value(
                   _FakeEither_2<_i5.Failure, List<_i14.MonthlyTaskEntity>>()))
           as _i7.Future<_i4.Either<_i5.Failure, List<_i14.MonthlyTaskEntity>>>);
+}
+
+/// A class which mocks [GetTaskByDateUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetTaskByDateUsecase extends _i1.Mock
+    implements _i16.GetTaskByDateUsecase {
+  MockGetTaskByDateUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.TaskRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeTaskRepository_0()) as _i2.TaskRepository);
+  @override
+  _i3.AuthenticationRepository get authenticationRepository =>
+      (super.noSuchMethod(Invocation.getter(#authenticationRepository),
+              returnValue: _FakeAuthenticationRepository_1())
+          as _i3.AuthenticationRepository);
+  @override
+  _i7.Future<_i4.Either<_i5.Failure, List<_i8.TaskEntity>>> call(
+          DateTime? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+              returnValue:
+                  Future<_i4.Either<_i5.Failure, List<_i8.TaskEntity>>>.value(
+                      _FakeEither_2<_i5.Failure, List<_i8.TaskEntity>>()))
+          as _i7.Future<_i4.Either<_i5.Failure, List<_i8.TaskEntity>>>);
 }

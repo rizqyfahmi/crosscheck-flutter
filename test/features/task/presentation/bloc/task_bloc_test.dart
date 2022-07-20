@@ -7,6 +7,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_dat
 import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
@@ -25,7 +26,8 @@ import 'task_bloc_test.mocks.dart';
   GetMoreHistoryUsecase,
   GetRefreshHistoryUsecase,
   GetInitialTaskByDateUsecase,
-  GetMonthlyTaskUsecase
+  GetMonthlyTaskUsecase,
+  GetTaskByDateUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
@@ -33,6 +35,7 @@ void main() {
   late MockGetRefreshHistoryUsecase mockGetRefreshHistoryUsecase;
   late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
   late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
+  late MockGetTaskByDateUsecase mockGetTaskByDateUsecase;
   late TaskBloc taskBloc;
   late List<TaskModel> models;
 
@@ -42,12 +45,14 @@ void main() {
     mockGetRefreshHistoryUsecase = MockGetRefreshHistoryUsecase();
     mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
     mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
+    mockGetTaskByDateUsecase = MockGetTaskByDateUsecase();
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase, 
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase, 
       getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
       getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
-      getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase
+      getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase,
+      getTaskByDateUsecase: mockGetTaskByDateUsecase
     );
 
     models = Utils().taskEntities.map((entity) => TaskModel.fromTaskEntity(entity)).toList();
@@ -606,5 +611,89 @@ void main() {
         TaskGeneralError(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.cacheError)
       ]));
     });
+  });
+
+  /*--------------------------------------------------- Get Task By Date | Event Page ---------------------------------------------------*/
+  group("Get task by date", () {
+    late DateTime time;
+    late List<TaskEntity> mockedTaskEntities;
+    late List<TaskModel> expectedTaskBlocModel;
+
+    setUp(() {
+      time = DateTime(2022, 7, 16);
+      mockedTaskEntities = [
+        TaskEntity(id: "001", title: "Hello title", description: "Hello description", start: time.add(const Duration(hours: 6)), end: time.add(const Duration(hours: 8)), isAllDay: false, alerts: const []),
+        TaskEntity(id: "002", title: "Hello title 2", description: "Hello description 2", start: time.add(const Duration(hours: 9)), end: time.add(const Duration(hours: 10)), isAllDay: false, alerts: const []),
+      ];
+      expectedTaskBlocModel = mockedTaskEntities.map((entity) {
+        return TaskModel.fromTaskEntity(entity);
+      }).toList();
+    });
+
+    test("Should get task by date properly", () {
+      when(mockGetTaskByDateUsecase(time)).thenAnswer((_) async {
+        return Right(mockedTaskEntities);
+      });
+
+      taskBloc.add(TaskGetByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskLoaded(models: expectedTaskBlocModel, monthlyTaskModels: const []),
+        TaskIdle(models: expectedTaskBlocModel, monthlyTaskModels: const [])
+      ]));
+    });
+
+    test("Should returns ServerFailure when get monthly task returns ServerFailure in the time local data source is empty", () async {
+      when(mockGetTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(ServerFailure(message: Failure.generalError, data: []));
+      });
+
+      taskBloc.add(TaskGetByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns ServerFailure when get monthly task returns ServerFailure in the time local data source is not empty", () async {
+      when(mockGetTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: mockedTaskEntities));
+      });
+
+      taskBloc.add(TaskGetByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns CacheFailure when get monthly task returns CacheFailure in the time local data source is empty", () async {
+      when(mockGetTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(CacheFailure(message: Failure.cacheError, data: []));
+      });
+
+      taskBloc.add(TaskGetByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure when get monthly task returns CacheFailure in the time local data source is not empty", () async {
+      when(mockGetTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: mockedTaskEntities));
+      });
+
+      taskBloc.add(TaskGetByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.cacheError)
+      ]));
+    });    
   });
 }
