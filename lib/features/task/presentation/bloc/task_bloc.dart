@@ -8,6 +8,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_dat
 import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_model.dart';
@@ -23,13 +24,15 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetRefreshHistoryUsecase getRefreshHistoryUsecase;
   final GetInitialTaskByDateUsecase getInitialTaskByDateUsecase;
   final GetMonthlyTaskUsecase getMonthlyTaskUsecase;
+  final GetTaskByDateUsecase getTaskByDateUsecase;
   
   TaskBloc({
     required this.getHistoryUsecase,
     required this.getMoreHistoryUsecase,
     required this.getRefreshHistoryUsecase,
     required this.getInitialTaskByDateUsecase,
-    required this.getMonthlyTaskUsecase
+    required this.getMonthlyTaskUsecase,
+    required this.getTaskByDateUsecase
   }) : super(TaskInit()) {
     on<TaskGetHistory>((event, emit) async {
       await getTask(event, emit, <TaskEntity>() async {
@@ -74,6 +77,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<TaskGetMonthlyTask>((event, emit) async {
       await getMonthlyTask(event, emit, <MonthlyTaskEntity>() {
         return getMonthlyTaskUsecase(event.time) as Future<Either<Failure, List<MonthlyTaskEntity>>>;
+      });
+    });
+    on<TaskGetByDate>((event, emit) async {
+      await getTask(event, emit, <TaskEntity>() {
+        return getTaskByDateUsecase(event.time) as Future<Either<Failure, List<TaskEntity>>>;
       });
     });
   }

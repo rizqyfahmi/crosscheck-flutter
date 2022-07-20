@@ -32,3 +32,14 @@ class TaskGetMonthlyTask extends TaskEvent {
   @override
   List<Object?> get props => [time];
 }
+
+class TaskGetByDate extends TaskEvent {
+  final DateTime time;
+
+  TaskGetByDate({
+    required this.time
+  });
+
+  @override
+  List<Object?> get props => [time];
+}

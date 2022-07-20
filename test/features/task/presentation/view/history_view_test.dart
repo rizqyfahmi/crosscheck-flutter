@@ -4,6 +4,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_dat
 import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_state.dart';
@@ -23,7 +24,8 @@ import 'history_view_test.mocks.dart';
   GetMoreHistoryUsecase,
   GetRefreshHistoryUsecase,
   GetInitialTaskByDateUsecase,
-  GetMonthlyTaskUsecase
+  GetMonthlyTaskUsecase,
+  GetTaskByDateUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
@@ -31,6 +33,7 @@ void main() {
   late MockGetRefreshHistoryUsecase mockGetRefreshHistoryUsecase;
   late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
   late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
+  late MockGetTaskByDateUsecase mockGetTaskByDateUsecase;
   late TaskBloc taskBloc;
   late Widget testWidget;
 
@@ -40,12 +43,14 @@ void main() {
     mockGetRefreshHistoryUsecase = MockGetRefreshHistoryUsecase();
     mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
     mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
+    mockGetTaskByDateUsecase = MockGetTaskByDateUsecase();
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase,
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase,
       getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
       getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
-      getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase
+      getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase,
+      getTaskByDateUsecase: mockGetTaskByDateUsecase
     );
     testWidget = buildWidget(taskBloc: taskBloc);
   });
