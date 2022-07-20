@@ -9,6 +9,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecas
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
@@ -27,6 +28,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetMonthlyTaskUsecase getMonthlyTaskUsecase;
   final GetTaskByDateUsecase getTaskByDateUsecase;
   final GetMoreTaskByDateUsecase getMoreTaskByDateUsecase;
+  final GetRefreshTaskByDateUsecase getRefreshTaskByDateUsecase;
   
   TaskBloc({
     required this.getHistoryUsecase,
@@ -35,7 +37,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     required this.getInitialTaskByDateUsecase,
     required this.getMonthlyTaskUsecase,
     required this.getTaskByDateUsecase,
-    required this.getMoreTaskByDateUsecase
+    required this.getMoreTaskByDateUsecase,
+    required this.getRefreshTaskByDateUsecase
   }) : super(TaskInit()) {
     on<TaskGetHistory>((event, emit) async {
       await getTask(event, emit, <TaskEntity>() async {
@@ -91,6 +94,28 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       await getTask(event, emit, <TaskEntity>() {
         return getMoreTaskByDateUsecase(event.time) as Future<Either<Failure, List<TaskEntity>>>;
       });
+    });
+    on<TaskGetRefreshByDate>((event, emit) async {
+      emit(TaskLoading(models: state.models, monthlyTaskModels: state.monthlyTaskModels));
+
+      final response = await getRefreshTaskByDateUsecase(event.time);
+      response.fold(
+        (error) {
+          final data = (error.data as CombineTaskEntity);
+          
+          List<MonthlyTaskModel> monthlyTaskModels = getMonthlyTaskModel(data.monthlyTaskEntities);
+          List<TaskModel> taskModels = getTaskModel(data.taskEntities);
+
+          emit(TaskGeneralError(models: taskModels, monthlyTaskModels: monthlyTaskModels, message: error.message));
+        },
+        (result) {
+          List<MonthlyTaskModel> monthlyTaskModels = getMonthlyTaskModel(result.monthlyTaskEntities);
+          List<TaskModel> taskModels = getTaskModel(result.taskEntities);
+
+          emit(TaskLoaded(models: taskModels, monthlyTaskModels: monthlyTaskModels));
+          emit(TaskIdle(models: taskModels, monthlyTaskModels: monthlyTaskModels));
+        }
+      );
     });
   }
 

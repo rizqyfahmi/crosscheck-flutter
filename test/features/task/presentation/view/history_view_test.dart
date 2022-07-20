@@ -5,6 +5,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecas
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_event.dart';
@@ -27,7 +28,8 @@ import 'history_view_test.mocks.dart';
   GetInitialTaskByDateUsecase,
   GetMonthlyTaskUsecase,
   GetTaskByDateUsecase,
-  GetMoreTaskByDateUsecase
+  GetMoreTaskByDateUsecase,
+  GetRefreshTaskByDateUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
@@ -37,6 +39,7 @@ void main() {
   late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
   late MockGetTaskByDateUsecase mockGetTaskByDateUsecase;
   late MockGetMoreTaskByDateUsecase mockGetMoreTaskByDateUsecase;
+  late MockGetRefreshTaskByDateUsecase mockGetRefreshTaskByDateUsecase;
   late TaskBloc taskBloc;
   late Widget testWidget;
 
@@ -48,6 +51,8 @@ void main() {
     mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
     mockGetTaskByDateUsecase = MockGetTaskByDateUsecase();
     mockGetMoreTaskByDateUsecase = MockGetMoreTaskByDateUsecase();
+    mockGetRefreshTaskByDateUsecase = MockGetRefreshTaskByDateUsecase();
+
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase,
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase,
@@ -55,7 +60,8 @@ void main() {
       getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
       getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase,
       getTaskByDateUsecase: mockGetTaskByDateUsecase,
-      getMoreTaskByDateUsecase: mockGetMoreTaskByDateUsecase
+      getMoreTaskByDateUsecase: mockGetMoreTaskByDateUsecase,
+      getRefreshTaskByDateUsecase: mockGetRefreshTaskByDateUsecase
     );
     testWidget = buildWidget(taskBloc: taskBloc);
   });

@@ -44,6 +44,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecas
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
 import 'package:crosscheck/features/walkthrough/data/datasource/walkthrough_local_data_source.dart';
@@ -76,7 +77,8 @@ Future<void> init() async  {
       getInitialTaskByDateUsecase: locator(),
       getMonthlyTaskUsecase: locator(),
       getTaskByDateUsecase: locator(),
-      getMoreTaskByDateUsecase: locator()
+      getMoreTaskByDateUsecase: locator(),
+      getRefreshTaskByDateUsecase: locator()
     ),
   );
 
@@ -97,6 +99,7 @@ Future<void> init() async  {
   locator.registerLazySingleton(() => GetMonthlyTaskUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton(() => GetTaskByDateUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton(() => GetMoreTaskByDateUsecase(repository: locator(), authenticationRepository: locator()));
+  locator.registerLazySingleton(() => GetRefreshTaskByDateUsecase(repository: locator(), authenticationRepository: locator()));
   locator.registerLazySingleton<WalkthroughRepository>(() => WalkthroughRepositoryImpl(walkthroughLocalDataSource: locator()));
   locator.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(remote: locator(), local: locator(), networkInfo: locator()));
   locator.registerLazySingleton<MainRepository>(() => MainRepositoryImpl(mainLocalDataSource: locator()));

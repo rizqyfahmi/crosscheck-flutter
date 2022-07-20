@@ -28,6 +28,8 @@ import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_u
     as _i17;
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart'
     as _i11;
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_task_by_date_usecase.dart'
+    as _i18;
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart'
     as _i16;
 import 'package:dartz/dartz.dart' as _i4;
@@ -263,4 +265,49 @@ class MockGetMoreTaskByDateUsecase extends _i1.Mock
                   Future<_i4.Either<_i5.Failure, List<_i8.TaskEntity>>>.value(
                       _FakeEither_2<_i5.Failure, List<_i8.TaskEntity>>()))
           as _i7.Future<_i4.Either<_i5.Failure, List<_i8.TaskEntity>>>);
+}
+
+/// A class which mocks [GetRefreshTaskByDateUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetRefreshTaskByDateUsecase extends _i1.Mock
+    implements _i18.GetRefreshTaskByDateUsecase {
+  MockGetRefreshTaskByDateUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.TaskRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeTaskRepository_0()) as _i2.TaskRepository);
+  @override
+  _i3.AuthenticationRepository get authenticationRepository =>
+      (super.noSuchMethod(Invocation.getter(#authenticationRepository),
+              returnValue: _FakeAuthenticationRepository_1())
+          as _i3.AuthenticationRepository);
+  @override
+  _i7.Future<_i4.Either<_i5.Failure, _i13.CombineTaskEntity>> call(
+          DateTime? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+              returnValue:
+                  Future<_i4.Either<_i5.Failure, _i13.CombineTaskEntity>>.value(
+                      _FakeEither_2<_i5.Failure, _i13.CombineTaskEntity>()))
+          as _i7.Future<_i4.Either<_i5.Failure, _i13.CombineTaskEntity>>);
+  @override
+  List<_i14.MonthlyTaskEntity> getMonthlyTaskEntities(
+          _i4.Either<_i5.Failure, List<_i14.MonthlyTaskEntity>>?
+              monthlyResult) =>
+      (super.noSuchMethod(
+              Invocation.method(#getMonthlyTaskEntities, [monthlyResult]),
+              returnValue: <_i14.MonthlyTaskEntity>[])
+          as List<_i14.MonthlyTaskEntity>);
+  @override
+  List<_i8.TaskEntity> getTaskEntities(
+          _i4.Either<_i5.Failure, List<_i8.TaskEntity>>? tasksResult) =>
+      (super.noSuchMethod(Invocation.method(#getTaskEntities, [tasksResult]),
+          returnValue: <_i8.TaskEntity>[]) as List<_i8.TaskEntity>);
+  @override
+  _i5.Failure getFailure(dynamic value, _i13.CombineTaskEntity? data) =>
+      (super.noSuchMethod(Invocation.method(#getFailure, [value, data]),
+          returnValue: _FakeFailure_3()) as _i5.Failure);
 }

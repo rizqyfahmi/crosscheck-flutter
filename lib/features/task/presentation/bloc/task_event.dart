@@ -54,3 +54,14 @@ class TaskGetMoreByDate extends TaskEvent {
   @override
   List<Object?> get props => [time];
 }
+
+class TaskGetRefreshByDate extends TaskEvent {
+  final DateTime time;
+
+  TaskGetRefreshByDate({
+    required this.time
+  });
+
+  @override
+  List<Object?> get props => [time];
+}
