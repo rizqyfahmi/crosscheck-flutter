@@ -1,6 +1,7 @@
 import 'package:crosscheck/core/error/failure.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
@@ -21,13 +22,15 @@ import 'history_view_test.mocks.dart';
   GetHistoryUsecase,
   GetMoreHistoryUsecase,
   GetRefreshHistoryUsecase,
-  GetInitialTaskByDateUsecase
+  GetInitialTaskByDateUsecase,
+  GetMonthlyTaskUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
   late MockGetMoreHistoryUsecase mockGetMoreHistoryUsecase;
   late MockGetRefreshHistoryUsecase mockGetRefreshHistoryUsecase;
   late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
+  late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
   late TaskBloc taskBloc;
   late Widget testWidget;
 
@@ -36,11 +39,13 @@ void main() {
     mockGetMoreHistoryUsecase = MockGetMoreHistoryUsecase();
     mockGetRefreshHistoryUsecase = MockGetRefreshHistoryUsecase();
     mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
+    mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase,
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase,
       getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
-      getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase
+      getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
+      getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase
     );
     testWidget = buildWidget(taskBloc: taskBloc);
   });

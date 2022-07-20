@@ -21,3 +21,14 @@ class TaskGetInitialByDate extends TaskEvent {
   @override
   List<Object?> get props => [time];
 }
+
+class TaskGetMonthlyTask extends TaskEvent {
+  final DateTime time;
+
+  TaskGetMonthlyTask({
+    required this.time
+  });
+
+  @override
+  List<Object?> get props => [time];
+}

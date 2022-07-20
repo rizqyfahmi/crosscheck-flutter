@@ -52,6 +52,8 @@ import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dar
     as _i29;
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart'
     as _i33;
+import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart'
+    as _i36;
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart'
     as _i31;
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart'
@@ -415,4 +417,33 @@ class MockGetInitialTaskByDateUsecase extends _i1.Mock
   _i10.Failure getFailure(dynamic value, _i34.CombineTaskEntity? data) =>
       (super.noSuchMethod(Invocation.method(#getFailure, [value, data]),
           returnValue: _FakeFailure_8()) as _i10.Failure);
+}
+
+/// A class which mocks [GetMonthlyTaskUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetMonthlyTaskUsecase extends _i1.Mock
+    implements _i36.GetMonthlyTaskUsecase {
+  MockGetMonthlyTaskUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i9.TaskRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeTaskRepository_7()) as _i9.TaskRepository);
+  @override
+  _i2.AuthenticationRepository get authenticationRepository =>
+      (super.noSuchMethod(Invocation.getter(#authenticationRepository),
+              returnValue: _FakeAuthenticationRepository_0())
+          as _i2.AuthenticationRepository);
+  @override
+  _i12.Future<_i3.Either<_i10.Failure, List<_i35.MonthlyTaskEntity>>> call(
+          DateTime? param) =>
+      (super.noSuchMethod(Invocation.method(#call, [param]),
+              returnValue: Future<
+                      _i3.Either<_i10.Failure,
+                          List<_i35.MonthlyTaskEntity>>>.value(
+                  _FakeEither_1<_i10.Failure, List<_i35.MonthlyTaskEntity>>()))
+          as _i12.Future<_i3.Either<_i10.Failure, List<_i35.MonthlyTaskEntity>>>);
 }
