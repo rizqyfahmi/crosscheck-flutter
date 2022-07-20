@@ -8,6 +8,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecas
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_refresh_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
 import 'package:crosscheck/features/task/presentation/bloc/task_bloc.dart';
@@ -29,7 +30,8 @@ import 'task_bloc_test.mocks.dart';
   GetInitialTaskByDateUsecase,
   GetMonthlyTaskUsecase,
   GetTaskByDateUsecase,
-  GetMoreTaskByDateUsecase
+  GetMoreTaskByDateUsecase,
+  GetRefreshTaskByDateUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
@@ -39,6 +41,7 @@ void main() {
   late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
   late MockGetTaskByDateUsecase mockGetTaskByDateUsecase;
   late MockGetMoreTaskByDateUsecase mockGetMoreTaskByDateUsecase;
+  late MockGetRefreshTaskByDateUsecase mockGetRefreshTaskByDateUsecase;
   late TaskBloc taskBloc;
   late List<TaskModel> models;
 
@@ -50,6 +53,7 @@ void main() {
     mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
     mockGetTaskByDateUsecase = MockGetTaskByDateUsecase();
     mockGetMoreTaskByDateUsecase = MockGetMoreTaskByDateUsecase();
+    mockGetRefreshTaskByDateUsecase = MockGetRefreshTaskByDateUsecase();
 
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase, 
@@ -58,7 +62,8 @@ void main() {
       getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
       getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase,
       getTaskByDateUsecase: mockGetTaskByDateUsecase,
-      getMoreTaskByDateUsecase: mockGetMoreTaskByDateUsecase
+      getMoreTaskByDateUsecase: mockGetMoreTaskByDateUsecase,
+      getRefreshTaskByDateUsecase: mockGetRefreshTaskByDateUsecase
     );
 
     models = Utils().taskEntities.map((entity) => TaskModel.fromTaskEntity(entity)).toList();
@@ -793,6 +798,233 @@ void main() {
       expect(taskBloc.stream, emitsInOrder([
         const TaskLoading(models: [], monthlyTaskModels: []),
         TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.cacheError)
+      ]));
+    });
+  });
+
+  /*--------------------------------------------------- Get Refresh Task By Date | Event Page ---------------------------------------------------*/
+  group("Get refresh task by date", () {
+    late DateTime time;
+    late List<MonthlyTaskEntity> mockedMonthlyTaskEntities;
+    late List<MonthlyTaskModel> expectedMonthlyTaskBlocModel;
+    late List<TaskEntity> mockedTaskEntities;
+    late List<TaskModel> expectedTaskBlocModel;
+    late CombineTaskEntity mockedCombineTaskEntity;
+
+    setUp(() {
+      time = DateTime(2022, 7, 16);
+      mockedMonthlyTaskEntities = [
+        MonthlyTaskEntity(id: "001", date: time, total: 2),
+        MonthlyTaskEntity(id: "002", date: time.add(const Duration(days: 1)), total: 1),
+        MonthlyTaskEntity(id: "003", date: time.add(const Duration(days: 2)), total: 5),
+      ];
+      expectedMonthlyTaskBlocModel = mockedMonthlyTaskEntities.map((entity) {
+        return MonthlyTaskModel.fromMonthlyTaskEntity(entity);
+      }).toList();
+      mockedTaskEntities = [
+        TaskEntity(id: "001", title: "Hello title", description: "Hello description", start: time.add(const Duration(hours: 6)), end: time.add(const Duration(hours: 8)), isAllDay: false, alerts: const []),
+        TaskEntity(id: "002", title: "Hello title 2", description: "Hello description 2", start: time.add(const Duration(hours: 9)), end: time.add(const Duration(hours: 10)), isAllDay: false, alerts: const []),
+      ];
+      expectedTaskBlocModel = mockedTaskEntities.map((entity) {
+        return TaskModel.fromTaskEntity(entity);
+      }).toList();
+      mockedCombineTaskEntity = CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: mockedTaskEntities);
+    });
+    
+    test("Should returns task and monthly task properly when get refresh task by date", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Right(mockedCombineTaskEntity);
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskLoaded(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel),
+        TaskIdle(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel)
+      ]));
+    });
+
+    test("Should returns ServerFailure with empty task and monthly task when get refresh task by date returns ServerFailure and local data source of task and monthly task are empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(ServerFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: [], taskEntities: [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns ServerFailure with task and monthly task when get refresh task by date returns ServerFailure and local data source of task and monthly task are not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.generalError)
+      ]));
+    });
+    
+    test("Should returns ServerFailure with empty task but has monthly task when get refresh task by date returns ServerFailure and local data source of task is empty but monthly task is not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: const [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns CacheFailure with empty task and monthly task when get refresh task by date returns CacheFailure and local data source of task and monthly task are empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(CacheFailure(message: Failure.cacheError, data: CombineTaskEntity(monthlyTaskEntities: [], taskEntities: [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure with task and monthly task when get refresh task by date returns CacheFailure and local data source of task and monthly task are not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure with empty task but has monthly task when get refresh task by date returns CacheFailure and local data source of task is empty but monthly task is not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: const [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: const [], monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.cacheError)
+      ]));
+    });
+
+
+    test("Should returns ServerFailure with empty task and monthly task when get refresh monthly task by date returns ServerFailure and local data source of task and monthly task are empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(ServerFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: [], taskEntities: [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns ServerFailure with task and monthly task when get refresh monthly task by date returns ServerFailure and local data source of task and monthly task are not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.generalError)
+      ]));
+    });
+    
+    test("Should returns ServerFailure with task but empty monthly task when get refresh monthly task by date returns ServerFailure and local data source of task is not empty but monthly task is empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: const [], taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns CacheFailure with empty task but has monthly task when get refresh monthly task by date returns CacheFailure and local data source of task and monthly task are empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(CacheFailure(message: Failure.cacheError, data: CombineTaskEntity(monthlyTaskEntities: [], taskEntities: [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure with task and monthly task when get refresh monthly task by date returns CacheFailure and local data source of task and monthly task are not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure with task but empty monthly task when get refresh monthly task by date returns CacheFailure and local data source of task is not empty but monthly task is empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: CombineTaskEntity(monthlyTaskEntities: const [], taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.cacheError)
+      ]));
+    });
+    
+    test("Should returns UnexpectedFailure with empty task and monthly task when get refresh task by date and get refresh monthly task by date return Failure and local data source of task and monthly task are empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(UnexpectedFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: [], taskEntities: [])));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns UnexpectedFailure with empty task and monthly task when get refresh task by date and get refresh monthly task by date return Failure and local data source of task and monthly task are not empty", () {
+      when(mockGetRefreshTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(UnexpectedFailure(message: Failure.generalError, data: CombineTaskEntity(monthlyTaskEntities: mockedMonthlyTaskEntities, taskEntities: mockedTaskEntities)));
+      });
+
+      taskBloc.add(TaskGetRefreshByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: expectedMonthlyTaskBlocModel, message: Failure.generalError)
       ]));
     });
   });
