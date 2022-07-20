@@ -6,6 +6,7 @@ import 'package:crosscheck/features/task/domain/usecases/get_history_usecase.dar
 import 'package:crosscheck/features/task/domain/usecases/get_initial_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_monthly_task_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_more_history_usecase.dart';
+import 'package:crosscheck/features/task/domain/usecases/get_more_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_refresh_history_usecase.dart';
 import 'package:crosscheck/features/task/domain/usecases/get_task_by_date_usecase.dart';
 import 'package:crosscheck/features/task/presentation/bloc/monthly_task_model.dart';
@@ -27,7 +28,8 @@ import 'task_bloc_test.mocks.dart';
   GetRefreshHistoryUsecase,
   GetInitialTaskByDateUsecase,
   GetMonthlyTaskUsecase,
-  GetTaskByDateUsecase
+  GetTaskByDateUsecase,
+  GetMoreTaskByDateUsecase
 ])
 void main() {
   late MockGetHistoryUsecase mockGetHistoryUsecase;
@@ -36,6 +38,7 @@ void main() {
   late MockGetInitialTaskByDateUsecase mockGetInitialTaskByDateUsecase;
   late MockGetMonthlyTaskUsecase mockGetMonthlyTaskUsecase;
   late MockGetTaskByDateUsecase mockGetTaskByDateUsecase;
+  late MockGetMoreTaskByDateUsecase mockGetMoreTaskByDateUsecase;
   late TaskBloc taskBloc;
   late List<TaskModel> models;
 
@@ -46,13 +49,16 @@ void main() {
     mockGetInitialTaskByDateUsecase = MockGetInitialTaskByDateUsecase();
     mockGetMonthlyTaskUsecase = MockGetMonthlyTaskUsecase();
     mockGetTaskByDateUsecase = MockGetTaskByDateUsecase();
+    mockGetMoreTaskByDateUsecase = MockGetMoreTaskByDateUsecase();
+
     taskBloc = TaskBloc(
       getHistoryUsecase: mockGetHistoryUsecase, 
       getMoreHistoryUsecase: mockGetMoreHistoryUsecase, 
       getRefreshHistoryUsecase: mockGetRefreshHistoryUsecase,
       getInitialTaskByDateUsecase: mockGetInitialTaskByDateUsecase,
       getMonthlyTaskUsecase: mockGetMonthlyTaskUsecase,
-      getTaskByDateUsecase: mockGetTaskByDateUsecase
+      getTaskByDateUsecase: mockGetTaskByDateUsecase,
+      getMoreTaskByDateUsecase: mockGetMoreTaskByDateUsecase
     );
 
     models = Utils().taskEntities.map((entity) => TaskModel.fromTaskEntity(entity)).toList();
@@ -694,6 +700,100 @@ void main() {
         const TaskLoading(models: [], monthlyTaskModels: []),
         TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.cacheError)
       ]));
-    });    
+    });
+  });
+
+  /*--------------------------------------------------- Get More Task By Date | Event Page ---------------------------------------------------*/
+  group("Get task by date", () {
+    late DateTime time;
+    late List<TaskEntity> mockedTaskEntities;
+    late List<TaskEntity> mockedMoreTaskEntities;
+    late List<TaskModel> expectedTaskBlocModel;
+    late List<TaskModel> expectedMoreTaskBlocModel;
+
+    setUp(() {
+      time = DateTime(2022, 7, 16);
+      mockedTaskEntities = [
+        TaskEntity(id: "001", title: "Hello title", description: "Hello description", start: time.add(const Duration(hours: 6)), end: time.add(const Duration(hours: 8)), isAllDay: false, alerts: const []),
+        TaskEntity(id: "002", title: "Hello title 2", description: "Hello description 2", start: time.add(const Duration(hours: 9)), end: time.add(const Duration(hours: 10)), isAllDay: false, alerts: const []),
+      ];
+      mockedMoreTaskEntities = [
+        TaskEntity(id: "003", title: "Hello title 3", description: "Hello description 3", start: time.add(const Duration(hours: 11)), end: time.add(const Duration(hours: 12)), isAllDay: false, alerts: const []),
+        TaskEntity(id: "004", title: "Hello title 4", description: "Hello description 4", start: time.add(const Duration(hours: 12)), end: time.add(const Duration(hours: 13)), isAllDay: false, alerts: const []),
+      ];
+
+      expectedTaskBlocModel = mockedTaskEntities.map((entity) {
+        return TaskModel.fromTaskEntity(entity);
+      }).toList();
+      expectedMoreTaskBlocModel = mockedMoreTaskEntities.map((entity) {
+        return TaskModel.fromTaskEntity(entity);
+      }).toList();
+    });
+
+    test("Should get more task properly", () {
+      when(mockGetMoreTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Right([...mockedTaskEntities, ...mockedMoreTaskEntities]);
+      });
+
+      taskBloc.add(TaskGetMoreByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskLoaded(models: [...expectedTaskBlocModel, ...expectedMoreTaskBlocModel], monthlyTaskModels: const []),
+        TaskIdle(models: [...expectedTaskBlocModel, ...expectedMoreTaskBlocModel], monthlyTaskModels: const [])
+      ]));
+    });
+
+    test("Should returns ServerFailure when get task returns ServerFailure in the time local data source is empty", () async {
+      when(mockGetMoreTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(ServerFailure(message: Failure.generalError, data: []));
+      });
+
+      taskBloc.add(TaskGetMoreByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns ServerFailure when get task returns ServerFailure in the time local data source is not empty", () async {
+      when(mockGetMoreTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(ServerFailure(message: Failure.generalError, data: mockedTaskEntities));
+      });
+
+      taskBloc.add(TaskGetMoreByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.generalError)
+      ]));
+    });
+
+    test("Should returns CacheFailure when get task returns CacheFailure in the time local data source is empty", () async {
+      when(mockGetMoreTaskByDateUsecase(any)).thenAnswer((_) async {
+        return const Left(CacheFailure(message: Failure.cacheError, data: []));
+      });
+
+      taskBloc.add(TaskGetMoreByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        const TaskGeneralError(models: [], monthlyTaskModels: [], message: Failure.cacheError)
+      ]));
+    });
+
+    test("Should returns CacheFailure when get task returns CacheFailure in the time local data source is not empty", () async {
+      when(mockGetMoreTaskByDateUsecase(any)).thenAnswer((_) async {
+        return Left(CacheFailure(message: Failure.cacheError, data: mockedTaskEntities));
+      });
+
+      taskBloc.add(TaskGetMoreByDate(time: time));
+
+      expect(taskBloc.stream, emitsInOrder([
+        const TaskLoading(models: [], monthlyTaskModels: []),
+        TaskGeneralError(models: expectedTaskBlocModel, monthlyTaskModels: const [], message: Failure.cacheError)
+      ]));
+    });
   });
 }
