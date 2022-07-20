@@ -105,6 +105,24 @@ class TaskRepositoryImpl extends TaskRepository {
     }
 
   }
+
+  @override
+  Future<Either<Failure, List<MonthlyTaskEntity>>> getRefreshMonthlyTask({required String token, required DateTime time}) async {
+    List<MonthlyTaskModel> cachedData = await local.getCacheMonthlyTask(time);
+
+    try {
+      await local.clearCachedMonthlyTask();
+    
+      final response = await remote.getMonthlyTask(token: token, time: time);
+      final data = response.models;
+      await local.cacheMonthlyTask(data);
+      return Right(data);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, data: cachedData));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message, data: cachedData));
+    }
+  }
   
   @override
   Future<Either<Failure, List<TaskEntity>>> getTaskByDate({required String token, required DateTime time}) async {

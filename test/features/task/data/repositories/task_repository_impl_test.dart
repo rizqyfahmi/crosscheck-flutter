@@ -314,7 +314,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheMonthlyTask(expected)).thenAnswer((_) async => Future.value());
@@ -323,7 +323,7 @@ void main() {
     expect(result, Right(expected));
 
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -332,7 +332,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheMonthlyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
@@ -341,7 +341,7 @@ void main() {
     expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -350,7 +350,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => expected);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: expected));
     when(mockTaskLocalDataSource.cacheMonthlyTask(expected)).thenThrow(const CacheException(message: Failure.cacheError));
@@ -359,7 +359,7 @@ void main() {
     expect(result, Left(CacheFailure(message: Failure.cacheError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verify(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -368,7 +368,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
@@ -376,7 +376,7 @@ void main() {
     expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -385,7 +385,7 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => expected);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
     when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
 
@@ -393,7 +393,7 @@ void main() {
     expect(result, Left(ServerFailure(message: Failure.generalError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -402,14 +402,14 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, const Left(NetworkFailure(message: Failure.networkError, data: [])));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -418,14 +418,14 @@ void main() {
     final time = DateTime(2022, 7);
     final utils = Utils();
     final expected = utils.getMonthlyTaskModel(time: time);
-    when(mockTaskLocalDataSource.getCacheMonthlyTask(time)).thenAnswer((_) async => expected);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => expected);
     when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
     
     final result = await taskRepository.getMonthlyTask(token: Utils.token, time: time);
     expect(result, Left(NetworkFailure(message: Failure.networkError, data: expected)));
     
     verify(mockNetworkInfo.isConnected);
-    verify(mockTaskLocalDataSource.getCacheMonthlyTask(time));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
     verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(expected));
   });
@@ -563,9 +563,6 @@ void main() {
     verifyNever(mockTaskLocalDataSource.cacheTask(any));
   });
 
-
-
-
   /*--------------------------------------------------- Get Refresh Task by Date (empty cached data) ---------------------------------------------------*/ 
   test("Should returns refreshed task by date properly when get cached task returns empty", () async {
     final time = DateTime(2022, 7, 16);
@@ -614,7 +611,7 @@ void main() {
     verifyNever(mockTaskLocalDataSource.cacheTask(any));
   });
 
-  test("Should returns ServerFailure with empty data when clear cached task throws CacheException and and get cached task returns empty", () async {
+  test("Should returns CacheFailure with empty data when clear cached task throws CacheException and and get cached task returns empty", () async {
     final time = DateTime(2022, 7, 16);
     when(mockTaskLocalDataSource.getCachedTask()).thenAnswer((_) async => []);
     when(mockTaskLocalDataSource.clearCachedTask()).thenThrow(const CacheException(message: Failure.cacheError));
@@ -688,6 +685,136 @@ void main() {
     verify(mockTaskLocalDataSource.clearCachedTask());
     verifyNever(mockTaskRemoteDataSource.getTaskByDate(token: Utils.token, time: time));
     verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+  
+  /*--------------------------------------------------- Get Refresh Monthly Task by Date (empty cached data) ---------------------------------------------------*/ 
+  test("Should returns refreshed monthly task by date properly when get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockedData = Utils().getMonthlyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: mockedData));
+    when(mockTaskLocalDataSource.cacheMonthlyTask(any)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, Right(mockedData));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheMonthlyTask(any));
+  });
+
+  test("Should returns CacheFailure with empty data when set/cache monthly task by date throws CacheException and get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockedData = Utils().getMonthlyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: mockedData));
+    when(mockTaskLocalDataSource.cacheMonthlyTask(any)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheMonthlyTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when get monthly task by date from remote data source throws ServerException and get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, const Left(ServerFailure(message: Failure.generalError, data: [])));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheTask(any));
+  });
+
+  test("Should returns CacheFailure with empty data when clear cached monthly task throws CacheException and and get cached task returns empty", () async {
+    final time = DateTime(2022, 7, 16);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => []);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, const Left(CacheFailure(message: Failure.cacheError, data: [])));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(any));
+  });
+
+  /*--------------------------------------------------- Get Refresh Task by Date (not empty cached data) ---------------------------------------------------*/ 
+  test("Should returns refreshed monthly task by date properly when get cached task returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockedData = Utils().getMonthlyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => mockedData);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: mockedData));
+    when(mockTaskLocalDataSource.cacheMonthlyTask(any)).thenAnswer((_) async => Future.value());
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, Right(mockedData));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheMonthlyTask(any));
+  });
+
+  test("Should returns CacheFailure with empty data when set/cache monthly task by date throws CacheException and get cached returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockedData = Utils().getMonthlyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => mockedData);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenAnswer((_) async => MonthlyTaskResponseModel(message: Utils.successMessage, data: mockedData));
+    when(mockTaskLocalDataSource.cacheMonthlyTask(any)).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: mockedData)));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verify(mockTaskLocalDataSource.cacheMonthlyTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when get monthly task by date from remote data source throws ServerException and and get cached task returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockedData = Utils().getMonthlyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => mockedData);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenAnswer((_) async => Future.value());
+    when(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time)).thenThrow(const ServerException(message: Failure.generalError));
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, Left(ServerFailure(message: Failure.generalError, data: mockedData)));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verify(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(any));
+  });
+
+  test("Should returns ServerFailure with empty data when clear cached monthly task throws CacheException and get cached task returns not empty", () async {
+    final time = DateTime(2022, 7, 16);
+    final mockedData = Utils().getMonthlyTaskModel(time: time);
+    when(mockTaskLocalDataSource.getCacheMonthlyTask(any)).thenAnswer((_) async => mockedData);
+    when(mockTaskLocalDataSource.clearCachedMonthlyTask()).thenThrow(const CacheException(message: Failure.cacheError));
+
+    final result = await taskRepository.getRefreshMonthlyTask(token: Utils.token, time: time);
+
+    expect(result, Left(CacheFailure(message: Failure.cacheError, data: mockedData)));
+    verify(mockTaskLocalDataSource.getCacheMonthlyTask(any));
+    verify(mockTaskLocalDataSource.clearCachedMonthlyTask());
+    verifyNever(mockTaskRemoteDataSource.getMonthlyTask(token: Utils.token, time: time));
+    verifyNever(mockTaskLocalDataSource.cacheMonthlyTask(any));
   });
 
 }
