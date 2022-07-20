@@ -61,19 +61,23 @@ class GetInitialTaskByDateUsecase extends Usecase<CombineTaskEntity, DateTime> {
   }
 
   List<MonthlyTaskEntity> getMonthlyTaskEntities(Either<Failure, List<MonthlyTaskEntity>> monthlyResult) {
-    if (monthlyResult.isLeft()) {
-      return ((monthlyResult as Left).value as Failure).data;
+    if (monthlyResult.isRight()) {
+      return (monthlyResult as Right).value as List<MonthlyTaskEntity>;
     }
 
-    return (monthlyResult as Right).value as List<MonthlyTaskEntity>;
+    final data = ((monthlyResult as Left).value as Failure).data as List<dynamic>;
+    
+    return data.map((entity) => entity as MonthlyTaskEntity).toList();
   }
 
   List<TaskEntity> getTaskEntities(Either<Failure, List<TaskEntity>> tasksResult) {
-    if (tasksResult.isLeft()) {
-      return ((tasksResult as Left).value as Failure).data;
+    if (tasksResult.isRight()) {
+      return (tasksResult as Right).value as List<TaskEntity>;
     }
 
-    return (tasksResult as Right).value as List<TaskEntity>;
+    final data = ((tasksResult as Left).value as Failure).data as List<dynamic>;
+
+    return data.map((entity) => entity as TaskEntity).toList();
   }
 
   Failure getFailure(dynamic value, CombineTaskEntity data) {
